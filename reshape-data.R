@@ -4,6 +4,7 @@ library(dplyr)
 path_wnw_data <- Sys.getenv("path_wnw_data")
 path_baseline_data <- Sys.getenv("path_baseline_data")
 path_screener_data <- Sys.getenv("path_screener_data")
+path_output_data <- Sys.getenv("path_output_data")
 
 wnwdata <- read_xlsx(file.path(path_wnw_data, "C2W - Working Not Working - Alldata.xlsx"), sheet = "alldata")
 baselinedata <- read_xlsx(file.path(path_baseline_data, "C2W- Baseline - Alldata.xlsx"), sheet = "Alldata")
@@ -122,7 +123,20 @@ check_include2 <- (dat_exclusion_rule[["post_begin_month_wnw1"]]==1 | dat_exclus
 dat_exclusion_rule[["include"]] <- if_else(check_include1 & check_include2, 1, 0)
 dat_exclusion_rule[["include"]] <- replace(dat_exclusion_rule[["include"]], is.na(dat_exclusion_rule[["include"]]), 0)
 
+# Account for those participants who will be excluded from all data analysis
+# ex1: 32-did not report at least one value for wnw1; 1-reported to not be working full time twice and had missing value for wnw1 on last available assessment
+# ex2: reported at least one value for wnw1; but in all cases, reported to not be working full time
+# ex3: twelve months after having reported to be working full time, no indication of whether the individual worked full time (no reported value for wnw1 twelve months after first reporting wnw1=1,3,5)
+# ex4: twelve months after having reported to be working full time, reported to not be working full time (reported a value of wnw1, but wnw1 is not 1,3 or 5)
+tabulate_excluded_by_source <- dat_exclusion_rule %>% 
+  summarise(ex1 = sum(is.na(any_ft)),
+            ex2 = sum(any_ft==0, na.rm=TRUE),
+            ex3 = sum(any_ft==1 & is.na(post_begin_month_wnw1), na.rm=TRUE),
+            ex4 = sum(any_ft==1 & !is.na(post_begin_month_wnw1) & (!(post_begin_month_wnw1==1 | post_begin_month_wnw1==3 | post_begin_month_wnw1==5)), na.rm=TRUE))
 
+tabulate_excluded_by_source[["total_excluded"]] <- rowSums(tabulate_excluded_by_source)
+print(tabulate_excluded_by_source)
 
-
+# Write output to csv file
+write.csv(dat_exclusion_rule, file.path(path_output_data, "dat_exclusion_rule.csv"), row.names = FALSE)
 
