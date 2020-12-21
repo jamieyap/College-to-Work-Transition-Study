@@ -1,15 +1,22 @@
 library(readxl)
 library(dplyr)
 
-path_wnw_data <- Sys.getenv("path_wnw_data")
-path_baseline_data <- Sys.getenv("path_baseline_data")
-path_screener_data <- Sys.getenv("path_screener_data")
-path_output_data <- Sys.getenv("path_output_data")
+# Set file paths: 
+# To change file paths, one can, for example, simply change the line
+# path_wnw_data <- Sys.getenv("path_wnw_data")
+# to the line (note the back slash, instead of a foward slash)
+# path_wnw_data <- "C:/Users/myusername/Desktop"
+
+path_wnw_data <- Sys.getenv("path_wnw_data")  # Location of C2W - Working Not Working - Alldata.xlsx
+path_baseline_data <- Sys.getenv("path_baseline_data")  # Location of C2W- Baseline - Alldata.xlsx
+path_screener_data <- Sys.getenv("path_screener_data")  # Location of C2W - Screener - Alldata.xlsx
+path_output_data <- Sys.getenv("path_output_data")  # Location of where newly created datasets will be saved
 
 wnwdata <- read_xlsx(file.path(path_wnw_data, "C2W - Working Not Working - Alldata.xlsx"), sheet = "alldata")
 baselinedata <- read_xlsx(file.path(path_baseline_data, "C2W- Baseline - Alldata.xlsx"), sheet = "Alldata")
 screenerdata <- read_xlsx(file.path(path_screener_data, "C2W - Screener - Alldata.xlsx"), sheet = "alldata")
 
+# Ensure rows are correctly ordered according to ParticipantID and survey_timepoint
 refdata <- wnwdata %>% select(ParticipantID, survey_timepoint, wnw1) %>% arrange(ParticipantID, survey_timepoint)
 
 # For each participant, determine the first time ever (if any) they reported to have worked full time
@@ -135,8 +142,25 @@ tabulate_excluded_by_source <- dat_exclusion_rule %>%
             ex4 = sum(any_ft==1 & !is.na(post_begin_month_wnw1) & (!(post_begin_month_wnw1==1 | post_begin_month_wnw1==3 | post_begin_month_wnw1==5)), na.rm=TRUE))
 
 tabulate_excluded_by_source[["total_excluded"]] <- rowSums(tabulate_excluded_by_source)
-print(tabulate_excluded_by_source)
+print(tabulate_excluded_by_source) 
+
+# The data frame dat_exclusion_rule contains the following columns
+# ParticipantID -- unique identifier for each participant
+# any_ft -- did the individual report to have worked full time at any point in the study? (1) yes; (0) no
+# begin_month -- which was the very first month (i.e., after graduating from college) the individual reported to have worked full time? e.g., '3' represents 3 months after graduating from college
+# post_begin_month -- equal to begin_month plus 12 months
+# begin_month_wnw1 -- what was the value of wnw1 reported at begin_month? (if any_ft=1, possible values are 1,3,5; if any_ft=0, this variable is set to NA)
+# post_begin_month_wnw1 -- what was the value of wnw1 reported at post_begin_month_wnw1? (regardless of the value of any_ft, possible values are 1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+# include -- whether individual will be included (1) or not (0) in data analysis
+
+# To determine which participants to include in data analysis, simply obtain those rows having include=1
+# Among those rows having include=1, 'time 1' is the value of begin_month and 'time 2' is the value of post_begin_month
+
+# Sanity check: count number of individuals having each possible combination of values of wnw1 reported
+# during begin_month_wnw1 and post_begin_month_wnw1
+dat_exclusion_rule %>% filter(include==1) %>% group_by(begin_month_wnw1, post_begin_month_wnw1) %>% summarise(n())
 
 # Write output to csv file
 write.csv(dat_exclusion_rule, file.path(path_output_data, "dat_exclusion_rule.csv"), row.names = FALSE)
+
 
