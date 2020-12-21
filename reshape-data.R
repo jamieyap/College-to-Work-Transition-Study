@@ -8,13 +8,10 @@ library(dplyr)
 # path_wnw_data <- "C:/Users/myusername/Desktop"
 
 path_wnw_data <- Sys.getenv("path_wnw_data")  # Location of C2W - Working Not Working - Alldata.xlsx
-path_baseline_data <- Sys.getenv("path_baseline_data")  # Location of C2W- Baseline - Alldata.xlsx
-path_screener_data <- Sys.getenv("path_screener_data")  # Location of C2W - Screener - Alldata.xlsx
 path_output_data <- Sys.getenv("path_output_data")  # Location of where newly created datasets will be saved
 
+# Read in raw data
 wnwdata <- read_xlsx(file.path(path_wnw_data, "C2W - Working Not Working - Alldata.xlsx"), sheet = "alldata")
-baselinedata <- read_xlsx(file.path(path_baseline_data, "C2W- Baseline - Alldata.xlsx"), sheet = "Alldata")
-screenerdata <- read_xlsx(file.path(path_screener_data, "C2W - Screener - Alldata.xlsx"), sheet = "alldata")
 
 # Ensure rows are correctly ordered according to ParticipantID and survey_timepoint
 refdata <- wnwdata %>% select(ParticipantID, survey_timepoint, wnw1) %>% arrange(ParticipantID, survey_timepoint)
@@ -146,21 +143,39 @@ print(tabulate_excluded_by_source)
 
 # The data frame dat_exclusion_rule contains the following columns
 # ParticipantID -- unique identifier for each participant
-# any_ft -- did the individual report to have worked full time at any point in the study? (1) yes; (0) no
+# any_ft -- did the individual report to have worked full time at any point in the study? (1) yes; (0) no; (NA) if no indication either way
 # begin_month -- which was the very first month (i.e., after graduating from college) the individual reported to have worked full time? e.g., '3' represents 3 months after graduating from college
 # post_begin_month -- equal to begin_month plus 12 months
 # begin_month_wnw1 -- what was the value of wnw1 reported at begin_month? (if any_ft=1, possible values are 1,3,5; if any_ft=0, this variable is set to NA)
 # post_begin_month_wnw1 -- what was the value of wnw1 reported at post_begin_month_wnw1? (regardless of the value of any_ft, possible values are 1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
 # include -- whether individual will be included (1) or not (0) in data analysis
 
-# To determine which participants to include in data analysis, simply obtain those rows having include=1
-# Among those rows having include=1, 'time 1' is the value of begin_month and 'time 2' is the value of post_begin_month
-
 # Sanity check: count number of individuals having each possible combination of values of wnw1 reported
 # during begin_month_wnw1 and post_begin_month_wnw1
 dat_exclusion_rule %>% filter(include==1) %>% group_by(begin_month_wnw1, post_begin_month_wnw1) %>% summarise(n())
 
+# Select those rows in wnwdata corresponding to individuals who will be included in data analysis
+# To determine which participants to include in data analysis, simply obtain those rows having include=1
+# Among those rows having include=1, 'time 0' is the value of begin_month and 'time 1' is the value of post_begin_month
+wide_subset_dat_exclusion_rule <- dat_exclusion_rule %>% 
+  filter(include==1) %>%
+  select(ParticipantID, begin_month, post_begin_month) %>%
+  rename(survey_timepoint_0 = begin_month,
+         survey_timepoint_1 = post_begin_month)
+
+long_subset_dat_exclusion_rule <- reshape(data = wide_subset_dat_exclusion_rule, 
+                                          direction = "long", 
+                                          idvar = "ParticipantID", 
+                                          varying = list(c("survey_timepoint_0","survey_timepoint_1")), 
+                                          v.names = "survey_timepoint")
+
+long_subset_dat_exclusion_rule <- long_subset_dat_exclusion_rule %>%
+  arrange(ParticipantID, time) %>%
+  mutate(time = time-1)
+
 # Write output to csv file
 write.csv(dat_exclusion_rule, file.path(path_output_data, "dat_exclusion_rule.csv"), row.names = FALSE)
+write.csv(long_subset_dat_exclusion_rule, file.path(path_output_data, "longformat_analysis_ids.csv"), row.names = FALSE)
+write.csv(wide_subset_dat_exclusion_rule, file.path(path_output_data, "wideformat_analysis_ids.csv"), row.names = FALSE)
 
 
