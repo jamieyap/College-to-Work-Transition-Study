@@ -24,6 +24,9 @@ library(kableExtra)
 library(dplyr)
 path_output_data <- Sys.getenv("path_output_data")
 
+# Read in functions for data analysis
+source("analysis-utils.R")
+
 # Read in variable description
 dat_baseline_vars <- read.csv(file.path(path_output_data, "dat_baseline_vars.csv"), header = TRUE)
 dat_screener_vars <- read.csv(file.path(path_output_data, "dat_screener_vars.csv"), header = TRUE)
@@ -33,27 +36,72 @@ dat_wnw_vars <- read.csv(file.path(path_output_data, "dat_wnw_vars.csv"), header
 dat_baseline_analysis <- read.csv(file.path(path_output_data, "dat_baseline_analysis.csv"), header = TRUE)
 dat_screener_analysis <- read.csv(file.path(path_output_data, "dat_screener_analysis.csv"), header = TRUE)
 dat_wnw_analysis <- read.csv(file.path(path_output_data, "dat_wnw_analysis.csv"), header = TRUE)
-
-# Merge datasets into one data frame
-dat_analysis <- left_join(x = dat_wnw_analysis, y = dat_screener_analysis, by = "ParticipantID")
-dat_analysis <- left_join(x = dat_analysis, y = dat_baseline_analysis, by = "ParticipantID")
-dat_analysis <- dat_analysis %>% select(colnames(dat_screener_analysis), colnames(dat_baseline_analysis), everything())
 ```
 
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+list_summary_baseline <- apply(dat_baseline_analysis[,dat_baseline_vars$new_var_name], 2, ColumnSummary)
+list_summary_screener <- apply(dat_screener_analysis[,dat_screener_vars$new_var_name], 2, ColumnSummary)
+list_summary_wnw_0 <- apply(dat_wnw_analysis[dat_wnw_analysis$time==0,dat_wnw_vars$new_var_name], 2, ColumnSummary)
+list_summary_wnw_1 <- apply(dat_wnw_analysis[dat_wnw_analysis$time==1,dat_wnw_vars$new_var_name], 2, ColumnSummary)
+```
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
-summary(dat_baseline_analysis)
+tab_baseline <- bind_rows(list_summary_baseline) %>% round(., 3)
+tab_screener <- bind_rows(list_summary_screener) %>% round(., 3)
+tab_wnw_0 <- bind_rows(list_summary_wnw_0) %>% round(., 3)
+tab_wnw_1 <- bind_rows(list_summary_wnw_1) %>% round(., 3)
+
+tab_baseline$variable <- names(list_summary_baseline)
+tab_screener$variable <- names(list_summary_screener)
+tab_wnw_0$variable <- paste("Time 0: ", names(list_summary_wnw_0), sep="")
+tab_wnw_1$variable <- paste("Time 1: ", names(list_summary_wnw_1), sep="")
+
+tab_all <- rbind(tab_baseline, tab_screener, tab_wnw_0, tab_wnw_1)
+tab_all <- tab_all %>% select(variable, everything())
+```
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+tab_all %>%
+  mutate(variable = gsub("_"," ", .data[["variable"]])) %>%
+  kable(booktabs = TRUE, align = c('c','c','c','c','c','c','c'),
+        col.names = c("Variable","Mean","SD","Min","Max","No. Missing", "Percent Missing"),
+        caption = paste("Empirical Summary Statistics; N = 1240 Participants in Total"), escape = FALSE) %>%
+  kable_styling(full_width = FALSE, latex_options = c("HOLD_position"))  
 ```
 
 \newpage
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
-summary(dat_screener_analysis)
+dat_baseline_vars %>%
+  select(-notable_observations) %>%
+  mutate(new_var_name = gsub("_"," ", .data[["new_var_name"]])) %>%
+  kable(booktabs = TRUE, align = c('c','c','c','c'),
+        col.names = c("Source Data","Variable","Min Possible Val","Max Possible Val"),
+        caption = paste("Variables Constructed from Baseline Raw Dataset (All variables rated on a categorical scale were recoded so that minimum value is zero, i.e., by subtracting 1 off raw value)"), escape = FALSE) %>%
+  kable_styling(full_width = FALSE, latex_options = c("HOLD_position"))  
 ```
 
-\newpage
- 
+
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
-summary(dat_wnw_analysis)
+dat_screener_vars %>%
+  select(-notable_observations) %>%
+  mutate(new_var_name = gsub("_"," ", .data[["new_var_name"]])) %>%
+  kable(booktabs = TRUE, align = c('c','c','c','c'),
+        col.names = c("Source Data","Variable","Min Possible Val","Max Possible Val"),
+        caption = paste("Variables Constructed from Screener Raw Dataset (All variables rated on a categorical scale were recoded so that minimum value is zero, i.e., by subtracting 1 off raw value)"), escape = FALSE) %>%
+  kable_styling(full_width = FALSE, latex_options = c("HOLD_position"))  
 ```
+
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+dat_wnw_vars %>%
+  select(-notable_observations) %>%
+  mutate(new_var_name = gsub("_"," ", .data[["new_var_name"]])) %>%
+  kable(booktabs = TRUE, align = c('c','c','c','c'),
+        col.names = c("Source Data","Variable","Min Possible Val","Max Possible Val"),
+        caption = paste("Variables Constructed from Working-Not-Working Raw Dataset (All variables rated on a categorical scale were recoded so that minimum value is zero, i.e., by subtracting 1 off raw value)"), escape = FALSE) %>%
+  kable_styling(full_width = FALSE, latex_options = c("HOLD_position"))  
+```
+
+
 

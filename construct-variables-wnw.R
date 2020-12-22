@@ -122,7 +122,7 @@ dat_wnw_analysis <- dat_wnw_analysis %>%
          wnw114 = wnw114 - 1) %>%
   mutate(injunctive_workplace_norms = (wnw111+wnw114)/2)
 
-curr_new_var <- data.frame(source_raw_dat = "wnw", new_var_name = c("wnw111","wnw114","injunctive_workplace_norms"), min_val = 0, max_val = 5, notable_observations = "Subtract 1 off wnw111 and wnw114 prior to obtaining their average to calculate injunctive workplace drinking norms")
+curr_new_var <- data.frame(source_raw_dat = "wnw", new_var_name = c("wnw111","wnw114","injunctive_workplace_norms"), min_val = 0, max_val = 4, notable_observations = "Subtract 1 off wnw111 and wnw114 prior to obtaining their average to calculate injunctive workplace drinking norms")
 list_new_var_names <- append(list_new_var_names, list(curr_new_var))
 
 # -----------------------------------------------------------------------------

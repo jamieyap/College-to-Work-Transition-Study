@@ -1,5 +1,17 @@
 library(geeM)
 
+ColumnSummary <- function(x){
+  
+  MEAN <- mean(x, na.rm=TRUE)
+  SD <- sd(x, na.rm=TRUE)
+  MIN <- min(x, na.rm=TRUE)
+  MAX <- max(x, na.rm=TRUE)
+  NMISS <- sum(is.na(x))
+  PMISS <- NMISS/length(x)
+  
+  out <- data.frame(MEAN = MEAN, SD = SD, MIN = MIN, MAX = MAX, NMISS = NMISS, PMISS = PMISS)
+}
+
 FormatGEEOutput <- function(fit){
   outfit <- round(cbind(estimates = summary(fit)$beta, se = summary(fit)$se.robust, p = summary(fit)$p), digits=3)
   outfit <- as.data.frame(outfit)
