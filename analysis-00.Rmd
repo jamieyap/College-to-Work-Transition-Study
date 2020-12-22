@@ -1,0 +1,59 @@
+---
+title: "Analysis: Exploratory"
+author: 
+date: '`r format(Sys.Date(), "%B %d, %Y")`'
+geometry: margin=1in
+output: 
+  pdf_document:
+    number_sections: TRUE
+---
+
+
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(tidy = TRUE)
+knitr::opts_chunk$set(fig.pos = 'H')
+```
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+library(rmarkdown)
+library(knitr)
+library(kableExtra)
+```
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+library(dplyr)
+path_output_data <- Sys.getenv("path_output_data")
+
+# Read in variable description
+dat_baseline_vars <- read.csv(file.path(path_output_data, "dat_baseline_vars.csv"), header = TRUE)
+dat_screener_vars <- read.csv(file.path(path_output_data, "dat_screener_vars.csv"), header = TRUE)
+dat_wnw_vars <- read.csv(file.path(path_output_data, "dat_wnw_vars.csv"), header = TRUE)
+
+# Read in data
+dat_baseline_analysis <- read.csv(file.path(path_output_data, "dat_baseline_analysis.csv"), header = TRUE)
+dat_screener_analysis <- read.csv(file.path(path_output_data, "dat_screener_analysis.csv"), header = TRUE)
+dat_wnw_analysis <- read.csv(file.path(path_output_data, "dat_wnw_analysis.csv"), header = TRUE)
+
+# Merge datasets into one data frame
+dat_analysis <- left_join(x = dat_wnw_analysis, y = dat_screener_analysis, by = "ParticipantID")
+dat_analysis <- left_join(x = dat_analysis, y = dat_baseline_analysis, by = "ParticipantID")
+dat_analysis <- dat_analysis %>% select(colnames(dat_screener_analysis), colnames(dat_baseline_analysis), everything())
+```
+
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+summary(dat_baseline_analysis)
+```
+
+\newpage
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+summary(dat_screener_analysis)
+```
+
+\newpage
+ 
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+summary(dat_wnw_analysis)
+```
+

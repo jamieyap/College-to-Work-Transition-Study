@@ -116,8 +116,8 @@ list_new_var_names <- append(list_new_var_names, list(curr_new_var))
 # Injunctive Workplace Drinking Norms
 # -----------------------------------------------------------------------------
 dat_wnw_analysis <- dat_wnw_analysis %>%
-  mutate(wnw111 = replace(wnw111, wnw111==9, NA),
-         wnw114 = replace(wnw114, wnw114==9, NA)) %>%
+  mutate(wnw111 = replace(wnw111, (wnw111==9) | (wnw111==6), NA),
+         wnw114 = replace(wnw114, (wnw114==9) | (wnw114==6), NA)) %>%
   mutate(wnw111 = wnw111 - 1,
          wnw114 = wnw114 - 1) %>%
   mutate(injunctive_workplace_norms = (wnw111+wnw114)/2)
