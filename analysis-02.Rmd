@@ -1,0 +1,36 @@
+---
+title: "Analysis: Part Two"
+author: 
+date: '`r format(Sys.Date(), "%B %d, %Y")`'
+geometry: margin=1in
+output: 
+  pdf_document:
+    number_sections: TRUE
+---
+
+
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(tidy = TRUE)
+knitr::opts_chunk$set(fig.pos = 'H')
+```
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+library(rmarkdown)
+library(knitr)
+library(kableExtra)
+```
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+library(dplyr)
+path_output_data <- Sys.getenv("path_output_data")
+load("list_models_rutgers.RData")
+load("list_models_HED.RData")
+```
+
+
+
+
+
+
+
+
