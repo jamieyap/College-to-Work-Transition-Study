@@ -231,6 +231,57 @@ print(tab_rutgers_2)
 print(tab_DASS)
 ```
 
+\newpage
+
+# HED
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+fit_HED <- geem(HED ~ sex + race + age + baseline_HED + baseline_social_desirability + baseline_impulsivity + lifestress
+                    + injunctive_workplace_norms + qualitative_role_overload + quantitative_role_overload
+                    + time 
+                    + time:injunctive_workplace_norms + time:qualitative_role_overload + time:quantitative_role_overload, 
+                    data = dat_analysis, id = ParticipantID, waves = time, corstr = "exchangeable", family = "quasipoisson")
+
+tab_HED <- FormatGEEOutput(fit_HED)
+
+fit_HED_2 <- geem(HED ~ sex + race + age + baseline_HED + baseline_social_desirability + baseline_impulsivity + lifestress
+                      + injunctive_workplace_norms + qualitative_role_overload + quantitative_role_overload 
+                      + time 
+                      + time:injunctive_workplace_norms + time:qualitative_role_overload + time:quantitative_role_overload
+                      + DASS + time:DASS, 
+                      data = dat_analysis, id = ParticipantID, waves = time, corstr = "exchangeable", family = "quasipoisson")
+
+tab_HED_2 <- FormatGEEOutput(fit_HED_2)
+
+fit_DASS <- geem(DASS ~ sex + race + age + baseline_HED + baseline_social_desirability + baseline_impulsivity + lifestress 
+                 + qualitative_role_overload + quantitative_role_overload
+                 + time
+                 + time:qualitative_role_overload + time:quantitative_role_overload, 
+                 data = dat_analysis, id = ParticipantID, waves = time, corstr = "exchangeable", family = "gaussian")
+  
+tab_DASS <- FormatGEEOutput(fit_DASS)
+```
+
+## Outcome: HED
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+print(tab_HED)
+```
+
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+print(tab_HED_2)
+```
+
+
+## Outcome: DASS
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+print(tab_DASS)
+```
+
+
+
 
 
 
