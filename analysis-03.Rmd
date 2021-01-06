@@ -1,0 +1,135 @@
+---
+title: "Analysis: Part Three"
+author: 
+date: '`r format(Sys.Date(), "%B %d, %Y")`'
+geometry: margin=1in
+output: 
+  pdf_document:
+    number_sections: TRUE
+---
+
+
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(tidy = TRUE)
+knitr::opts_chunk$set(fig.pos = 'H')
+```
+
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+library(rmarkdown)
+library(knitr)
+library(kableExtra)
+```
+
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+library(dplyr)
+library(geeM)
+path_output_data <- Sys.getenv("path_output_data")
+
+# Read in functions for data analysis
+source("analysis-utils.R")
+
+# Read in data
+dat_baseline_analysis <- read.csv(file.path(path_output_data, "dat_baseline_analysis.csv"), header = TRUE)
+dat_screener_analysis <- read.csv(file.path(path_output_data, "dat_screener_analysis.csv"), header = TRUE)
+dat_wnw_analysis <- read.csv(file.path(path_output_data, "dat_wnw_analysis.csv"), header = TRUE)
+
+# Center and scale variables
+dat_baseline_analysis <- dat_baseline_analysis %>% mutate(across(!c("ParticipantID"), scale))
+dat_screener_analysis <- dat_screener_analysis %>% mutate(across(!c("ParticipantID","sex","race"), scale))
+dat_wnw_analysis_0 <- dat_wnw_analysis %>% filter(time==0) %>% mutate(across(!c("ParticipantID","time","survey_timepoint","CASEID","HED","rutgers"), scale))
+dat_wnw_analysis_1 <- dat_wnw_analysis %>% filter(time==1) %>% mutate(across(!c("ParticipantID","time","survey_timepoint","CASEID","HED","rutgers"), scale))
+dat_wnw_analysis <- rbind(dat_wnw_analysis_0, dat_wnw_analysis_1)
+dat_wnw_analysis <- dat_wnw_analysis %>% arrange(ParticipantID, time)
+remove(dat_wnw_analysis_0, dat_wnw_analysis_1)
+
+# Merge datasets into one data frame
+dat_analysis <- left_join(x = dat_wnw_analysis, y = dat_screener_analysis, by = "ParticipantID")
+dat_analysis <- left_join(x = dat_analysis, y = dat_baseline_analysis, by = "ParticipantID")
+dat_analysis <- dat_analysis %>% select(colnames(dat_screener_analysis), colnames(dat_baseline_analysis), everything())
+```
+
+# RAPI
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+fit_rutgers <- geem(rutgers ~ sex + race + age + baseline_rutgers + baseline_social_desirability + baseline_impulsivity + lifestress
+                     + injunctive_workplace_norms + qualitative_role_overload + quantitative_role_overload, 
+                    data = dat_analysis, id = ParticipantID, waves = time, corstr = "exchangeable", family = "quasipoisson")
+
+tab_rutgers <- FormatGEEOutput(fit_rutgers)
+
+fit_rutgers_2 <- geem(rutgers ~ sex + race + age + baseline_rutgers + baseline_social_desirability + baseline_impulsivity + lifestress
+                      + injunctive_workplace_norms + qualitative_role_overload + quantitative_role_overload + DASS, 
+                      data = dat_analysis, id = ParticipantID, waves = time, corstr = "exchangeable", family = "quasipoisson")
+
+tab_rutgers_2 <- FormatGEEOutput(fit_rutgers_2)
+
+fit_DASS <- geem(DASS ~ sex + race + age + baseline_rutgers + baseline_social_desirability + baseline_impulsivity + lifestress 
+                 + injunctive_workplace_norms + qualitative_role_overload + quantitative_role_overload, 
+                 data = dat_analysis, id = ParticipantID, waves = time, corstr = "exchangeable", family = "gaussian")
+  
+tab_DASS <- FormatGEEOutput(fit_DASS)
+```
+
+## Outcome: RAPI
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+print(tab_rutgers)
+```
+
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+print(tab_rutgers_2)
+```
+
+
+## Outcome: DASS
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+print(tab_DASS)
+```
+
+\newpage
+
+# HED
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+fit_HED <- geem(HED ~ sex + race + age + baseline_HED + baseline_social_desirability + baseline_impulsivity + lifestress
+                     + injunctive_workplace_norms + qualitative_role_overload + quantitative_role_overload, 
+                    data = dat_analysis, id = ParticipantID, waves = time, corstr = "exchangeable", family = "quasipoisson")
+
+tab_HED <- FormatGEEOutput(fit_HED)
+
+fit_HED_2 <- geem(HED ~ sex + race + age + baseline_HED + baseline_social_desirability + baseline_impulsivity + lifestress
+                      + injunctive_workplace_norms + qualitative_role_overload + quantitative_role_overload + DASS, 
+                      data = dat_analysis, id = ParticipantID, waves = time, corstr = "exchangeable", family = "quasipoisson")
+
+tab_HED_2 <- FormatGEEOutput(fit_HED_2)
+
+fit_DASS <- geem(DASS ~ sex + race + age + baseline_HED + baseline_social_desirability + baseline_impulsivity + lifestress 
+                 + injunctive_workplace_norms + qualitative_role_overload + quantitative_role_overload, 
+                 data = dat_analysis, id = ParticipantID, waves = time, corstr = "exchangeable", family = "gaussian")
+  
+tab_DASS <- FormatGEEOutput(fit_DASS)
+```
+
+## Outcome: HED
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+print(tab_HED)
+```
+
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+print(tab_HED_2)
+```
+
+## Outcome: DASS
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+print(tab_DASS)
+```
+
+
+
