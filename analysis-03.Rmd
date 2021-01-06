@@ -149,7 +149,7 @@ fit_rutgers_2 <- geem(rutgers ~ sex + race + age + baseline_rutgers + baseline_s
                       + injunctive_workplace_norms + qualitative_role_overload + quantitative_role_overload 
                       + time 
                       + time:injunctive_workplace_norms + time:qualitative_role_overload + time:quantitative_role_overload
-                      + DASS, 
+                      + DASS + time:DASS, 
                       data = dat_analysis, id = ParticipantID, waves = time, corstr = "exchangeable", family = "quasipoisson")
 
 tab_rutgers_2 <- FormatGEEOutput(fit_rutgers_2)
