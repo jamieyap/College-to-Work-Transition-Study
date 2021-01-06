@@ -132,4 +132,60 @@ print(tab_DASS)
 ```
 
 
+\newpage
+
+# RAPI
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+fit_rutgers <- geem(rutgers ~ sex + race + age + baseline_rutgers + baseline_social_desirability + baseline_impulsivity + lifestress
+                    + injunctive_workplace_norms + qualitative_role_overload + quantitative_role_overload
+                    + time 
+                    + time:injunctive_workplace_norms + time:qualitative_role_overload + time:quantitative_role_overload, 
+                    data = dat_analysis, id = ParticipantID, waves = time, corstr = "exchangeable", family = "quasipoisson")
+
+tab_rutgers <- FormatGEEOutput(fit_rutgers)
+
+fit_rutgers_2 <- geem(rutgers ~ sex + race + age + baseline_rutgers + baseline_social_desirability + baseline_impulsivity + lifestress
+                      + injunctive_workplace_norms + qualitative_role_overload + quantitative_role_overload 
+                      + time 
+                      + time:injunctive_workplace_norms + time:qualitative_role_overload + time:quantitative_role_overload
+                      + DASS, 
+                      data = dat_analysis, id = ParticipantID, waves = time, corstr = "exchangeable", family = "quasipoisson")
+
+tab_rutgers_2 <- FormatGEEOutput(fit_rutgers_2)
+
+fit_DASS <- geem(DASS ~ sex + race + age + baseline_rutgers + baseline_social_desirability + baseline_impulsivity + lifestress 
+                 + injunctive_workplace_norms + qualitative_role_overload + quantitative_role_overload
+                 + time
+                 + time:injunctive_workplace_norms + time:qualitative_role_overload + time:quantitative_role_overload, 
+                 data = dat_analysis, id = ParticipantID, waves = time, corstr = "exchangeable", family = "gaussian")
+  
+tab_DASS <- FormatGEEOutput(fit_DASS)
+```
+
+## Outcome: RAPI
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+print(tab_rutgers)
+```
+
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+print(tab_rutgers_2)
+```
+
+
+## Outcome: DASS
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+print(tab_DASS)
+```
+
+
+
+
+
+
+
+
 

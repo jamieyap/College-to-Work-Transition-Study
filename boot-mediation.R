@@ -146,3 +146,11 @@ for(i in 1:B){
 # Save output
 save(list_models_rutgers, file = "list_models_rutgers_02.RData")
 save(list_models_HED, file = "list_models_HED_02.RData")
+
+
+
+
+
+
+
+
