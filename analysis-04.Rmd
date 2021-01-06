@@ -1,0 +1,119 @@
+---
+title: "Analysis: Part Four"
+author: 
+date: '`r format(Sys.Date(), "%B %d, %Y")`'
+geometry: margin=0.5in
+output: 
+  pdf_document:
+    number_sections: TRUE
+---
+
+
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(tidy = TRUE)
+knitr::opts_chunk$set(fig.pos = 'H')
+```
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+library(rmarkdown)
+library(knitr)
+library(kableExtra)
+```
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+library(dplyr)
+path_output_data <- Sys.getenv("path_output_data")
+load("list_models_rutgers_02.RData")
+alpha <- 0.05
+```
+
+
+# Drinking Outcome: RAPI
+
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+list_params_rutgers <- list()
+
+for(i in 1:length(list_models_rutgers)){
+  curr_model_estimates <- list_models_rutgers[[i]]
+  
+  tab_DASS <- curr_model_estimates[["est_DASS"]]
+  a2 <- tab_DASS[row.names(tab_DASS) == "qualitative_role_overload",][["estimates"]]
+  a3 <- tab_DASS[row.names(tab_DASS) == "quantitative_role_overload",][["estimates"]]
+
+  tab_drinking <- curr_model_estimates[["est_rutgers"]]
+  b1 <- tab_drinking[row.names(tab_drinking) == "DASS",][["estimates"]]
+  
+  curr_params_rutgers <- data.frame(a2=a2, a3=a3, b1=b1)
+  list_params_rutgers <- append(list_params_rutgers, list(curr_params_rutgers))
+}
+```
+
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+bootdat_params_rutgers <- bind_rows(list_params_rutgers) %>%
+  # Mediated Effect: Qualitative Role Overload
+  mutate(qualitative_role_overload = a2*b1) %>%
+  # Mediated Effect: Quantitative Role Overload
+  mutate(quantitative_role_overload = a3*b1)
+```
+
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+marginal_result <- bootdat_params_rutgers %>%
+  summarise(mean_marginal_result = mean(qualitative_role_overload),
+            LB_marginal_result = quantile(qualitative_role_overload, probs = alpha/2),
+            UB_marginal_result = quantile(qualitative_role_overload, probs = 1-alpha/2))
+
+summary_qualitative_role_overload <- matrix(c(marginal_result),
+                                            byrow=TRUE, ncol=3)
+summary_qualitative_role_overload <- apply(summary_qualitative_role_overload, 2, unlist)
+summary_qualitative_role_overload <- round(summary_qualitative_role_overload, digits=4)
+summary_qualitative_role_overload <- t(summary_qualitative_role_overload)
+row.names(summary_qualitative_role_overload) <- c("Marginal Result")
+colnames(summary_qualitative_role_overload) <- c("Bootstrap Mean","Bootstrap 95%-CI LB","Bootstrap 95%-CI UB")
+```
+
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+summary_qualitative_role_overload %>%
+  kable(booktabs = TRUE, align = c('c','c','c'), caption = "DASS-mediated effect of Qualitative Role Overload on Drinking Outcome")  %>%
+  kable_styling(full_width = FALSE, latex_options = c("HOLD_position"))  
+```
+
+
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+marginal_result <- bootdat_params_rutgers %>%
+  summarise(mean_marginal_result = mean(quantitative_role_overload),
+            LB_marginal_result = quantile(quantitative_role_overload, probs = alpha/2),
+            UB_marginal_result = quantile(quantitative_role_overload, probs = 1-alpha/2))
+
+summary_quantitative_role_overload <- matrix(c(marginal_result),
+                                            byrow=TRUE, ncol=3)
+summary_quantitative_role_overload <- apply(summary_quantitative_role_overload, 2, unlist)
+summary_quantitative_role_overload <- round(summary_quantitative_role_overload, digits=4)
+summary_quantitative_role_overload <- t(summary_quantitative_role_overload)
+row.names(summary_quantitative_role_overload) <- c("Marginal Result")
+colnames(summary_quantitative_role_overload) <- c("Bootstrap Mean","Bootstrap 95%-CI LB","Bootstrap 95%-CI UB")
+```
+
+
+
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+summary_quantitative_role_overload %>%
+  kable(booktabs = TRUE, align = c('c','c','c'), caption = "DASS-mediated effect of Quantitative Role Overload on Drinking Outcome")  %>%
+  kable_styling(full_width = FALSE, latex_options = c("HOLD_position"))  
+```
+
+
+
+
+
+
+
+
+
+
+
