@@ -156,11 +156,16 @@ for(i in 1:B){
   curr_bootdat <- list_resampled_data_centered_and_scaled[[i]]
   
   fit_rutgers <- geem(rutgers ~ sex + race + age + baseline_rutgers + baseline_social_desirability + baseline_impulsivity + lifestress 
-                      + injunctive_workplace_norms + qualitative_role_overload + quantitative_role_overload + DASS, 
+                      + injunctive_workplace_norms + qualitative_role_overload + quantitative_role_overload + DASS
+                      + time 
+                      + time:injunctive_workplace_norms + time:qualitative_role_overload + time:quantitative_role_overload
+                      + DASS + DASS:time, 
                       data = curr_bootdat, id = AnalysisID, waves = time, corstr = "exchangeable", family = "quasipoisson")
   
   fit_DASS <- geem(DASS ~ sex + race + age + baseline_rutgers + baseline_social_desirability + baseline_impulsivity + lifestress 
-                   + injunctive_workplace_norms + qualitative_role_overload + quantitative_role_overload, 
+                   + injunctive_workplace_norms + qualitative_role_overload + quantitative_role_overload
+                   + time
+                   + time:injunctive_workplace_norms + time:qualitative_role_overload + time:quantitative_role_overload, 
                    data = curr_bootdat, id = AnalysisID, waves = time, corstr = "exchangeable", family = "gaussian")
   
   tab_rutgers <- FormatGEEOutput(fit_rutgers)
@@ -175,11 +180,16 @@ for(i in 1:B){
   curr_bootdat <- list_resampled_data_centered_and_scaled[[i]]
   
   fit_HED <- geem(HED ~ sex + race + age + baseline_HED + baseline_social_desirability + baseline_impulsivity + lifestress 
-                  + injunctive_workplace_norms + qualitative_role_overload + quantitative_role_overload + DASS, 
+                  + injunctive_workplace_norms + qualitative_role_overload + quantitative_role_overload + DASS
+                  + time
+                  + time:injunctive_workplace_norms + time:qualitative_role_overload + time:quantitative_role_overload
+                  + DASS + DASS:time, 
                   data = curr_bootdat, id = AnalysisID, waves = time, corstr = "exchangeable", family = "quasipoisson")
   
   fit_DASS <- geem(DASS ~ sex + race + age + baseline_HED + baseline_social_desirability + baseline_impulsivity + lifestress 
-                   + injunctive_workplace_norms + qualitative_role_overload + quantitative_role_overload, 
+                   + injunctive_workplace_norms + qualitative_role_overload + quantitative_role_overload
+                   + time
+                   + time:injunctive_workplace_norms + time:qualitative_role_overload + time:quantitative_role_overload, 
                    data = curr_bootdat, id = AnalysisID, waves = time, corstr = "exchangeable", family = "gaussian")
   
   tab_HED <- FormatGEEOutput(fit_HED)
