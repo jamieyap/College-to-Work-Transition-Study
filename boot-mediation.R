@@ -51,7 +51,9 @@ for(i in 1:B){
 
 remove(curr_bootdat, curr_bootdat_0, curr_bootdat_1)
 
+###############################################################################
 # Estimate two models for each bootstrap sample
+###############################################################################
 list_models_rutgers <- list()
 
 for(i in 1:B){
@@ -74,7 +76,6 @@ for(i in 1:B){
   list_models_rutgers <- append(list_models_rutgers, list(list(est_rutgers = tab_rutgers, est_DASS = tab_DASS)))
 }
 
-# Estimate two models for each bootstrap sample
 list_models_HED <- list()
 
 for(i in 1:B){
@@ -101,4 +102,47 @@ for(i in 1:B){
 save(list_models_rutgers, file = "list_models_rutgers.RData")
 save(list_models_HED, file = "list_models_HED.RData")
 
+###############################################################################
+# Estimate two models for each bootstrap sample
+###############################################################################
+list_models_rutgers <- list()
 
+for(i in 1:B){
+  curr_bootdat <- list_resampled_data_centered_and_scaled[[i]]
+  
+  fit_rutgers <- geem(rutgers ~ sex + race + age + baseline_rutgers + baseline_social_desirability + baseline_impulsivity + lifestress 
+                      + injunctive_workplace_norms + qualitative_role_overload + quantitative_role_overload + DASS, 
+                      data = curr_bootdat, id = AnalysisID, waves = time, corstr = "exchangeable", family = "quasipoisson")
+  
+  fit_DASS <- geem(DASS ~ sex + race + age + baseline_rutgers + baseline_social_desirability + baseline_impulsivity + lifestress 
+                   + injunctive_workplace_norms + qualitative_role_overload + quantitative_role_overload, 
+                   data = curr_bootdat, id = AnalysisID, waves = time, corstr = "exchangeable", family = "gaussian")
+  
+  tab_rutgers <- FormatGEEOutput(fit_rutgers)
+  tab_DASS <- FormatGEEOutput(fit_DASS)
+  
+  list_models_rutgers <- append(list_models_rutgers, list(list(est_rutgers = tab_rutgers, est_DASS = tab_DASS)))
+}
+
+list_models_HED <- list()
+
+for(i in 1:B){
+  curr_bootdat <- list_resampled_data_centered_and_scaled[[i]]
+  
+  fit_HED <- geem(HED ~ sex + race + age + baseline_HED + baseline_social_desirability + baseline_impulsivity + lifestress 
+                  + injunctive_workplace_norms + qualitative_role_overload + quantitative_role_overload + DASS, 
+                  data = curr_bootdat, id = AnalysisID, waves = time, corstr = "exchangeable", family = "quasipoisson")
+  
+  fit_DASS <- geem(DASS ~ sex + race + age + baseline_HED + baseline_social_desirability + baseline_impulsivity + lifestress 
+                   + injunctive_workplace_norms + qualitative_role_overload + quantitative_role_overload, 
+                   data = curr_bootdat, id = AnalysisID, waves = time, corstr = "exchangeable", family = "gaussian")
+  
+  tab_HED <- FormatGEEOutput(fit_HED)
+  tab_DASS <- FormatGEEOutput(fit_DASS)
+  
+  list_models_HED <- append(list_models_HED, list(list(est_HED = tab_HED, est_DASS = tab_DASS)))
+}
+
+# Save output
+save(list_models_rutgers, file = "list_models_rutgers_02.RData")
+save(list_models_HED, file = "list_models_HED_02.RData")
