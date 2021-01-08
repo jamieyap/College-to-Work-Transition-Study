@@ -65,6 +65,61 @@ load("list_models_HED_03.RData")
 alpha <- 0.05
 ```
 
+# Mediation Model 1
+
+
+## Calculate Total Effect
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+total_eff_fit_HED_1 <- geem(HED ~ sex + race + age + baseline_HED + baseline_social_desirability + baseline_impulsivity + lifestress + injunctive_workplace_norms
+                        + qualitative_role_overload + quantitative_role_overload, 
+                  data = dat_analysis, id = ParticipantID, waves = time, corstr = "exchangeable", family = "quasipoisson")
+
+total_eff_outfit_HED_1 <- FormatGEEOutput(total_eff_fit_HED_1)
+total_eff_N_HED_1 <- length(setdiff(unique(dat_analysis$ParticipantID), total_eff_fit_HED_1$dropped))
+```
+
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+total_eff_outfit_HED_1 %>%
+  mutate(parameter = as.character(row.names(.))) %>%
+  mutate(parameter = gsub("_"," ", .data[["parameter"]])) %>%
+  mutate(parameter = gsub(":"," x ", .data[["parameter"]])) %>%
+  select(parameter, everything()) %>%
+  mutate_all(linebreak) %>%
+  kable(booktabs = TRUE, align = c('c','c','c','c'),
+        col.names = linebreak(c("Parameter","Estimates","SE","p-value"), align = "c"),
+        caption = paste("Outcome: Count of past-month heavy drinking days; N = ", total_eff_N_HED_1, sep=""), escape = FALSE) %>%
+  kable_styling(full_width = FALSE, latex_options = c("HOLD_position"))  
+```
+
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+total_eff_fit_rutgers_1 <- geem(rutgers ~ sex + race + age + baseline_rutgers + baseline_social_desirability + baseline_impulsivity + lifestress + injunctive_workplace_norms
+                        + qualitative_role_overload + quantitative_role_overload, 
+                  data = dat_analysis, id = ParticipantID, waves = time, corstr = "exchangeable", family = "quasipoisson")
+
+total_eff_outfit_rutgers_1 <- FormatGEEOutput(total_eff_fit_rutgers_1)
+total_eff_N_rutgers_1 <- length(setdiff(unique(dat_analysis$ParticipantID), total_eff_fit_rutgers_1$dropped))
+```
+
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+total_eff_outfit_rutgers_1 %>%
+  mutate(parameter = as.character(row.names(.))) %>%
+  mutate(parameter = gsub("_"," ", .data[["parameter"]])) %>%
+  mutate(parameter = gsub(":"," x ", .data[["parameter"]])) %>%
+  select(parameter, everything()) %>%
+  mutate_all(linebreak) %>%
+  kable(booktabs = TRUE, align = c('c','c','c','c'),
+        col.names = linebreak(c("Parameter","Estimates","SE","p-value"), align = "c"),
+        caption = paste("Outcome: RAPI; N = ", total_eff_N_rutgers_1, sep=""), escape = FALSE) %>%
+  kable_styling(full_width = FALSE, latex_options = c("HOLD_position"))  
+```
+
+\newpage
+
+## Calculate Mediated Effect
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
 fit_HED_1 <- geem(HED ~ sex + race + age + baseline_HED + baseline_social_desirability + baseline_impulsivity + lifestress + injunctive_workplace_norms
@@ -310,6 +365,63 @@ summary_quantitative_role_overload %>%
 
 \newpage
 
+# Mediation Model 2
+
+## Calculate Total Effect
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+total_eff_fit_HED_2 <- geem(HED ~ sex + race + age + baseline_HED + baseline_social_desirability + baseline_impulsivity + lifestress + injunctive_workplace_norms
+                                               + time + qualitative_role_overload + quantitative_role_overload  
+                                               + time:qualitative_role_overload + time:quantitative_role_overload + time:injunctive_workplace_norms, 
+                  data = dat_analysis, id = ParticipantID, waves = time, corstr = "exchangeable", family = "quasipoisson")
+
+total_eff_outfit_HED_2 <- FormatGEEOutput(total_eff_fit_HED_2)
+total_eff_N_HED_2 <- length(setdiff(unique(dat_analysis$ParticipantID), total_eff_fit_HED_2$dropped))
+```
+
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+total_eff_outfit_HED_2 %>%
+  mutate(parameter = as.character(row.names(.))) %>%
+  mutate(parameter = gsub("_"," ", .data[["parameter"]])) %>%
+  mutate(parameter = gsub(":"," x ", .data[["parameter"]])) %>%
+  select(parameter, everything()) %>%
+  mutate_all(linebreak) %>%
+  kable(booktabs = TRUE, align = c('c','c','c','c'),
+        col.names = linebreak(c("Parameter","Estimates","SE","p-value"), align = "c"),
+        caption = paste("Outcome: Count of past-month heavy drinking days; N = ", total_eff_N_HED_2, sep=""), escape = FALSE) %>%
+  kable_styling(full_width = FALSE, latex_options = c("HOLD_position"))  
+```
+
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+total_eff_fit_rutgers_2 <- geem(rutgers ~ sex + race + age + baseline_rutgers + baseline_social_desirability + baseline_impulsivity + lifestress + injunctive_workplace_norms
+                                               + time + qualitative_role_overload + quantitative_role_overload  
+                                               + time:qualitative_role_overload + time:quantitative_role_overload + time:injunctive_workplace_norms, 
+                  data = dat_analysis, id = ParticipantID, waves = time, corstr = "exchangeable", family = "quasipoisson")
+
+total_eff_outfit_rutgers_2 <- FormatGEEOutput(total_eff_fit_rutgers_2)
+total_eff_N_rutgers_2 <- length(setdiff(unique(dat_analysis$ParticipantID), total_eff_fit_rutgers_2$dropped))
+```
+
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+total_eff_outfit_rutgers_2 %>%
+  mutate(parameter = as.character(row.names(.))) %>%
+  mutate(parameter = gsub("_"," ", .data[["parameter"]])) %>%
+  mutate(parameter = gsub(":"," x ", .data[["parameter"]])) %>%
+  select(parameter, everything()) %>%
+  mutate_all(linebreak) %>%
+  kable(booktabs = TRUE, align = c('c','c','c','c'),
+        col.names = linebreak(c("Parameter","Estimates","SE","p-value"), align = "c"),
+        caption = paste("Outcome: RAPI; N = ", total_eff_N_rutgers_2, sep=""), escape = FALSE) %>%
+  kable_styling(full_width = FALSE, latex_options = c("HOLD_position"))  
+```
+
+
+\newpage
+
+## Calculate Mediated Effect
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
 fit_HED_2 <- geem(HED ~ sex + race + age + baseline_HED + baseline_social_desirability + baseline_impulsivity + lifestress + injunctive_workplace_norms
@@ -606,6 +718,63 @@ summary_quantitative_role_overload %>%
 \newpage
 
 
+# Mediation Model 3
+
+## Calculate Total Effect
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+total_eff_fit_HED_3 <- geem(HED ~ sex + race + age + baseline_HED + baseline_social_desirability + baseline_impulsivity + lifestress + injunctive_workplace_norms
+                                               + time + qualitative_role_overload + quantitative_role_overload  
+                                               + time:qualitative_role_overload + time:quantitative_role_overload + time:injunctive_workplace_norms, 
+                  data = dat_analysis, id = ParticipantID, waves = time, corstr = "exchangeable", family = "quasipoisson")
+
+total_eff_outfit_HED_3 <- FormatGEEOutput(total_eff_fit_HED_3)
+total_eff_N_HED_3 <- length(setdiff(unique(dat_analysis$ParticipantID), total_eff_fit_HED_3$dropped))
+```
+
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+total_eff_outfit_HED_3 %>%
+  mutate(parameter = as.character(row.names(.))) %>%
+  mutate(parameter = gsub("_"," ", .data[["parameter"]])) %>%
+  mutate(parameter = gsub(":"," x ", .data[["parameter"]])) %>%
+  select(parameter, everything()) %>%
+  mutate_all(linebreak) %>%
+  kable(booktabs = TRUE, align = c('c','c','c','c'),
+        col.names = linebreak(c("Parameter","Estimates","SE","p-value"), align = "c"),
+        caption = paste("Outcome: Count of past-month heavy drinking days; N = ", total_eff_N_HED_3, sep=""), escape = FALSE) %>%
+  kable_styling(full_width = FALSE, latex_options = c("HOLD_position"))  
+```
+
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+total_eff_fit_rutgers_3 <- geem(rutgers ~ sex + race + age + baseline_rutgers + baseline_social_desirability + baseline_impulsivity + lifestress + injunctive_workplace_norms
+                                               + time + qualitative_role_overload + quantitative_role_overload  
+                                               + time:qualitative_role_overload + time:quantitative_role_overload + time:injunctive_workplace_norms, 
+                  data = dat_analysis, id = ParticipantID, waves = time, corstr = "exchangeable", family = "quasipoisson")
+
+total_eff_outfit_rutgers_3 <- FormatGEEOutput(total_eff_fit_rutgers_3)
+total_eff_N_rutgers_3 <- length(setdiff(unique(dat_analysis$ParticipantID), total_eff_fit_rutgers_3$dropped))
+```
+
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+total_eff_outfit_rutgers_3 %>%
+  mutate(parameter = as.character(row.names(.))) %>%
+  mutate(parameter = gsub("_"," ", .data[["parameter"]])) %>%
+  mutate(parameter = gsub(":"," x ", .data[["parameter"]])) %>%
+  select(parameter, everything()) %>%
+  mutate_all(linebreak) %>%
+  kable(booktabs = TRUE, align = c('c','c','c','c'),
+        col.names = linebreak(c("Parameter","Estimates","SE","p-value"), align = "c"),
+        caption = paste("Outcome: RAPI; N = ", total_eff_N_rutgers_3, sep=""), escape = FALSE) %>%
+  kable_styling(full_width = FALSE, latex_options = c("HOLD_position"))  
+```
+
+
+\newpage
+
+## Calculate Mediated Effect
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
 fit_HED_3 <- geem(HED ~ sex + race + age + baseline_HED + baseline_social_desirability + baseline_impulsivity + lifestress + injunctive_workplace_norms
