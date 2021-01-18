@@ -25,7 +25,7 @@ GetSS <- function(use_this_model, L, contrast_labels = NULL){
   # alternative Lmat*beta is not equal to 0
   
   alpha <- .05
-  est_beta <- as_matrix(use_this_model$beta)
+  est_beta <- as.matrix(use_this_model$beta)
   coefnames <- use_this_model$coefnames
   est_cov_beta <- use_this_model$var
   converged <- 1*(use_this_model$converged==TRUE)
@@ -36,7 +36,7 @@ GetSS <- function(use_this_model, L, contrast_labels = NULL){
     est_stderr_ss <- sqrt(diag(est_cov_ss))
     est_stderr_ss <- as.matrix(est_stderr_ss)
     Z_ss <- est_ss/est_stderr_ss
-    pval_ss <- 2*pnorm(abs(Z_ss), lower_tail = FALSE)
+    pval_ss <- 2*pnorm(abs(Z_ss), lower.tail = FALSE)
     LB95_ss <- est_ss - qnorm(1-alpha/2)*est_stderr_ss
     UB95_ss <- est_ss + qnorm(1-alpha/2)*est_stderr_ss
     
