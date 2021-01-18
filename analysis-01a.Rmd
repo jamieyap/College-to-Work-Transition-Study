@@ -382,7 +382,7 @@ outfit_HED_2 %>%
         caption = paste("Outcome: No. of Days in the Past Month with Heavy Episodic Drinking; N = ", N_HED_2, sep=""), escape = FALSE) %>%
   kable_styling(full_width = FALSE, latex_options = c("HOLD_position"))  
 
-outfit_rutgers_3 %>%
+outfit_HED_3 %>%
   mutate(parameter = as.character(row.names(.))) %>%
   select(parameter, everything()) %>%
   mutate(parameter = gsub("_"," ", .data[["parameter"]])) %>%
@@ -390,13 +390,13 @@ outfit_rutgers_3 %>%
   mutate_all(linebreak) %>%
   kable(booktabs = TRUE, align = c('c','c','c','c'),
         col.names = linebreak(c("Parameter","Estimates","SE","p-value"), align = "c"),
-        caption = paste("Outcome: No. of Days in the Past Month with Heavy Episodic Drinking; N = ", N_rutgers_3, sep=""), escape = FALSE) %>%
+        caption = paste("Outcome: No. of Days in the Past Month with Heavy Episodic Drinking; N = ", N_HED_3, sep=""), escape = FALSE) %>%
   kable_styling(full_width = FALSE, latex_options = c("HOLD_position"))  
 
 ss_tab %>%
   mutate(parameter = as.character(row.names(.))) %>%
   select(parameter, everything()) %>%
-  kable(booktabs = TRUE, align = c('c','c','c','c','c','c','c'), caption = paste("Outcome: No. of Days in the Past Month with Heavy Episodic Drinking; N = ", N_rutgers_3, sep="")) %>%
+  kable(booktabs = TRUE, align = c('c','c','c','c','c','c','c'), caption = paste("Outcome: No. of Days in the Past Month with Heavy Episodic Drinking; N = ", N_HED_3, sep="")) %>%
   kable_styling(full_width = FALSE, latex_options = c("HOLD_position", "scale_down")) 
 ```
 
@@ -491,7 +491,7 @@ outfit_HED_2 %>%
         caption = paste("Outcome: No. of Days in the Past Month with Heavy Episodic Drinking; N = ", N_HED_2, sep=""), escape = FALSE) %>%
   kable_styling(full_width = FALSE, latex_options = c("HOLD_position"))  
 
-outfit_rutgers_3 %>%
+outfit_HED_3 %>%
   mutate(parameter = as.character(row.names(.))) %>%
   select(parameter, everything()) %>%
   mutate(parameter = gsub("_"," ", .data[["parameter"]])) %>%
@@ -499,13 +499,13 @@ outfit_rutgers_3 %>%
   mutate_all(linebreak) %>%
   kable(booktabs = TRUE, align = c('c','c','c','c'),
         col.names = linebreak(c("Parameter","Estimates","SE","p-value"), align = "c"),
-        caption = paste("Outcome: No. of Days in the Past Month with Heavy Episodic Drinking; N = ", N_rutgers_3, sep=""), escape = FALSE) %>%
+        caption = paste("Outcome: No. of Days in the Past Month with Heavy Episodic Drinking; N = ", N_HED_3, sep=""), escape = FALSE) %>%
   kable_styling(full_width = FALSE, latex_options = c("HOLD_position"))  
 
 ss_tab %>%
   mutate(parameter = as.character(row.names(.))) %>%
   select(parameter, everything()) %>%
-  kable(booktabs = TRUE, align = c('c','c','c','c','c','c','c'), caption = paste("Outcome: No. of Days in the Past Month with Heavy Episodic Drinking; N = ", N_rutgers_3, sep="")) %>%
+  kable(booktabs = TRUE, align = c('c','c','c','c','c','c','c'), caption = paste("Outcome: No. of Days in the Past Month with Heavy Episodic Drinking; N = ", N_HED_3, sep="")) %>%
   kable_styling(full_width = FALSE, latex_options = c("HOLD_position", "scale_down")) 
 ```
 
