@@ -45,6 +45,8 @@ GetSS <- function(use_this_model, L, contrast_labels = NULL){
     est_stderr_ss <- round(est_stderr_ss, digits=4)
     Z_ss <- round(Z_ss, digits=4)
     pval_ss <- round(pval_ss, digits=4)
+    LB95_ss <- round(LB95_ss, digits=4)
+    UB95_ss <- round(UB95_ss, digits=4)
     
     if(is.null(contrast_labels)){
       results_ss <- data.frame(est = est_ss, SE = est_stderr_ss, Z = Z_ss, pval = pval_ss, LB95 = LB95_ss, UB95 = UB95_ss)
