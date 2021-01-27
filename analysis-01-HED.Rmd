@@ -1,5 +1,5 @@
 ---
-title: "Analysis: Part 1 (RAPI)"
+title: "Analysis: Part 1 (HED)"
 author: 
 date: '`r format(Sys.Date(), "%B %d, %Y")`'
 geometry: margin=1in
@@ -52,13 +52,13 @@ dat_analysis <- dat_analysis %>% select(colnames(dat_screener_analysis), colname
 
 # Hypotheses
 
-(H1a): More permissive peer drinking norms are associated with an increase in alcohol misuse among young adults transitioning from college to work _(see Model 1a)_
+(H1a): More permissive peer drinking norms are associated with an increase in alcohol misuse among young adults transitioning from college to work _(see Model 1b)_
 
-(H1b): Role overload is associated with an increase in alcohol misuse among young adults transitioning from college to work _(see Model 1a)_
+(H1b): Role overload is associated with an increase in alcohol misuse among young adults transitioning from college to work _(see Model 1b)_
 
-(H4) The effect of drinking norms on alcohol misuse intensifies over time: It is stronger during the late onboarding phase than the early onboarding phase _(see Model 2a)_
+(H4) The effect of drinking norms on alcohol misuse intensifies over time: It is stronger during the late onboarding phase than the early onboarding phase _(see Model 2b)_
 
-(H5): During the early onboarding phase, the effect of peer drinking norms on employee alcohol misuse is moderated by psychological distress such that its effect on alcohol misuse is attenuated as a function of psychological distress _(see Model 8a)_
+(H5): During the early onboarding phase, the effect of peer drinking norms on employee alcohol misuse is moderated by psychological distress such that its effect on alcohol misuse is attenuated as a function of psychological distress _(see Model 8b)_
 
 
 # Drinking Norms Variables
@@ -80,31 +80,31 @@ Each model will be estimated with either _perceived injunctive norms_ or _percei
 
 
 
-# Model 1a
+# Model 1b
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
-fit_rutgers_1 <- geem(rutgers ~ sex + race + age 
-                                + baseline_rutgers + baseline_social_desirability + baseline_impulsivity + lifestress
+fit_HED_1 <- geem(HED ~ sex + race + age 
+                                + baseline_HED + baseline_social_desirability + baseline_impulsivity + lifestress
                                 + injunctive_workplace_norms + qualitative_role_overload + quantitative_role_overload, 
                   data = dat_analysis, id = ParticipantID, waves = time, corstr = "exchangeable", family = "quasipoisson")
 
-outfit_rutgers_1 <- FormatGEEOutput(fit_rutgers_1)
-N_rutgers_1 <- length(setdiff(unique(dat_analysis$ParticipantID), fit_rutgers_1$dropped))
+outfit_HED_1 <- FormatGEEOutput(fit_HED_1)
+N_HED_1 <- length(setdiff(unique(dat_analysis$ParticipantID), fit_HED_1$dropped))
 ```
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
-fit_rutgers_2 <- geem(rutgers ~ sex + race + age 
-                                + baseline_rutgers + baseline_social_desirability + baseline_impulsivity + lifestress
+fit_HED_2 <- geem(HED ~ sex + race + age 
+                                + baseline_HED + baseline_social_desirability + baseline_impulsivity + lifestress
                                 + descriptive_workplace_norms + qualitative_role_overload + quantitative_role_overload, 
                   data = dat_analysis, id = ParticipantID, waves = time, corstr = "exchangeable", family = "quasipoisson")
 
-outfit_rutgers_2 <- FormatGEEOutput(fit_rutgers_2)
-N_rutgers_2 <- length(setdiff(unique(dat_analysis$ParticipantID), fit_rutgers_2$dropped))
+outfit_HED_2 <- FormatGEEOutput(fit_HED_2)
+N_HED_2 <- length(setdiff(unique(dat_analysis$ParticipantID), fit_HED_2$dropped))
 ```
 
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
-outfit_rutgers_1 %>%
+outfit_HED_1 %>%
   mutate(parameter = as.character(row.names(.))) %>%
   mutate(parameter = gsub("_"," ", .data[["parameter"]])) %>%
   mutate(parameter = gsub(":"," x ", .data[["parameter"]])) %>%
@@ -112,10 +112,10 @@ outfit_rutgers_1 %>%
   mutate_all(linebreak) %>%
   kable(booktabs = TRUE, align = c('c','c','c','c'),
         col.names = linebreak(c("Parameter","Estimates","SE","p-value"), align = "c"),
-        caption = paste("Outcome: Rutgers Alcohol Problem Index; N = ", N_rutgers_1, sep=""), escape = FALSE) %>%
+        caption = paste("Outcome: HED Alcohol Problem Index; N = ", N_HED_1, sep=""), escape = FALSE) %>%
   kable_styling(full_width = FALSE, latex_options = c("HOLD_position"))  
 
-outfit_rutgers_2 %>%
+outfit_HED_2 %>%
   mutate(parameter = as.character(row.names(.))) %>%
   select(parameter, everything()) %>%
   mutate(parameter = gsub("_"," ", .data[["parameter"]])) %>%
@@ -123,41 +123,41 @@ outfit_rutgers_2 %>%
   mutate_all(linebreak) %>%
   kable(booktabs = TRUE, align = c('c','c','c','c'),
         col.names = linebreak(c("Parameter","Estimates","SE","p-value"), align = "c"),
-        caption = paste("Outcome: Rutgers Alcohol Problem Index; N = ", N_rutgers_2, sep=""), escape = FALSE) %>%
+        caption = paste("Outcome: HED Alcohol Problem Index; N = ", N_HED_2, sep=""), escape = FALSE) %>%
   kable_styling(full_width = FALSE, latex_options = c("HOLD_position"))  
 ```
 
 
-# Model 2a
+# Model 2b
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
-fit_rutgers_3 <- geem(rutgers ~ sex + race + age 
-                                + baseline_rutgers + baseline_social_desirability + baseline_impulsivity + lifestress
+fit_HED_3 <- geem(HED ~ sex + race + age 
+                                + baseline_HED + baseline_social_desirability + baseline_impulsivity + lifestress
                                 + injunctive_workplace_norms + qualitative_role_overload + quantitative_role_overload
                                 + time
                                 + time:injunctive_workplace_norms + time:qualitative_role_overload + time:quantitative_role_overload, 
                   data = dat_analysis, id = ParticipantID, waves = time, corstr = "exchangeable", family = "quasipoisson")
 
-outfit_rutgers_3 <- FormatGEEOutput(fit_rutgers_3)
-N_rutgers_3 <- length(setdiff(unique(dat_analysis$ParticipantID), fit_rutgers_3$dropped))
+outfit_HED_3 <- FormatGEEOutput(fit_HED_3)
+N_HED_3 <- length(setdiff(unique(dat_analysis$ParticipantID), fit_HED_3$dropped))
 ```
 
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
-fit_rutgers_4 <- geem(rutgers ~ sex + race + age 
-                                + baseline_rutgers + baseline_social_desirability + baseline_impulsivity + lifestress
+fit_HED_4 <- geem(HED ~ sex + race + age 
+                                + baseline_HED + baseline_social_desirability + baseline_impulsivity + lifestress
                                 + descriptive_workplace_norms + qualitative_role_overload + quantitative_role_overload
                                 + time
                                 + time:descriptive_workplace_norms + time:qualitative_role_overload + time:quantitative_role_overload, 
                   data = dat_analysis, id = ParticipantID, waves = time, corstr = "exchangeable", family = "quasipoisson")
 
-outfit_rutgers_4 <- FormatGEEOutput(fit_rutgers_4)
-N_rutgers_4 <- length(setdiff(unique(dat_analysis$ParticipantID), fit_rutgers_4$dropped))
+outfit_HED_4 <- FormatGEEOutput(fit_HED_4)
+N_HED_4 <- length(setdiff(unique(dat_analysis$ParticipantID), fit_HED_4$dropped))
 ```
 
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
-outfit_rutgers_3 %>%
+outfit_HED_3 %>%
   mutate(parameter = as.character(row.names(.))) %>%
   mutate(parameter = gsub("_"," ", .data[["parameter"]])) %>%
   mutate(parameter = gsub(":"," x ", .data[["parameter"]])) %>%
@@ -165,10 +165,10 @@ outfit_rutgers_3 %>%
   mutate_all(linebreak) %>%
   kable(booktabs = TRUE, align = c('c','c','c','c'),
         col.names = linebreak(c("Parameter","Estimates","SE","p-value"), align = "c"),
-        caption = paste("Outcome: Rutgers Alcohol Problem Index; N = ", N_rutgers_3, sep=""), escape = FALSE) %>%
+        caption = paste("Outcome: HED Alcohol Problem Index; N = ", N_HED_3, sep=""), escape = FALSE) %>%
   kable_styling(full_width = FALSE, latex_options = c("HOLD_position"))  
 
-outfit_rutgers_4 %>%
+outfit_HED_4 %>%
   mutate(parameter = as.character(row.names(.))) %>%
   select(parameter, everything()) %>%
   mutate(parameter = gsub("_"," ", .data[["parameter"]])) %>%
@@ -176,15 +176,15 @@ outfit_rutgers_4 %>%
   mutate_all(linebreak) %>%
   kable(booktabs = TRUE, align = c('c','c','c','c'),
         col.names = linebreak(c("Parameter","Estimates","SE","p-value"), align = "c"),
-        caption = paste("Outcome: Rutgers Alcohol Problem Index; N = ", N_rutgers_4, sep=""), escape = FALSE) %>%
+        caption = paste("Outcome: HED Alcohol Problem Index; N = ", N_HED_4, sep=""), escape = FALSE) %>%
   kable_styling(full_width = FALSE, latex_options = c("HOLD_position"))  
 ```
 
-# Model 8a
+# Model 8b
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
-fit_rutgers_5 <- geem(rutgers ~ sex + race + age 
-                                + baseline_rutgers + baseline_social_desirability + baseline_impulsivity + lifestress
+fit_HED_5 <- geem(HED ~ sex + race + age 
+                                + baseline_HED + baseline_social_desirability + baseline_impulsivity + lifestress
                                 + injunctive_workplace_norms + qualitative_role_overload + quantitative_role_overload
                                 + DASS + injunctive_workplace_norms:DASS
                                 + time
@@ -193,13 +193,13 @@ fit_rutgers_5 <- geem(rutgers ~ sex + race + age
                                 + time:injunctive_workplace_norms:DASS, 
                   data = dat_analysis, id = ParticipantID, waves = time, corstr = "exchangeable", family = "quasipoisson")
 
-outfit_rutgers_5 <- FormatGEEOutput(fit_rutgers_5)
-N_rutgers_5 <- length(setdiff(unique(dat_analysis$ParticipantID), fit_rutgers_5$dropped))
+outfit_HED_5 <- FormatGEEOutput(fit_HED_5)
+N_HED_5 <- length(setdiff(unique(dat_analysis$ParticipantID), fit_HED_5$dropped))
 ```
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
-fit_rutgers_6 <- geem(rutgers ~ sex + race + age 
-                                + baseline_rutgers + baseline_social_desirability + baseline_impulsivity + lifestress
+fit_HED_6 <- geem(HED ~ sex + race + age 
+                                + baseline_HED + baseline_social_desirability + baseline_impulsivity + lifestress
                                 + descriptive_workplace_norms + qualitative_role_overload + quantitative_role_overload
                                 + DASS + descriptive_workplace_norms:DASS
                                 + time
@@ -208,13 +208,13 @@ fit_rutgers_6 <- geem(rutgers ~ sex + race + age
                                 + time:descriptive_workplace_norms:DASS, 
                   data = dat_analysis, id = ParticipantID, waves = time, corstr = "exchangeable", family = "quasipoisson")
 
-outfit_rutgers_6 <- FormatGEEOutput(fit_rutgers_6)
-N_rutgers_6 <- length(setdiff(unique(dat_analysis$ParticipantID), fit_rutgers_6$dropped))
+outfit_HED_6 <- FormatGEEOutput(fit_HED_6)
+N_HED_6 <- length(setdiff(unique(dat_analysis$ParticipantID), fit_HED_6$dropped))
 ```
 
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
-outfit_rutgers_5 %>%
+outfit_HED_5 %>%
   mutate(parameter = as.character(row.names(.))) %>%
   mutate(parameter = gsub("_"," ", .data[["parameter"]])) %>%
   mutate(parameter = gsub(":"," x ", .data[["parameter"]])) %>%
@@ -222,10 +222,10 @@ outfit_rutgers_5 %>%
   mutate_all(linebreak) %>%
   kable(booktabs = TRUE, align = c('c','c','c','c'),
         col.names = linebreak(c("Parameter","Estimates","SE","p-value"), align = "c"),
-        caption = paste("Outcome: Rutgers Alcohol Problem Index; N = ", N_rutgers_5, sep=""), escape = FALSE) %>%
+        caption = paste("Outcome: HED Alcohol Problem Index; N = ", N_HED_5, sep=""), escape = FALSE) %>%
   kable_styling(full_width = FALSE, latex_options = c("HOLD_position"))  
 
-outfit_rutgers_6 %>%
+outfit_HED_6 %>%
   mutate(parameter = as.character(row.names(.))) %>%
   select(parameter, everything()) %>%
   mutate(parameter = gsub("_"," ", .data[["parameter"]])) %>%
@@ -233,7 +233,7 @@ outfit_rutgers_6 %>%
   mutate_all(linebreak) %>%
   kable(booktabs = TRUE, align = c('c','c','c','c'),
         col.names = linebreak(c("Parameter","Estimates","SE","p-value"), align = "c"),
-        caption = paste("Outcome: Rutgers Alcohol Problem Index; N = ", N_rutgers_6, sep=""), escape = FALSE) %>%
+        caption = paste("Outcome: HED Alcohol Problem Index; N = ", N_HED_6, sep=""), escape = FALSE) %>%
   kable_styling(full_width = FALSE, latex_options = c("HOLD_position"))  
 ```
 
@@ -268,9 +268,9 @@ Lmat_low <- t(Lmat_low)
 Lmat_mod <- t(Lmat_mod)
 Lmat_hig <- t(Lmat_hig)
 
-ss_low_5 <- GetSS(use_this_model = fit_rutgers_5, L = Lmat_low)
-ss_mod_5 <- GetSS(use_this_model = fit_rutgers_5, L = Lmat_mod)
-ss_hig_5 <- GetSS(use_this_model = fit_rutgers_5, L = Lmat_hig)
+ss_low_5 <- GetSS(use_this_model = fit_HED_5, L = Lmat_low)
+ss_mod_5 <- GetSS(use_this_model = fit_HED_5, L = Lmat_mod)
+ss_hig_5 <- GetSS(use_this_model = fit_HED_5, L = Lmat_hig)
 
 ss_tab_5 <- rbind(ss_low_5, ss_mod_5, ss_hig_5)
 row.names(ss_tab_5) <- c("At early onboarding phase: effect of norms at low DASS",
@@ -278,9 +278,9 @@ row.names(ss_tab_5) <- c("At early onboarding phase: effect of norms at low DASS
                          "At early onboarding phase: effect of norms at high DASS")
 
 
-ss_low_6 <- GetSS(use_this_model = fit_rutgers_6, L = Lmat_low)
-ss_mod_6 <- GetSS(use_this_model = fit_rutgers_6, L = Lmat_mod)
-ss_hig_6 <- GetSS(use_this_model = fit_rutgers_6, L = Lmat_hig)
+ss_low_6 <- GetSS(use_this_model = fit_HED_6, L = Lmat_low)
+ss_mod_6 <- GetSS(use_this_model = fit_HED_6, L = Lmat_mod)
+ss_hig_6 <- GetSS(use_this_model = fit_HED_6, L = Lmat_hig)
 
 ss_tab_6 <- rbind(ss_low_6, ss_mod_6, ss_hig_6)
 row.names(ss_tab_6) <- c("At early onboarding phase: effect of norms at low DASS",
@@ -291,14 +291,14 @@ row.names(ss_tab_6) <- c("At early onboarding phase: effect of norms at low DASS
 ss_tab_5 %>%
   mutate(parameter = as.character(row.names(.))) %>%
   select(parameter, everything()) %>%
-  kable(booktabs = TRUE, align = c('c','c','c','c','c','c','c'), caption = paste("Outcome: Rutgers Alcohol Problem Index; N = ", N_rutgers_5, "; Norms Covariate: Injunctive", sep="")) %>%
+  kable(booktabs = TRUE, align = c('c','c','c','c','c','c','c'), caption = paste("Outcome: HED Alcohol Problem Index; N = ", N_HED_5, "; Norms Covariate: Injunctive", sep="")) %>%
   kable_styling(full_width = FALSE, latex_options = c("HOLD_position", "scale_down"))  
 
 
 ss_tab_6 %>%
   mutate(parameter = as.character(row.names(.))) %>%
   select(parameter, everything()) %>%
-  kable(booktabs = TRUE, align = c('c','c','c','c','c','c','c'), caption = paste("Outcome: Rutgers Alcohol Problem Index; N = ", N_rutgers_6, "; Norms Covariate: Descriptive",  sep="")) %>%
+  kable(booktabs = TRUE, align = c('c','c','c','c','c','c','c'), caption = paste("Outcome: HED Alcohol Problem Index; N = ", N_HED_6, "; Norms Covariate: Descriptive",  sep="")) %>%
   kable_styling(full_width = FALSE, latex_options = c("HOLD_position", "scale_down"))  
 ```
 
