@@ -1,6 +1,15 @@
+# The College-to-Work Transition Study (C2W)
+Focused on young adults transitioning from college to the work force, the College-to-Work Transition Study (C2W) involved a multi-year data collection effort where seniors in their final quarter/semester before graduation from universities located in the Pacific Northwest, Midwest, Southeast, and Northeast parts of the USA were invited to participate.
+
 # Code in this repository
 
-This repository contains code to process data collected during the study and investigate hypotheses.
+This repository contains code to process data collected during the study and investigate hypotheses relating to the time varying change in alcohol use between the _early onboarding phase_ and the _late onboarding phase_, moments in time corresponding to when young adults first engage in full time work and at twelve months immediately afterwards, respectively. 
+
+Specifically, the following alcohol use variables were used as outcome/dependent variables:
+
+* **Rutgers Alcohol Problem Index (RAPI):** RAPI was assessed with a 19-item measure drawn from a broader 23-item measure developed by White & LaBouvie (White & LaBouvie, 1989). Each item asked participants to rate on a scale of 1 (never) to 5 (More than 10 times) the frequency of a given event happening in the past month while they were drinking or because of their alcohol use. Items included, 'Got into fights, acted bad, or did mean things', 'Felt that you needed more alcohol than you used to have in order to get the same effect', and 'Felt that you had a problem with alcohol'. Responses for each item were rescaled to range from 0 (never) to 4 (More than 10 times) and then summed to obtain an overall score. 
+
+* **Number of days within the past month with any heavy drinking (HED):** HED was assessed with a one-item measure. Participants were asked, 'How often in the past month did you drink more than 4 (if you are a woman) or 5 (if you are a man) standard drinks in a single day?' Responses for each item ranged from 0 (= None in the past month) to 30 (= 30 days in the past month).
 
 ## 1. Code for data processing
 
