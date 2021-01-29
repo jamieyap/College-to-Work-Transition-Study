@@ -243,7 +243,7 @@ outfit_HED_6 %>%
 Lmat_low <- as.matrix(c(0,0,0,0, # intercept, sex, race, age
                         0,0,0,0, # end with lifestress
                         # END: control variables
-                        1,0,0,-1,
+                        1,0,0,0,
                         0,-1,
                         0,0,0
                         ))
@@ -256,10 +256,10 @@ Lmat_mod <- as.matrix(c(0,0,0,0, # intercept, sex, race, age
                         0,0,0
                         ))
 
-Lmat_hig <-  as.matrix(c(0,0,0,0, # intercept, sex, race, age
+Lmat_hig <- as.matrix(c(0,0,0,0, # intercept, sex, race, age
                         0,0,0,0, # end with lifestress
                         # END: control variables
-                        1,0,0,+1,
+                        1,0,0,0,
                         0,+1,
                         0,0,0
                         ))
@@ -303,7 +303,72 @@ ss_tab_6 %>%
 ```
 
 
-\newpage
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+# Calculate effects at late onboarding phase
+Lmat_low <- as.matrix(c(0,0,0,0, # intercept, sex, race, age
+                        0,0,0,0, # end with lifestress
+                        # END: control variables
+                        1,0,0,0,
+                        0,-1,
+                        1,0,-1
+                        ))
 
+Lmat_mod <- as.matrix(c(0,0,0,0, # intercept, sex, race, age
+                        0,0,0,0, # end with lifestress
+                        # END: control variables
+                        1,0,0,0,
+                        0,0,
+                        1,0,0
+                        ))
+
+Lmat_hig <- as.matrix(c(0,0,0,0, # intercept, sex, race, age
+                        0,0,0,0, # end with lifestress
+                        # END: control variables
+                        1,0,0,0,
+                        0,+1,
+                        1,0,+1
+                        ))
+
+Lmat_low <- t(Lmat_low)
+Lmat_mod <- t(Lmat_mod)
+Lmat_hig <- t(Lmat_hig)
+
+ss_low_5 <- GetSS(use_this_model = fit_HED_5, L = Lmat_low)
+ss_mod_5 <- GetSS(use_this_model = fit_HED_5, L = Lmat_mod)
+ss_hig_5 <- GetSS(use_this_model = fit_HED_5, L = Lmat_hig)
+
+ss_tab_5 <- rbind(ss_low_5, ss_mod_5, ss_hig_5)
+row.names(ss_tab_5) <- c("At late onboarding phase: effect of norms at low DASS",
+                         "At late onboarding phase: effect of norms at moderate DASS",
+                         "At late onboarding phase: effect of norms at high DASS")
+
+
+ss_low_6 <- GetSS(use_this_model = fit_HED_6, L = Lmat_low)
+ss_mod_6 <- GetSS(use_this_model = fit_HED_6, L = Lmat_mod)
+ss_hig_6 <- GetSS(use_this_model = fit_HED_6, L = Lmat_hig)
+
+ss_tab_6 <- rbind(ss_low_6, ss_mod_6, ss_hig_6)
+row.names(ss_tab_6) <- c("At late onboarding phase: effect of norms at low DASS",
+                         "At late onboarding phase: effect of norms at moderate DASS",
+                         "At late onboarding phase: effect of norms at high DASS")
+
+
+ss_tab_5 %>%
+  mutate(parameter = as.character(row.names(.))) %>%
+  select(parameter, everything()) %>%
+  kable(booktabs = TRUE, align = c('c','c','c','c','c','c','c'), caption = paste("Outcome: HED Alcohol Problem Index; N = ", N_HED_5, "; Norms Covariate: Injunctive", sep="")) %>%
+  kable_styling(full_width = FALSE, latex_options = c("HOLD_position", "scale_down"))  
+
+
+ss_tab_6 %>%
+  mutate(parameter = as.character(row.names(.))) %>%
+  select(parameter, everything()) %>%
+  kable(booktabs = TRUE, align = c('c','c','c','c','c','c','c'), caption = paste("Outcome: HED Alcohol Problem Index; N = ", N_HED_6, "; Norms Covariate: Descriptive",  sep="")) %>%
+  kable_styling(full_width = FALSE, latex_options = c("HOLD_position", "scale_down"))  
+```
+
+
+
+\newpage
 
 
