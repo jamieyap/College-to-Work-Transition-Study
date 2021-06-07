@@ -2,7 +2,7 @@
 title: "Analysis: Part 2b (HED)"
 author: 
 date: '`r format(Sys.Date(), "%B %d, %Y")`'
-geometry: margin=1in
+geometry: margin=0.7in
 output: 
   pdf_document:
   number_sections: TRUE
@@ -67,7 +67,7 @@ fit_HED_1 <- geem(HED ~ sex + race + age
                       + time 
                       + time:qualitative_role_overload + time:quantitative_role_overload
                       + time:DASS, 
-                  data = dat_analysis, id = ParticipantID, waves = time, corstr = "exchangeable", family = "quasipoisson")
+                  data = dat_analysis, id = ParticipantID, waves = time, corstr = "exchangeable", family = "poisson")
 
 outfit_HED_1 <- FormatGEEOutput(fit_HED_1)
 N_HED_1 <- length(setdiff(unique(dat_analysis$ParticipantID), fit_HED_1$dropped))
@@ -97,7 +97,7 @@ fit_HED_2 <- geem(HED ~ sex + race + age
                      + time 
                      + time:qualitative_role_overload + time:quantitative_role_overload
                      + time:DASS, 
-                  data = dat_analysis, id = ParticipantID, waves = time, corstr = "exchangeable", family = "quasipoisson")
+                  data = dat_analysis, id = ParticipantID, waves = time, corstr = "exchangeable", family = "poisson")
 
 outfit_HED_2 <- FormatGEEOutput(fit_HED_2)
 N_HED_2 <- length(setdiff(unique(dat_analysis$ParticipantID), fit_HED_2$dropped))
@@ -161,7 +161,7 @@ fit_HED_3 <- geem(HED ~ sex + race + age
                       + time:DASS
                       + I(DASS*DASS)
                       + I(time*DASS*DASS), 
-                  data = dat_analysis, id = ParticipantID, waves = time, corstr = "exchangeable", family = "quasipoisson")
+                  data = dat_analysis, id = ParticipantID, waves = time, corstr = "exchangeable", family = "poisson")
 
 outfit_HED_3 <- FormatGEEOutput(fit_HED_3)
 N_HED_3 <- length(setdiff(unique(dat_analysis$ParticipantID), fit_HED_3$dropped))
@@ -192,7 +192,7 @@ fit_HED_4 <- geem(HED ~ sex + race + age
                       + time:DASS
                       + I(DASS*DASS)
                       + I(time*DASS*DASS), 
-                  data = dat_analysis, id = ParticipantID, waves = time, corstr = "exchangeable", family = "quasipoisson")
+                  data = dat_analysis, id = ParticipantID, waves = time, corstr = "exchangeable", family = "poisson")
 
 outfit_HED_4 <- FormatGEEOutput(fit_HED_4)
 N_HED_4 <- length(setdiff(unique(dat_analysis$ParticipantID), fit_HED_4$dropped))
@@ -725,6 +725,23 @@ summary_qualitative_role_overload %>%
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
 summary_quantitative_role_overload %>%
   kable(booktabs = TRUE, align = c('c','c','c'), caption = "DASS-mediated effect of Quantitative Role Overload; Norms Covariate: Descriptive Norms")  %>%
+  kable_styling(full_width = FALSE, latex_options = c("HOLD_position"))  
+```
+
+
+
+
+\newpage
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+library(MuMIn)
+all_qic <- QIC(fit_HED_1, fit_HED_2, fit_DASS_1, fit_HED_3, fit_HED_4)
+all_qic <- data.frame(Table = c(1,2,3,4,5), QIC = all_qic$QIC)
+
+all_qic %>%
+  kable(booktabs = TRUE, align = c('c','c'),
+        col.names = c("Table No.", "QIC"),
+        caption = paste("Outcome: HED", sep=""), escape = FALSE) %>%
   kable_styling(full_width = FALSE, latex_options = c("HOLD_position"))  
 ```
 

@@ -2,7 +2,7 @@
 title: "Analysis: Part 1 (RAPI)"
 author: 
 date: '`r format(Sys.Date(), "%B %d, %Y")`'
-geometry: margin=1in
+geometry: margin=0.7in
 output: 
   pdf_document:
   number_sections: TRUE
@@ -86,7 +86,7 @@ Each model will be estimated with either _perceived injunctive norms_ or _percei
 fit_rutgers_1 <- geem(rutgers ~ sex + race + age 
                                 + baseline_rutgers + baseline_social_desirability + baseline_impulsivity + lifestress
                                 + injunctive_workplace_norms + qualitative_role_overload + quantitative_role_overload, 
-                  data = dat_analysis, id = ParticipantID, waves = time, corstr = "exchangeable", family = "quasipoisson")
+                  data = dat_analysis, id = ParticipantID, waves = time, corstr = "exchangeable", family = "poisson")
 
 outfit_rutgers_1 <- FormatGEEOutput(fit_rutgers_1)
 N_rutgers_1 <- length(setdiff(unique(dat_analysis$ParticipantID), fit_rutgers_1$dropped))
@@ -96,7 +96,7 @@ N_rutgers_1 <- length(setdiff(unique(dat_analysis$ParticipantID), fit_rutgers_1$
 fit_rutgers_2 <- geem(rutgers ~ sex + race + age 
                                 + baseline_rutgers + baseline_social_desirability + baseline_impulsivity + lifestress
                                 + descriptive_workplace_norms + qualitative_role_overload + quantitative_role_overload, 
-                  data = dat_analysis, id = ParticipantID, waves = time, corstr = "exchangeable", family = "quasipoisson")
+                  data = dat_analysis, id = ParticipantID, waves = time, corstr = "exchangeable", family = "poisson")
 
 outfit_rutgers_2 <- FormatGEEOutput(fit_rutgers_2)
 N_rutgers_2 <- length(setdiff(unique(dat_analysis$ParticipantID), fit_rutgers_2$dropped))
@@ -136,7 +136,7 @@ fit_rutgers_3 <- geem(rutgers ~ sex + race + age
                                 + injunctive_workplace_norms + qualitative_role_overload + quantitative_role_overload
                                 + time
                                 + time:injunctive_workplace_norms + time:qualitative_role_overload + time:quantitative_role_overload, 
-                  data = dat_analysis, id = ParticipantID, waves = time, corstr = "exchangeable", family = "quasipoisson")
+                  data = dat_analysis, id = ParticipantID, waves = time, corstr = "exchangeable", family = "poisson")
 
 outfit_rutgers_3 <- FormatGEEOutput(fit_rutgers_3)
 N_rutgers_3 <- length(setdiff(unique(dat_analysis$ParticipantID), fit_rutgers_3$dropped))
@@ -149,7 +149,7 @@ fit_rutgers_4 <- geem(rutgers ~ sex + race + age
                                 + descriptive_workplace_norms + qualitative_role_overload + quantitative_role_overload
                                 + time
                                 + time:descriptive_workplace_norms + time:qualitative_role_overload + time:quantitative_role_overload, 
-                  data = dat_analysis, id = ParticipantID, waves = time, corstr = "exchangeable", family = "quasipoisson")
+                  data = dat_analysis, id = ParticipantID, waves = time, corstr = "exchangeable", family = "poisson")
 
 outfit_rutgers_4 <- FormatGEEOutput(fit_rutgers_4)
 N_rutgers_4 <- length(setdiff(unique(dat_analysis$ParticipantID), fit_rutgers_4$dropped))
@@ -191,7 +191,7 @@ fit_rutgers_5 <- geem(rutgers ~ sex + race + age
                                 + time:injunctive_workplace_norms 
                                 + time:DASS
                                 + time:injunctive_workplace_norms:DASS, 
-                  data = dat_analysis, id = ParticipantID, waves = time, corstr = "exchangeable", family = "quasipoisson")
+                  data = dat_analysis, id = ParticipantID, waves = time, corstr = "exchangeable", family = "poisson")
 
 outfit_rutgers_5 <- FormatGEEOutput(fit_rutgers_5)
 N_rutgers_5 <- length(setdiff(unique(dat_analysis$ParticipantID), fit_rutgers_5$dropped))
@@ -206,7 +206,7 @@ fit_rutgers_6 <- geem(rutgers ~ sex + race + age
                                 + time:descriptive_workplace_norms 
                                 + time:DASS
                                 + time:descriptive_workplace_norms:DASS, 
-                  data = dat_analysis, id = ParticipantID, waves = time, corstr = "exchangeable", family = "quasipoisson")
+                  data = dat_analysis, id = ParticipantID, waves = time, corstr = "exchangeable", family = "poisson")
 
 outfit_rutgers_6 <- FormatGEEOutput(fit_rutgers_6)
 N_rutgers_6 <- length(setdiff(unique(dat_analysis$ParticipantID), fit_rutgers_6$dropped))
@@ -371,6 +371,77 @@ ss_tab_6 %>%
 
 
 \newpage
+
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+fit_rutgers_7 <- geem(rutgers ~ sex + race + age 
+                                + baseline_rutgers + baseline_social_desirability + baseline_impulsivity + lifestress
+                                + injunctive_workplace_norms + qualitative_role_overload + quantitative_role_overload
+                                + DASS + injunctive_workplace_norms:DASS
+                                + time
+                                + time:injunctive_workplace_norms 
+                                + time:DASS, 
+                  data = dat_analysis, id = ParticipantID, waves = time, corstr = "exchangeable", family = "poisson")
+
+outfit_rutgers_7 <- FormatGEEOutput(fit_rutgers_7)
+N_rutgers_7 <- length(setdiff(unique(dat_analysis$ParticipantID), fit_rutgers_7$dropped))
+```
+
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+fit_rutgers_8 <- geem(rutgers ~ sex + race + age 
+                                + baseline_rutgers + baseline_social_desirability + baseline_impulsivity + lifestress
+                                + descriptive_workplace_norms + qualitative_role_overload + quantitative_role_overload
+                                + DASS + descriptive_workplace_norms:DASS
+                                + time
+                                + time:descriptive_workplace_norms 
+                                + time:DASS, 
+                  data = dat_analysis, id = ParticipantID, waves = time, corstr = "exchangeable", family = "poisson")
+
+outfit_rutgers_8 <- FormatGEEOutput(fit_rutgers_8)
+N_rutgers_8 <- length(setdiff(unique(dat_analysis$ParticipantID), fit_rutgers_8$dropped))
+```
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+outfit_rutgers_7 %>%
+  mutate(parameter = as.character(row.names(.))) %>%
+  mutate(parameter = gsub("_"," ", .data[["parameter"]])) %>%
+  mutate(parameter = gsub(":"," x ", .data[["parameter"]])) %>%
+  select(parameter, everything()) %>%
+  mutate_all(linebreak) %>%
+  kable(booktabs = TRUE, align = c('c','c','c','c'),
+        col.names = linebreak(c("Parameter","Estimates","SE","p-value"), align = "c"),
+        caption = paste("Outcome: Rutgers Alcohol Problem Index; N = ", N_rutgers_7, sep=""), escape = FALSE) %>%
+  kable_styling(full_width = FALSE, latex_options = c("HOLD_position"))  
+
+outfit_rutgers_8 %>%
+  mutate(parameter = as.character(row.names(.))) %>%
+  select(parameter, everything()) %>%
+  mutate(parameter = gsub("_"," ", .data[["parameter"]])) %>%
+  mutate(parameter = gsub(":"," x ", .data[["parameter"]])) %>%
+  mutate_all(linebreak) %>%
+  kable(booktabs = TRUE, align = c('c','c','c','c'),
+        col.names = linebreak(c("Parameter","Estimates","SE","p-value"), align = "c"),
+        caption = paste("Outcome: Rutgers Alcohol Problem Index; N = ", N_rutgers_8, sep=""), escape = FALSE) %>%
+  kable_styling(full_width = FALSE, latex_options = c("HOLD_position"))  
+```
+
+
+
+
+\newpage
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+library(MuMIn)
+all_qic <- QIC(fit_rutgers_1, fit_rutgers_2, fit_rutgers_3, fit_rutgers_4, fit_rutgers_5, fit_rutgers_6, fit_rutgers_7, fit_rutgers_8)
+all_qic <- data.frame(Table = c(2,3,4,5,6,7,12,13), QIC = all_qic$QIC)
+
+all_qic %>%
+  kable(booktabs = TRUE, align = c('c','c'),
+        col.names = c("Table No.", "QIC"),
+        caption = paste("Outcome: Rutgers Alcohol Problem Index", sep=""), escape = FALSE) %>%
+  kable_styling(full_width = FALSE, latex_options = c("HOLD_position"))  
+```
 
 
 

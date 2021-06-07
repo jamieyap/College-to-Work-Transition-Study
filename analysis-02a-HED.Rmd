@@ -2,7 +2,7 @@
 title: "Analysis: Part 2a (HED)"
 author: 
 date: '`r format(Sys.Date(), "%B %d, %Y")`'
-geometry: margin=1in
+geometry: margin=0.7in
 output: 
   pdf_document:
   number_sections: TRUE
@@ -63,7 +63,7 @@ dat_analysis <- dat_analysis %>% select(colnames(dat_screener_analysis), colname
 fit_HED_1 <- geem(HED ~ sex + race + age 
                                 + baseline_HED + baseline_social_desirability + baseline_impulsivity + lifestress 
                                 + injunctive_workplace_norms + qualitative_role_overload + quantitative_role_overload + DASS, 
-                  data = dat_analysis, id = ParticipantID, waves = time, corstr = "exchangeable", family = "quasipoisson")
+                  data = dat_analysis, id = ParticipantID, waves = time, corstr = "exchangeable", family = "poisson")
 
 outfit_HED_1 <- FormatGEEOutput(fit_HED_1)
 N_HED_1 <- length(setdiff(unique(dat_analysis$ParticipantID), fit_HED_1$dropped))
@@ -90,7 +90,7 @@ outfit_HED_1 %>%
 fit_HED_2 <- geem(HED ~ sex + race + age 
                                 + baseline_HED + baseline_social_desirability + baseline_impulsivity + lifestress 
                                 + descriptive_workplace_norms + qualitative_role_overload + quantitative_role_overload + DASS, 
-                  data = dat_analysis, id = ParticipantID, waves = time, corstr = "exchangeable", family = "quasipoisson")
+                  data = dat_analysis, id = ParticipantID, waves = time, corstr = "exchangeable", family = "poisson")
 
 outfit_HED_2 <- FormatGEEOutput(fit_HED_2)
 N_HED_2 <- length(setdiff(unique(dat_analysis$ParticipantID), fit_HED_2$dropped))
@@ -286,7 +286,19 @@ summary_quantitative_role_overload %>%
 ```
 
 
+\newpage
 
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+library(MuMIn)
+all_qic <- QIC(fit_HED_1, fit_HED_2, fit_DASS_1)
+all_qic <- data.frame(Table = c(1,2,3), QIC = all_qic$QIC)
+
+all_qic %>%
+  kable(booktabs = TRUE, align = c('c','c'),
+        col.names = c("Table No.", "QIC"),
+        caption = paste("Outcome: HED", sep=""), escape = FALSE) %>%
+  kable_styling(full_width = FALSE, latex_options = c("HOLD_position"))  
+```
 
 
 
