@@ -112,7 +112,7 @@ outfit_HED_1 %>%
   mutate_all(linebreak) %>%
   kable(booktabs = TRUE, align = c('c','c','c','c'),
         col.names = linebreak(c("Parameter","Estimates","SE","p-value"), align = "c"),
-        caption = paste("Outcome: HED Alcohol Problem Index; N = ", N_HED_1, sep=""), escape = FALSE) %>%
+        caption = paste("Outcome: HED; N = ", N_HED_1, sep=""), escape = FALSE) %>%
   kable_styling(full_width = FALSE, latex_options = c("HOLD_position"))  
 
 outfit_HED_2 %>%
@@ -123,7 +123,7 @@ outfit_HED_2 %>%
   mutate_all(linebreak) %>%
   kable(booktabs = TRUE, align = c('c','c','c','c'),
         col.names = linebreak(c("Parameter","Estimates","SE","p-value"), align = "c"),
-        caption = paste("Outcome: HED Alcohol Problem Index; N = ", N_HED_2, sep=""), escape = FALSE) %>%
+        caption = paste("Outcome: HED; N = ", N_HED_2, sep=""), escape = FALSE) %>%
   kable_styling(full_width = FALSE, latex_options = c("HOLD_position"))  
 ```
 
@@ -165,7 +165,7 @@ outfit_HED_3 %>%
   mutate_all(linebreak) %>%
   kable(booktabs = TRUE, align = c('c','c','c','c'),
         col.names = linebreak(c("Parameter","Estimates","SE","p-value"), align = "c"),
-        caption = paste("Outcome: HED Alcohol Problem Index; N = ", N_HED_3, sep=""), escape = FALSE) %>%
+        caption = paste("Outcome: HED; N = ", N_HED_3, sep=""), escape = FALSE) %>%
   kable_styling(full_width = FALSE, latex_options = c("HOLD_position"))  
 
 outfit_HED_4 %>%
@@ -176,7 +176,7 @@ outfit_HED_4 %>%
   mutate_all(linebreak) %>%
   kable(booktabs = TRUE, align = c('c','c','c','c'),
         col.names = linebreak(c("Parameter","Estimates","SE","p-value"), align = "c"),
-        caption = paste("Outcome: HED Alcohol Problem Index; N = ", N_HED_4, sep=""), escape = FALSE) %>%
+        caption = paste("Outcome: HED; N = ", N_HED_4, sep=""), escape = FALSE) %>%
   kable_styling(full_width = FALSE, latex_options = c("HOLD_position"))  
 ```
 
@@ -222,7 +222,7 @@ outfit_HED_5 %>%
   mutate_all(linebreak) %>%
   kable(booktabs = TRUE, align = c('c','c','c','c'),
         col.names = linebreak(c("Parameter","Estimates","SE","p-value"), align = "c"),
-        caption = paste("Outcome: HED Alcohol Problem Index; N = ", N_HED_5, sep=""), escape = FALSE) %>%
+        caption = paste("Outcome: HED; N = ", N_HED_5, sep=""), escape = FALSE) %>%
   kable_styling(full_width = FALSE, latex_options = c("HOLD_position"))  
 
 outfit_HED_6 %>%
@@ -233,7 +233,7 @@ outfit_HED_6 %>%
   mutate_all(linebreak) %>%
   kable(booktabs = TRUE, align = c('c','c','c','c'),
         col.names = linebreak(c("Parameter","Estimates","SE","p-value"), align = "c"),
-        caption = paste("Outcome: HED Alcohol Problem Index; N = ", N_HED_6, sep=""), escape = FALSE) %>%
+        caption = paste("Outcome: HED; N = ", N_HED_6, sep=""), escape = FALSE) %>%
   kable_styling(full_width = FALSE, latex_options = c("HOLD_position"))  
 ```
 
@@ -291,14 +291,14 @@ row.names(ss_tab_6) <- c("At early onboarding phase: effect of norms at low DASS
 ss_tab_5 %>%
   mutate(parameter = as.character(row.names(.))) %>%
   select(parameter, everything()) %>%
-  kable(booktabs = TRUE, align = c('c','c','c','c','c','c','c'), caption = paste("Outcome: HED Alcohol Problem Index; N = ", N_HED_5, "; Norms Covariate: Injunctive", sep="")) %>%
+  kable(booktabs = TRUE, align = c('c','c','c','c','c','c','c'), caption = paste("Outcome: HED; N = ", N_HED_5, "; Norms Covariate: Injunctive", sep="")) %>%
   kable_styling(full_width = FALSE, latex_options = c("HOLD_position", "scale_down"))  
 
 
 ss_tab_6 %>%
   mutate(parameter = as.character(row.names(.))) %>%
   select(parameter, everything()) %>%
-  kable(booktabs = TRUE, align = c('c','c','c','c','c','c','c'), caption = paste("Outcome: HED Alcohol Problem Index; N = ", N_HED_6, "; Norms Covariate: Descriptive",  sep="")) %>%
+  kable(booktabs = TRUE, align = c('c','c','c','c','c','c','c'), caption = paste("Outcome: HED; N = ", N_HED_6, "; Norms Covariate: Descriptive",  sep="")) %>%
   kable_styling(full_width = FALSE, latex_options = c("HOLD_position", "scale_down"))  
 ```
 
@@ -356,14 +356,14 @@ row.names(ss_tab_6) <- c("At late onboarding phase: effect of norms at low DASS"
 ss_tab_5 %>%
   mutate(parameter = as.character(row.names(.))) %>%
   select(parameter, everything()) %>%
-  kable(booktabs = TRUE, align = c('c','c','c','c','c','c','c'), caption = paste("Outcome: HED Alcohol Problem Index; N = ", N_HED_5, "; Norms Covariate: Injunctive", sep="")) %>%
+  kable(booktabs = TRUE, align = c('c','c','c','c','c','c','c'), caption = paste("Outcome: HED; N = ", N_HED_5, "; Norms Covariate: Injunctive", sep="")) %>%
   kable_styling(full_width = FALSE, latex_options = c("HOLD_position", "scale_down"))  
 
 
 ss_tab_6 %>%
   mutate(parameter = as.character(row.names(.))) %>%
   select(parameter, everything()) %>%
-  kable(booktabs = TRUE, align = c('c','c','c','c','c','c','c'), caption = paste("Outcome: HED Alcohol Problem Index; N = ", N_HED_6, "; Norms Covariate: Descriptive",  sep="")) %>%
+  kable(booktabs = TRUE, align = c('c','c','c','c','c','c','c'), caption = paste("Outcome: HED; N = ", N_HED_6, "; Norms Covariate: Descriptive",  sep="")) %>%
   kable_styling(full_width = FALSE, latex_options = c("HOLD_position", "scale_down"))  
 ```
 
