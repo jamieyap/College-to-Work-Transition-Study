@@ -370,66 +370,6 @@ ss_tab_6 %>%
 
 
 
-\newpage
-
-# Sensitivity Analysis
-
-
-```{r, echo = FALSE, message = FALSE, warning = FALSE}
-fit_HED_7 <- geem(HED ~ sex + race + age 
-                                + baseline_HED + baseline_social_desirability + baseline_impulsivity + lifestress
-                                + injunctive_workplace_norms + qualitative_role_overload + quantitative_role_overload
-                                + DASS + injunctive_workplace_norms:DASS
-                                + time
-                                + time:injunctive_workplace_norms 
-                                + time:DASS, 
-                  data = dat_analysis, id = ParticipantID, waves = time, corstr = "exchangeable", family = "poisson")
-
-outfit_HED_7 <- FormatGEEOutput(fit_HED_7)
-N_HED_7 <- length(setdiff(unique(dat_analysis$ParticipantID), fit_HED_7$dropped))
-```
-
-
-```{r, echo = FALSE, message = FALSE, warning = FALSE}
-fit_HED_8 <- geem(HED ~ sex + race + age 
-                                + baseline_HED + baseline_social_desirability + baseline_impulsivity + lifestress
-                                + descriptive_workplace_norms + qualitative_role_overload + quantitative_role_overload
-                                + DASS + descriptive_workplace_norms:DASS
-                                + time
-                                + time:descriptive_workplace_norms 
-                                + time:DASS, 
-                  data = dat_analysis, id = ParticipantID, waves = time, corstr = "exchangeable", family = "poisson")
-
-outfit_HED_8 <- FormatGEEOutput(fit_HED_8)
-N_HED_8 <- length(setdiff(unique(dat_analysis$ParticipantID), fit_HED_8$dropped))
-```
-
-
-
-```{r, echo = FALSE, message = FALSE, warning = FALSE}
-outfit_HED_7 %>%
-  mutate(parameter = as.character(row.names(.))) %>%
-  mutate(parameter = gsub("_"," ", .data[["parameter"]])) %>%
-  mutate(parameter = gsub(":"," x ", .data[["parameter"]])) %>%
-  select(parameter, everything()) %>%
-  mutate_all(linebreak) %>%
-  kable(booktabs = TRUE, align = c('c','c','c','c'),
-        col.names = linebreak(c("Parameter","Estimates","SE","p-value"), align = "c"),
-        caption = paste("Outcome: HED; N = ", N_HED_7,   "; QIC = ", round(QIC(fit_HED_7), digits = 2), sep=""), escape = FALSE) %>%
-  kable_styling(full_width = FALSE, latex_options = c("HOLD_position"))  
-
-outfit_HED_8 %>%
-  mutate(parameter = as.character(row.names(.))) %>%
-  select(parameter, everything()) %>%
-  mutate(parameter = gsub("_"," ", .data[["parameter"]])) %>%
-  mutate(parameter = gsub(":"," x ", .data[["parameter"]])) %>%
-  mutate_all(linebreak) %>%
-  kable(booktabs = TRUE, align = c('c','c','c','c'),
-        col.names = linebreak(c("Parameter","Estimates","SE","p-value"), align = "c"),
-        caption = paste("Outcome: HED; N = ", N_HED_8,   "; QIC = ", round(QIC(fit_HED_8), digits = 2),  sep=""), escape = FALSE) %>%
-  kable_styling(full_width = FALSE, latex_options = c("HOLD_position"))  
-```
-
 
 
 

@@ -107,8 +107,8 @@ list_models_rutgers <- parLapply(cl=cl,
 stopCluster(cl)
 
 # Save output
-list_models_rutgers_02c <- list_models_rutgers
-save(list_models_rutgers_02c, file = "list_models_rutgers_02d.RData")
+list_models_rutgers_02d <- list_models_rutgers
+save(list_models_rutgers_02d, file = "list_models_rutgers_02d.RData")
 
 
 
