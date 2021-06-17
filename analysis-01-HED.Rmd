@@ -25,6 +25,7 @@ library(kableExtra)
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
 library(dplyr)
 library(geeM)
+library(MuMIn)
 path_output_data <- Sys.getenv("path_output_data")
 
 # Read in functions for data analysis
@@ -112,7 +113,7 @@ outfit_HED_1 %>%
   mutate_all(linebreak) %>%
   kable(booktabs = TRUE, align = c('c','c','c','c'),
         col.names = linebreak(c("Parameter","Estimates","SE","p-value"), align = "c"),
-        caption = paste("Outcome: HED; N = ", N_HED_1, sep=""), escape = FALSE) %>%
+        caption = paste("Outcome: HED; N = ", N_HED_1,  "; QIC = ", round(QIC(fit_HED_1), digits = 2), sep=""), escape = FALSE) %>%
   kable_styling(full_width = FALSE, latex_options = c("HOLD_position"))  
 
 outfit_HED_2 %>%
@@ -123,7 +124,7 @@ outfit_HED_2 %>%
   mutate_all(linebreak) %>%
   kable(booktabs = TRUE, align = c('c','c','c','c'),
         col.names = linebreak(c("Parameter","Estimates","SE","p-value"), align = "c"),
-        caption = paste("Outcome: HED; N = ", N_HED_2, sep=""), escape = FALSE) %>%
+        caption = paste("Outcome: HED; N = ", N_HED_2,   "; QIC = ", round(QIC(fit_HED_1), digits = 2), sep=""), escape = FALSE) %>%
   kable_styling(full_width = FALSE, latex_options = c("HOLD_position"))  
 ```
 
@@ -165,7 +166,7 @@ outfit_HED_3 %>%
   mutate_all(linebreak) %>%
   kable(booktabs = TRUE, align = c('c','c','c','c'),
         col.names = linebreak(c("Parameter","Estimates","SE","p-value"), align = "c"),
-        caption = paste("Outcome: HED; N = ", N_HED_3, sep=""), escape = FALSE) %>%
+        caption = paste("Outcome: HED; N = ", N_HED_3,  "; QIC = ", round(QIC(fit_HED_3), digits = 2), sep=""), escape = FALSE) %>%
   kable_styling(full_width = FALSE, latex_options = c("HOLD_position"))  
 
 outfit_HED_4 %>%
@@ -176,7 +177,7 @@ outfit_HED_4 %>%
   mutate_all(linebreak) %>%
   kable(booktabs = TRUE, align = c('c','c','c','c'),
         col.names = linebreak(c("Parameter","Estimates","SE","p-value"), align = "c"),
-        caption = paste("Outcome: HED; N = ", N_HED_4, sep=""), escape = FALSE) %>%
+        caption = paste("Outcome: HED; N = ", N_HED_4,  "; QIC = ", round(QIC(fit_HED_4), digits = 2), sep=""), escape = FALSE) %>%
   kable_styling(full_width = FALSE, latex_options = c("HOLD_position"))  
 ```
 
@@ -222,7 +223,7 @@ outfit_HED_5 %>%
   mutate_all(linebreak) %>%
   kable(booktabs = TRUE, align = c('c','c','c','c'),
         col.names = linebreak(c("Parameter","Estimates","SE","p-value"), align = "c"),
-        caption = paste("Outcome: HED; N = ", N_HED_5, sep=""), escape = FALSE) %>%
+        caption = paste("Outcome: HED; N = ", N_HED_5,  "; QIC = ", round(QIC(fit_HED_5), digits = 2), sep=""), escape = FALSE) %>%
   kable_styling(full_width = FALSE, latex_options = c("HOLD_position"))  
 
 outfit_HED_6 %>%
@@ -233,7 +234,7 @@ outfit_HED_6 %>%
   mutate_all(linebreak) %>%
   kable(booktabs = TRUE, align = c('c','c','c','c'),
         col.names = linebreak(c("Parameter","Estimates","SE","p-value"), align = "c"),
-        caption = paste("Outcome: HED; N = ", N_HED_6, sep=""), escape = FALSE) %>%
+        caption = paste("Outcome: HED; N = ", N_HED_6,  "; QIC = ", round(QIC(fit_HED_6), digits = 2), sep=""), escape = FALSE) %>%
   kable_styling(full_width = FALSE, latex_options = c("HOLD_position"))  
 ```
 
@@ -371,6 +372,7 @@ ss_tab_6 %>%
 
 \newpage
 
+# Sensitivity Analysis
 
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
@@ -413,7 +415,7 @@ outfit_HED_7 %>%
   mutate_all(linebreak) %>%
   kable(booktabs = TRUE, align = c('c','c','c','c'),
         col.names = linebreak(c("Parameter","Estimates","SE","p-value"), align = "c"),
-        caption = paste("Outcome: HED; N = ", N_HED_7, sep=""), escape = FALSE) %>%
+        caption = paste("Outcome: HED; N = ", N_HED_7,   "; QIC = ", round(QIC(fit_HED_7), digits = 2), sep=""), escape = FALSE) %>%
   kable_styling(full_width = FALSE, latex_options = c("HOLD_position"))  
 
 outfit_HED_8 %>%
@@ -424,31 +426,9 @@ outfit_HED_8 %>%
   mutate_all(linebreak) %>%
   kable(booktabs = TRUE, align = c('c','c','c','c'),
         col.names = linebreak(c("Parameter","Estimates","SE","p-value"), align = "c"),
-        caption = paste("Outcome: HED; N = ", N_HED_8, sep=""), escape = FALSE) %>%
+        caption = paste("Outcome: HED; N = ", N_HED_8,   "; QIC = ", round(QIC(fit_HED_8), digits = 2),  sep=""), escape = FALSE) %>%
   kable_styling(full_width = FALSE, latex_options = c("HOLD_position"))  
 ```
-
-
-\newpage
-
-```{r, echo = FALSE, message = FALSE, warning = FALSE}
-library(MuMIn)
-all_qic <- QIC(fit_HED_1, fit_HED_2, fit_HED_3, fit_HED_4, fit_HED_5, fit_HED_6, fit_HED_7, fit_HED_8)
-all_qic <- data.frame(Table = c(2,3,4,5,6,7,12,13), QIC = all_qic$QIC)
-
-all_qic %>%
-  kable(booktabs = TRUE, align = c('c','c'),
-        col.names = c("Table No.", "QIC"),
-        caption = paste("Outcome: HED", sep=""), escape = FALSE) %>%
-  kable_styling(full_width = FALSE, latex_options = c("HOLD_position"))  
-```
-
-
-
-
-
-
-
 
 
 

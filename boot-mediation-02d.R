@@ -75,16 +75,16 @@ list_models_rutgers <- parLapply(cl=cl,
                                                                   + baseline_rutgers + baseline_social_desirability + baseline_impulsivity + lifestress 
                                                                   + injunctive_workplace_norms + qualitative_role_overload + quantitative_role_overload + DASS
                                                                   + time 
-                                                                  + time:qualitative_role_overload + time:quantitative_role_overload
-                                                                  + time:DASS, 
+                                                                  + time:qualitative_role_overload
+                                                                  + I(DASS*DASS), 
                                                                   data = curr_bootdat, id = AnalysisID, waves = time, corstr = "exchangeable", family = "poisson")
                                    
                                    fit_rutgers_descriptive <- geem(rutgers ~ sex + race + age 
                                                                    + baseline_rutgers + baseline_social_desirability + baseline_impulsivity + lifestress 
                                                                    + descriptive_workplace_norms + qualitative_role_overload + quantitative_role_overload + DASS
                                                                    + time 
-                                                                   + time:qualitative_role_overload + time:quantitative_role_overload
-                                                                   + time:DASS, 
+                                                                   + time:qualitative_role_overload
+                                                                   + I(DASS*DASS), 
                                                                    data = curr_bootdat, id = AnalysisID, waves = time, corstr = "exchangeable", family = "poisson")
                                    
                                    fit_DASS <- geem(DASS ~ sex + race + age 
@@ -107,66 +107,8 @@ list_models_rutgers <- parLapply(cl=cl,
 stopCluster(cl)
 
 # Save output
-list_models_rutgers_02b <- list_models_rutgers
-save(list_models_rutgers_02b, file = "list_models_rutgers_02b.RData")
-
-
-
-
-ncore <- detectCores()
-cl <- makeCluster(ncore - 1)
-clusterSetRNGStream(cl, 102399)
-clusterExport(cl, c("path_output_data"))
-clusterEvalQ(cl,
-             {
-               library(dplyr)
-               library(geeM)
-               source("analysis-utils.R")  # Read in functions for data analysis
-             })
-
-list_models_HED <- parLapply(cl=cl, 
-                                 X=list_resampled_data_centered_and_scaled, 
-                                 fun=function(curr_bootdat){
-                                   
-                                   fit_HED_injunctive <- geem(HED ~ sex + race + age 
-                                                                  + baseline_HED + baseline_social_desirability + baseline_impulsivity + lifestress 
-                                                                  + injunctive_workplace_norms + qualitative_role_overload + quantitative_role_overload + DASS
-                                                                  + time 
-                                                                  + time:qualitative_role_overload + time:quantitative_role_overload
-                                                                  + time:DASS, 
-                                                                  data = curr_bootdat, id = AnalysisID, waves = time, corstr = "exchangeable", family = "poisson")
-                                   
-                                   fit_HED_descriptive <- geem(HED ~ sex + race + age 
-                                                                   + baseline_HED + baseline_social_desirability + baseline_impulsivity + lifestress 
-                                                                   + descriptive_workplace_norms + qualitative_role_overload + quantitative_role_overload + DASS
-                                                                   + time 
-                                                                   + time:qualitative_role_overload + time:quantitative_role_overload
-                                                                   + time:DASS, 
-                                                                   data = curr_bootdat, id = AnalysisID, waves = time, corstr = "exchangeable", family = "poisson")
-                                   
-                                   fit_DASS <- geem(DASS ~ sex + race + age 
-                                                    + baseline_HED + baseline_social_desirability + baseline_impulsivity + lifestress
-                                                    + qualitative_role_overload + quantitative_role_overload
-                                                    + time + time:qualitative_role_overload + time:quantitative_role_overload, 
-                                                    data = curr_bootdat, id = AnalysisID, waves = time, corstr = "exchangeable", family = "gaussian")
-                                   
-                                   tab_HED_injunctive <- FormatGEEOutput(fit_HED_injunctive)
-                                   tab_HED_descriptive <- FormatGEEOutput(fit_HED_descriptive)
-                                   tab_DASS <- FormatGEEOutput(fit_DASS)
-                                   
-                                   list_models_HED <- list(est_HED_injunctive = tab_HED_injunctive, 
-                                                               est_HED_descriptive = tab_HED_descriptive, 
-                                                               est_DASS = tab_DASS)
-                                   
-                                   return(list_models_HED)
-                                 })
-
-stopCluster(cl)
-
-# Save output
-list_models_HED_02b <- list_models_HED
-save(list_models_HED_02b, file = "list_models_HED_02b.RData")
-
+list_models_rutgers_02c <- list_models_rutgers
+save(list_models_rutgers_02c, file = "list_models_rutgers_02d.RData")
 
 
 

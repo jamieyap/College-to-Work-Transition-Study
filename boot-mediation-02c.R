@@ -79,7 +79,7 @@ list_models_rutgers <- parLapply(cl=cl,
                                                                   + time:DASS
                                                                   + I(DASS*DASS)
                                                                   + I(time*DASS*DASS), 
-                                                                  data = curr_bootdat, id = AnalysisID, waves = time, corstr = "exchangeable", family = "quasipoisson")
+                                                                  data = curr_bootdat, id = AnalysisID, waves = time, corstr = "exchangeable", family = "poisson")
                                    
                                    fit_rutgers_descriptive <- geem(rutgers ~ sex + race + age 
                                                                    + baseline_rutgers + baseline_social_desirability + baseline_impulsivity + lifestress 
@@ -89,7 +89,7 @@ list_models_rutgers <- parLapply(cl=cl,
                                                                    + time:DASS
                                                                    + I(DASS*DASS)
                                                                    + I(time*DASS*DASS), 
-                                                                   data = curr_bootdat, id = AnalysisID, waves = time, corstr = "exchangeable", family = "quasipoisson")
+                                                                   data = curr_bootdat, id = AnalysisID, waves = time, corstr = "exchangeable", family = "poisson")
                                    
                                    fit_DASS <- geem(DASS ~ sex + race + age 
                                                     + baseline_rutgers + baseline_social_desirability + baseline_impulsivity + lifestress
@@ -141,7 +141,7 @@ list_models_HED <- parLapply(cl=cl,
                                                                   + time:DASS
                                                                   + I(DASS*DASS)
                                                                   + I(time*DASS*DASS), 
-                                                                  data = curr_bootdat, id = AnalysisID, waves = time, corstr = "exchangeable", family = "quasipoisson")
+                                                                  data = curr_bootdat, id = AnalysisID, waves = time, corstr = "exchangeable", family = "poisson")
                                    
                                    fit_HED_descriptive <- geem(HED ~ sex + race + age 
                                                                    + baseline_HED + baseline_social_desirability + baseline_impulsivity + lifestress 
@@ -151,7 +151,7 @@ list_models_HED <- parLapply(cl=cl,
                                                                    + time:DASS
                                                                    + I(DASS*DASS)
                                                                    + I(time*DASS*DASS), 
-                                                                   data = curr_bootdat, id = AnalysisID, waves = time, corstr = "exchangeable", family = "quasipoisson")
+                                                                   data = curr_bootdat, id = AnalysisID, waves = time, corstr = "exchangeable", family = "poisson")
                                    
                                    fit_DASS <- geem(DASS ~ sex + race + age 
                                                     + baseline_HED + baseline_social_desirability + baseline_impulsivity + lifestress

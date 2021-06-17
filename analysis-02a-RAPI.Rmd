@@ -25,6 +25,7 @@ library(kableExtra)
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
 library(dplyr)
 library(geeM)
+library(MuMIn)
 path_output_data <- Sys.getenv("path_output_data")
 
 # Read in functions for data analysis
@@ -79,7 +80,7 @@ outfit_rutgers_1 %>%
   mutate_all(linebreak) %>%
   kable(booktabs = TRUE, align = c('c','c','c','c'),
         col.names = linebreak(c("Parameter","Estimates","SE","p-value"), align = "c"),
-        caption = paste("Outcome: RAPI; N = ", N_rutgers_1, sep=""), escape = FALSE) %>%
+        caption = paste("Outcome: RAPI; N = ", N_rutgers_1, "; QIC = ", round(QIC(fit_rutgers_1), digits = 2), sep=""), escape = FALSE) %>%
   kable_styling(full_width = FALSE, latex_options = c("HOLD_position"))  
 ```
 
@@ -106,7 +107,7 @@ outfit_rutgers_2 %>%
   mutate_all(linebreak) %>%
   kable(booktabs = TRUE, align = c('c','c','c','c'),
         col.names = linebreak(c("Parameter","Estimates","SE","p-value"), align = "c"),
-        caption = paste("Outcome: RAPI; N = ", N_rutgers_2, sep=""), escape = FALSE) %>%
+        caption = paste("Outcome: RAPI; N = ", N_rutgers_2,  "; QIC = ", round(QIC(fit_rutgers_2), digits = 2), sep=""), escape = FALSE) %>%
   kable_styling(full_width = FALSE, latex_options = c("HOLD_position"))  
 ```
 
@@ -134,7 +135,7 @@ outfit_DASS_1 %>%
   mutate_all(linebreak) %>%
   kable(booktabs = TRUE, align = c('c','c','c','c'),
         col.names = linebreak(c("Parameter","Estimates","SE","p-value"), align = "c"),
-        caption = paste("Outcome: DASS; N = ", N_DASS_1, sep=""), escape = FALSE) %>%
+        caption = paste("Outcome: DASS; N = ", N_DASS_1,  "; QIC = ", round(QIC(fit_DASS_1), digits = 2), sep=""), escape = FALSE) %>%
   kable_styling(full_width = FALSE, latex_options = c("HOLD_position"))  
 ```
 
@@ -284,24 +285,6 @@ summary_quantitative_role_overload %>%
   kable(booktabs = TRUE, align = c('c','c','c'), caption = "DASS-mediated effect of Quantitative Role Overload; Norms Covariate: Descriptive Norms")  %>%
   kable_styling(full_width = FALSE, latex_options = c("HOLD_position"))  
 ```
-
-
-
-\newpage
-
-```{r, echo = FALSE, message = FALSE, warning = FALSE}
-library(MuMIn)
-all_qic <- QIC(fit_rutgers_1, fit_rutgers_2, fit_DASS_1)
-all_qic <- data.frame(Table = c(1,2,3), QIC = all_qic$QIC)
-
-all_qic %>%
-  kable(booktabs = TRUE, align = c('c','c'),
-        col.names = c("Table No.", "QIC"),
-        caption = paste("Outcome: RAPI", sep=""), escape = FALSE) %>%
-  kable_styling(full_width = FALSE, latex_options = c("HOLD_position"))  
-```
-
-
 
 
 
