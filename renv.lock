@@ -9,12 +9,26 @@
     ]
   },
   "Packages": {
+    "MASS": {
+      "Package": "MASS",
+      "Version": "7.3-53",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "d1bc1c8e9c0ace57ec9ffea01021d45f"
+    },
     "Matrix": {
       "Package": "Matrix",
       "Version": "1.2-18",
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "08588806cba69f04797dab50627428ed"
+    },
+    "MuMIn": {
+      "Package": "MuMIn",
+      "Version": "1.43.17",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "cb69eaf02bd4f7520d0e1f53290bd77c"
     },
     "R6": {
       "Package": "R6",
@@ -128,6 +142,13 @@
       "Repository": "CRAN",
       "Hash": "ec8ca05cffcc70569eaaad8469d2a3a7"
     },
+    "expm": {
+      "Package": "expm",
+      "Version": "0.999-6",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "1bb0f92b6125ea03dd7142f8eaf36bf5"
+    },
     "fansi": {
       "Package": "fansi",
       "Version": "0.4.1",
@@ -233,6 +254,13 @@
       "Repository": "CRAN",
       "Hash": "361811f31f71f8a617a9a68bf63f1f42"
     },
+    "ltm": {
+      "Package": "ltm",
+      "Version": "1.1-1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "5b0639db36f2f532e88c7e3259745d66"
+    },
     "magrittr": {
       "Package": "magrittr",
       "Version": "2.0.1",
@@ -254,12 +282,33 @@
       "Repository": "CRAN",
       "Hash": "e87a35ec73b157552814869f45a63aa3"
     },
+    "msm": {
+      "Package": "msm",
+      "Version": "1.6.8",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "5458188099f0deae645462e550345c8b"
+    },
     "munsell": {
       "Package": "munsell",
       "Version": "0.5.0",
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "6dfe8bf774944bd5595785e3229d8771"
+    },
+    "mvtnorm": {
+      "Package": "mvtnorm",
+      "Version": "1.1-2",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "6f0133c3842aef0394dbd844a21d3f5f"
+    },
+    "nlme": {
+      "Package": "nlme",
+      "Version": "3.1-150",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "82e52d2c6e674764ffb122d084afa96b"
     },
     "openssl": {
       "Package": "openssl",
@@ -281,6 +330,13 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "01f28d4278f15c76cddbea05899c5d6f"
+    },
+    "polycor": {
+      "Package": "polycor",
+      "Version": "0.7-10",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "6207104d51b52f6baa20e0bd32dfbd8c"
     },
     "prettyunits": {
       "Package": "prettyunits",
@@ -393,6 +449,13 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "0759e6b6c0957edb1311028a49a35e76"
+    },
+    "survival": {
+      "Package": "survival",
+      "Version": "3.2-7",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "39c4ac6d22dad33db0ee37b40810ea12"
     },
     "sys": {
       "Package": "sys",
