@@ -2,10 +2,14 @@
 title: "Analysis: Exploratory"
 author: 
 date: '`r format(Sys.Date(), "%B %d, %Y")`'
-geometry: margin=1in
+geometry: margin=0.5in
 output: 
   pdf_document:
     number_sections: TRUE
+header-includes:
+- \usepackage{pdflscape}
+- \newcommand{\blandscape}{\begin{landscape}}
+- \newcommand{\elandscape}{\end{landscape}}
 ---
 
 
@@ -38,38 +42,6 @@ dat_screener_analysis <- read.csv(file.path(path_output_data, "dat_screener_anal
 dat_wnw_analysis <- read.csv(file.path(path_output_data, "dat_wnw_analysis.csv"), header = TRUE)
 ```
 
-```{r, echo = FALSE, message = FALSE, warning = FALSE}
-list_summary_baseline <- apply(dat_baseline_analysis[,dat_baseline_vars$new_var_name], 2, ColumnSummary)
-list_summary_screener <- apply(dat_screener_analysis[,dat_screener_vars$new_var_name], 2, ColumnSummary)
-list_summary_wnw_0 <- apply(dat_wnw_analysis[dat_wnw_analysis$time==0,dat_wnw_vars$new_var_name], 2, ColumnSummary)
-list_summary_wnw_1 <- apply(dat_wnw_analysis[dat_wnw_analysis$time==1,dat_wnw_vars$new_var_name], 2, ColumnSummary)
-```
-
-```{r, echo = FALSE, message = FALSE, warning = FALSE}
-tab_baseline <- bind_rows(list_summary_baseline) %>% round(., 3)
-tab_screener <- bind_rows(list_summary_screener) %>% round(., 3)
-tab_wnw_0 <- bind_rows(list_summary_wnw_0) %>% round(., 3)
-tab_wnw_1 <- bind_rows(list_summary_wnw_1) %>% round(., 3)
-
-tab_baseline$variable <- names(list_summary_baseline)
-tab_screener$variable <- names(list_summary_screener)
-tab_wnw_0$variable <- paste("Time 0: ", names(list_summary_wnw_0), sep="")
-tab_wnw_1$variable <- paste("Time 1: ", names(list_summary_wnw_1), sep="")
-
-tab_all <- rbind(tab_baseline, tab_screener, tab_wnw_0, tab_wnw_1)
-tab_all <- tab_all %>% select(variable, everything())
-```
-
-```{r, echo = FALSE, message = FALSE, warning = FALSE}
-tab_all %>%
-  mutate(variable = gsub("_"," ", .data[["variable"]])) %>%
-  kable(booktabs = TRUE, align = c('c','c','c','c','c','c','c'),
-        col.names = c("Variable","Mean","SD","Min","Max","No. Missing", "Percent Missing"),
-        caption = paste("Empirical Summary Statistics; N = 1240 Participants in Total"), escape = FALSE) %>%
-  kable_styling(full_width = FALSE, latex_options = c("HOLD_position"))  
-```
-
-\newpage
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
 dat_baseline_vars %>%
@@ -103,5 +75,112 @@ dat_wnw_vars %>%
   kable_styling(full_width = FALSE, latex_options = c("HOLD_position"))  
 ```
 
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+list_summary_baseline <- apply(dat_baseline_analysis[,dat_baseline_vars$new_var_name], 2, ColumnSummary)
+list_summary_screener <- apply(dat_screener_analysis[,dat_screener_vars$new_var_name], 2, ColumnSummary)
+list_summary_wnw_0 <- apply(dat_wnw_analysis[dat_wnw_analysis$time==0,dat_wnw_vars$new_var_name], 2, ColumnSummary)
+list_summary_wnw_1 <- apply(dat_wnw_analysis[dat_wnw_analysis$time==1,dat_wnw_vars$new_var_name], 2, ColumnSummary)
+```
 
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+tab_baseline <- bind_rows(list_summary_baseline) %>% round(., 3)
+tab_screener <- bind_rows(list_summary_screener) %>% round(., 3)
+tab_wnw_0 <- bind_rows(list_summary_wnw_0) %>% round(., 3)
+tab_wnw_1 <- bind_rows(list_summary_wnw_1) %>% round(., 3)
+
+tab_baseline$variable <- names(list_summary_baseline)
+tab_screener$variable <- names(list_summary_screener)
+tab_wnw_0$variable <- paste("Time 0: ", names(list_summary_wnw_0), sep="")
+tab_wnw_1$variable <- paste("Time 1: ", names(list_summary_wnw_1), sep="")
+
+tab_all <- rbind(tab_baseline, tab_screener, tab_wnw_0, tab_wnw_1)
+tab_all <- tab_all %>% select(variable, everything())
+```
+
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+library(ltm)
+# Baseline variables
+baseline_social_desirability <- data.frame(dat_baseline_analysis[,c("bq62","bq63","bq64","bq65","bq66","bq67","bq68","bq69","bq70","bq71")])
+baseline_impulsivity <- data.frame(dat_baseline_analysis[,c("bq51","bq52","bq53","bq54")])
+baseline_rutgers <- data.frame(dat_screener_analysis[,c("sq25", "sq26", "sq27", "sq28", "sq29", "sq30", 
+                                                        "sq31", "sq32", "sq33", "sq34", "sq35", "sq36", "sq37", "sq38", "sq39", "sq40", 
+                                                        "sq41", "sq42", "sq43", "sq44")])
+
+# Time zero variables
+wnw_0_DASS <- data.frame(dat_wnw_analysis[which(dat_wnw_analysis$time==0),c("wnw28","wnw29","wnw30","wnw31","wnw32")])
+wnw_0_rutgers <- data.frame(dat_wnw_analysis[which(dat_wnw_analysis$time==0),c("wnw41", "wnw42", "wnw43", "wnw44",
+                                                                               "wnw45", "wnw46", "wnw47", "wnw48",
+                                                                               "wnw49", "wnw50", "wnw51", "wnw52",
+                                                                               "wnw53", "wnw54", "wnw55", "wnw56",
+                                                                               "wnw57", "wnw58", "wnw59")])
+wnw_0_qualitative_role_overload <- data.frame(dat_wnw_analysis[which(dat_wnw_analysis$time==0),c("wnw82","wnw83","wnw84")])
+wnw_0_injunctive <- data.frame(dat_wnw_analysis[which(dat_wnw_analysis$time==0),c("wnw111","wnw114")])
+wnw_0_descriptive <- data.frame(dat_wnw_analysis[which(dat_wnw_analysis$time==0),c("wnw116","wnw117")])
+wnw_0_lifestress <- data.frame(dat_wnw_analysis[which(dat_wnw_analysis$time==0),c("wnw12", "wnw13", "wnw14", "qwnw15")])
+
+# Time one variables
+wnw_1_DASS <- data.frame(dat_wnw_analysis[which(dat_wnw_analysis$time==1),c("wnw28","wnw29","wnw30","wnw31","wnw32")])
+wnw_1_rutgers <- data.frame(dat_wnw_analysis[which(dat_wnw_analysis$time==1),c("wnw41", "wnw42", "wnw43", "wnw44",
+                                                                               "wnw45", "wnw46", "wnw47", "wnw48",
+                                                                               "wnw49", "wnw50", "wnw51", "wnw52",
+                                                                               "wnw53", "wnw54", "wnw55", "wnw56",
+                                                                               "wnw57", "wnw58", "wnw59")])
+wnw_1_qualitative_role_overload <- data.frame(dat_wnw_analysis[which(dat_wnw_analysis$time==1),c("wnw82","wnw83","wnw84")])
+wnw_1_injunctive <- data.frame(dat_wnw_analysis[which(dat_wnw_analysis$time==1),c("wnw111","wnw114")])
+wnw_1_descriptive <- data.frame(dat_wnw_analysis[which(dat_wnw_analysis$time==1),c("wnw116","wnw117")])
+wnw_1_lifestress <- data.frame(dat_wnw_analysis[which(dat_wnw_analysis$time==1),c("wnw12", "wnw13", "wnw14", "qwnw15")])
+
+tab_all <- tab_all %>%
+  mutate(alpha = NA) %>%
+  mutate(alpha = replace(alpha, variable == "baseline_social_desirability", cronbach.alpha(baseline_social_desirability, na.rm=TRUE)[["alpha"]])) %>%
+  mutate(alpha = replace(alpha, variable == "baseline_impulsivity", cronbach.alpha(baseline_impulsivity, na.rm=TRUE)[["alpha"]])) %>%
+  mutate(alpha = replace(alpha, variable == "baseline_rutgers", cronbach.alpha(baseline_rutgers, na.rm=TRUE)[["alpha"]])) %>%
+  # Time 0
+  mutate(alpha = replace(alpha, variable == "Time 0: DASS", cronbach.alpha(wnw_0_DASS, na.rm=TRUE)[["alpha"]])) %>%
+  mutate(alpha = replace(alpha, variable == "Time 0: rutgers", cronbach.alpha(wnw_0_rutgers, na.rm=TRUE)[["alpha"]])) %>%
+  mutate(alpha = replace(alpha, variable == "Time 0: qualitative_role_overload", cronbach.alpha(wnw_0_qualitative_role_overload, na.rm=TRUE)[["alpha"]])) %>%
+  mutate(alpha = replace(alpha, variable == "Time 0: injunctive_workplace_norms", cronbach.alpha(wnw_0_injunctive, na.rm=TRUE)[["alpha"]])) %>%
+  mutate(alpha = replace(alpha, variable == "Time 0: descriptive_workplace_norms", cronbach.alpha(wnw_0_descriptive, na.rm=TRUE)[["alpha"]])) %>%
+  mutate(alpha = replace(alpha, variable == "Time 0: lifestress", cronbach.alpha(wnw_0_lifestress, na.rm=TRUE)[["alpha"]])) %>%
+  # Time 1
+  mutate(alpha = replace(alpha, variable == "Time 1: DASS", cronbach.alpha(wnw_1_DASS, na.rm=TRUE)[["alpha"]])) %>%
+  mutate(alpha = replace(alpha, variable == "Time 1: rutgers", cronbach.alpha(wnw_1_rutgers, na.rm=TRUE)[["alpha"]])) %>%
+  mutate(alpha = replace(alpha, variable == "Time 1: qualitative_role_overload", cronbach.alpha(wnw_1_qualitative_role_overload, na.rm=TRUE)[["alpha"]])) %>%
+  mutate(alpha = replace(alpha, variable == "Time 1: injunctive_workplace_norms", cronbach.alpha(wnw_1_injunctive, na.rm=TRUE)[["alpha"]])) %>%
+  mutate(alpha = replace(alpha, variable == "Time 1: descriptive_workplace_norms", cronbach.alpha(wnw_1_descriptive, na.rm=TRUE)[["alpha"]])) %>%
+  mutate(alpha = replace(alpha, variable == "Time 1: lifestress", cronbach.alpha(wnw_1_lifestress, na.rm=TRUE)[["alpha"]])) %>%
+  mutate(alpha = round(alpha, digits = 3))
+```
+
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+tab_all %>%
+  mutate(variable = gsub("_"," ", .data[["variable"]])) %>%
+  kable(booktabs = TRUE, align = c('c','c','c','c','c','c','c'),
+        col.names = c("Variable","Mean","SD","Min","Max","No. Missing", "Percent Missing", "Cronbach Alpha"),
+        caption = paste("Empirical Summary Statistics; N = 1240 Participants in Total; Cronbach Alphas are denoted by `NA' when not applicable"), escape = FALSE) %>%
+  kable_styling(full_width = FALSE, latex_options = c("HOLD_position"))  
+```
+
+\newpage
+
+
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+dat_wnw_0 <- dat_wnw_analysis[dat_wnw_analysis$time==0,dat_wnw_vars$new_var_name]
+dat_wnw_1 <- dat_wnw_analysis[dat_wnw_analysis$time==1,dat_wnw_vars$new_var_name]
+
+colnames(dat_wnw_0) <- paste(colnames(dat_wnw_0), "_time_0", sep="")
+colnames(dat_wnw_1) <- paste(colnames(dat_wnw_1), "_time_1", sep="")
+
+dat_corr <- cbind(dat_baseline_analysis[,dat_baseline_vars$new_var_name],
+                  dat_screener_analysis[,dat_screener_vars$new_var_name],
+                  dat_wnw_0,
+                  dat_wnw_1)
+cormat <- cor(dat_corr, use = "pairwise.complete.obs")
+cormat <- round(cormat, digits=3)
+
+write.csv(cormat, "correlation_matrix.csv", row.names = TRUE)
+```
 
