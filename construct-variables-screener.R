@@ -120,9 +120,15 @@ dat_screener_analysis %>% select(archived_age, self_reported_age, sq3, sq4, fini
 # Wrap up
 # -----------------------------------------------------------------------------
 dat_new_var_names <- bind_rows(list_new_var_names)
-dat_screener_analysis <- dat_screener_analysis %>%
+
+bigdat_screener_analysis <- dat_screener_analysis %>%
   select("ParticipantID", dat_new_var_names[["new_var_name"]], everything())
 
-write.csv(dat_screener_analysis, file.path(path_output_data, "dat_screener_analysis.csv"), row.names = FALSE)
+dat_screener_analysis <- dat_screener_analysis %>%
+  select("ParticipantID", dat_new_var_names[["new_var_name"]])
+
+
 write.csv(dat_new_var_names, file.path(path_output_data, "dat_screener_vars.csv"), row.names = FALSE)
+write.csv(dat_screener_analysis, file.path(path_output_data, "dat_screener_analysis.csv"), row.names = FALSE)
+write.csv(bigdat_screener_analysis, file.path(path_output_data, "bigdat_screener_analysis.csv"), row.names = FALSE)
 

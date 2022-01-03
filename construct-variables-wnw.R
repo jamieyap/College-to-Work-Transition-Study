@@ -155,10 +155,15 @@ list_new_var_names <- append(list_new_var_names, list(curr_new_var))
 # Wrap up
 # -----------------------------------------------------------------------------
 dat_new_var_names <- bind_rows(list_new_var_names)
-dat_wnw_analysis <- dat_wnw_analysis %>%
+
+bigdat_wnw_analysis <- dat_wnw_analysis %>%
   select("ParticipantID", "time", "survey_timepoint", "CASEID", dat_new_var_names[["new_var_name"]], everything())
 
-write.csv(dat_wnw_analysis, file.path(path_output_data, "dat_wnw_analysis.csv"), row.names = FALSE)
-write.csv(dat_new_var_names, file.path(path_output_data, "dat_wnw_vars.csv"), row.names = FALSE)
+dat_wnw_analysis <- dat_wnw_analysis %>%
+  select("ParticipantID", "time", "survey_timepoint", "CASEID", dat_new_var_names[["new_var_name"]])
 
+
+write.csv(dat_new_var_names, file.path(path_output_data, "dat_wnw_vars.csv"), row.names = FALSE)
+write.csv(dat_wnw_analysis, file.path(path_output_data, "dat_wnw_analysis.csv"), row.names = FALSE)
+write.csv(bigdat_wnw_analysis, file.path(path_output_data, "bigdat_wnw_analysis.csv"), row.names = FALSE)
 

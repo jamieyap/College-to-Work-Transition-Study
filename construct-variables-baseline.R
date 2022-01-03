@@ -56,11 +56,16 @@ list_new_var_names <- append(list_new_var_names, list(curr_new_var))
 # Wrap up
 # -----------------------------------------------------------------------------
 dat_new_var_names <- bind_rows(list_new_var_names)
-dat_baseline_analysis <- dat_baseline_analysis %>%
+
+bigdat_baseline_analysis <- dat_baseline_analysis %>%
   select("ParticipantID", dat_new_var_names[["new_var_name"]], everything())
 
-write.csv(dat_baseline_analysis, file.path(path_output_data, "dat_baseline_analysis.csv"), row.names = FALSE)
-write.csv(dat_new_var_names, file.path(path_output_data, "dat_baseline_vars.csv"), row.names = FALSE)
+dat_baseline_analysis <- dat_baseline_analysis %>%
+  select("ParticipantID", dat_new_var_names[["new_var_name"]])
 
+
+write.csv(dat_new_var_names, file.path(path_output_data, "dat_baseline_vars.csv"), row.names = FALSE)
+write.csv(dat_baseline_analysis, file.path(path_output_data, "dat_baseline_analysis.csv"), row.names = FALSE)
+write.csv(bigdat_baseline_analysis, file.path(path_output_data, "bigdat_baseline_analysis.csv"), row.names = FALSE)
 
 

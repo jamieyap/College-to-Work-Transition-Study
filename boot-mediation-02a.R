@@ -121,6 +121,8 @@ list_models_HED <- parLapply(cl=cl,
                                  X=list_resampled_data_centered_and_scaled, 
                                  fun=function(curr_bootdat){
                                    
+                                   # Note: The argument scale.fix in the function geem() is set to FALSE by default.
+                                   # When scale.fix=FALSE, an overdispersion parameter is estimated.
                                    fit_HED_injunctive <- geem(HED ~ sex + race + age 
                                                                   + baseline_HED + baseline_social_desirability + baseline_impulsivity + lifestress 
                                                                   + injunctive_workplace_norms + qualitative_role_overload + quantitative_role_overload + DASS, 
