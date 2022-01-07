@@ -1,4 +1,5 @@
 library(geeM)
+library(dplyr)
 
 ColumnSummary <- function(x){
   
@@ -13,11 +14,38 @@ ColumnSummary <- function(x){
 }
 
 FormatGEEOutput <- function(fit){
-  outfit <- round(cbind(estimates = summary(fit)$beta, se = summary(fit)$se.robust, p = summary(fit)$p), digits=3)
+  outfit <- round(cbind(estimates = summary(fit)$beta, se = summary(fit)$se.robust, p = summary(fit)$p), digits=2)
   outfit <- as.data.frame(outfit)
-  row.names(outfit) <- summary(fit)$coefnames
+  outfit$parameter <- summary(fit)$coefnames
+  
+  # Column 'estimates' is of character type
+  outfit <- outfit %>%
+    mutate(estimates = case_when(
+      p <= 0.10 & p > 0.05 ~ paste(estimates, "\206", sep=""),
+      p <= 0.05 & p > 0.01 ~ paste(estimates, "*", sep=""),
+      p <= 0.01 & p > 0.001 ~ paste(estimates, "**", sep=""),
+      p <= 0.001 ~ paste(estimates, "***", sep=""),
+      TRUE ~ as.character(estimates)
+    )) %>%
+    mutate(estimates = replace(estimates, estimates == "0" & p>0.10, "0.00"))
+  
+  outfit <- outfit %>% select(parameter, everything())
+  
   return(outfit)
 }
+
+
+CondenseGEEOutput <- function(fit){
+  # Note: This function is only used in the scripts boot-mediation-XX.R
+  outfit <- cbind(estimates = summary(fit)$beta, se = summary(fit)$se.robust, p = summary(fit)$p)
+  outfit <- as.data.frame(outfit)
+  row.names(outfit) <- summary(fit)$coefnames
+  # Column 'estimates' is of numeric type
+  # Names of parameters are row names, and not in a column of their own
+  
+  return(outfit)
+}
+
 
 GetSS <- function(use_this_model, L, contrast_labels = NULL){
   # Function to calculate p-values for a two-sided test and 95% confidence intervals
@@ -49,9 +77,33 @@ GetSS <- function(use_this_model, L, contrast_labels = NULL){
     UB95_ss <- round(UB95_ss, digits=4)
     
     if(is.null(contrast_labels)){
-      results_ss <- data.frame(est = est_ss, SE = est_stderr_ss, Z = Z_ss, pval = pval_ss, LB95 = LB95_ss, UB95 = UB95_ss)
+      results_ss <- data.frame(estimates = est_ss, SE = est_stderr_ss, p = pval_ss)
+      results_ss <- round(results_ss, digits=3)
+      
+      results_ss <- results_ss %>%
+        mutate(estimates = case_when(
+          p <= 0.10 & p > 0.05 ~ paste(estimates, "\206", sep=""),
+          p <= 0.05 & p > 0.01 ~ paste(estimates, "*", sep=""),
+          p <= 0.01 & p > 0.001 ~ paste(estimates, "**", sep=""),
+          p <= 0.001 ~ paste(estimates, "***", sep=""),
+          TRUE ~ as.character(estimates)
+        )) %>%
+        mutate(estimates = replace(estimates, estimates == "0" & p>0.10, "0.00"))
+      
     }else{
-      results_ss <- data.frame(contrast = contrast_labels, est = est_ss, SE = est_stderr_ss, Z = Z_ss, pval = pval_ss, LB95 = LB95_ss, UB95 = UB95_ss)
+      results_ss <- data.frame(contrast = contrast_labels, estimates = est_ss, SE = est_stderr_ss, p = pval_ss)
+      results_ss[,2:ncol(results_ss)] <- round(results_ss[,2:ncol(results_ss)], digits=2)
+      
+      results_ss <- results_ss %>%
+        mutate(estimates = case_when(
+          p <= 0.10 & p > 0.05 ~ paste(estimates, "\206", sep=""),
+          p <= 0.05 & p > 0.01 ~ paste(estimates, "*", sep=""),
+          p <= 0.01 & p > 0.001 ~ paste(estimates, "**", sep=""),
+          p <= 0.001 ~ paste(estimates, "***", sep=""),
+          TRUE ~ as.character(estimates)
+        )) %>%
+        mutate(estimates = replace(estimates, estimates == "0" & p>0.10, "0.00"))
+      
     }
   }else{
     results_ss <- data.frame(msg = "did not converge") 

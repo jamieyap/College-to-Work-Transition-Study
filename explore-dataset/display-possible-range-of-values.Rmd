@@ -1,0 +1,70 @@
+---
+title: "Display possible range of values in constructed variables"
+author: 
+date: '`r format(Sys.Date(), "%B %d, %Y")`'
+geometry: margin=0.5in
+output: 
+  pdf_document:
+    number_sections: TRUE
+header-includes:
+- \usepackage{pdflscape}
+- \newcommand{\blandscape}{\begin{landscape}}
+- \newcommand{\elandscape}{\end{landscape}}
+---
+
+
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(tidy = TRUE)
+knitr::opts_chunk$set(fig.pos = 'H')
+```
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+library(rmarkdown)
+library(knitr)
+library(kableExtra)
+```
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+library(dplyr)
+path_output_data <- Sys.getenv("path_output_data")
+
+# Read in variable description
+dat_baseline_vars <- read.csv(file.path(path_output_data, "dat_baseline_vars.csv"), header = TRUE)
+dat_screener_vars <- read.csv(file.path(path_output_data, "dat_screener_vars.csv"), header = TRUE)
+dat_wnw_vars <- read.csv(file.path(path_output_data, "dat_wnw_vars.csv"), header = TRUE)
+```
+
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+dat_baseline_vars %>%
+  select(-notable_observations) %>%
+  mutate(new_var_name = gsub("_"," ", .data[["new_var_name"]])) %>%
+  kable(booktabs = TRUE, align = c('c','c','c','c'), 
+        col.names = c("Source Data","Variable","Min Possible Val","Max Possible Val"),
+        caption = paste("Variables Constructed from Baseline Raw Dataset (All variables rated on a categorical scale were recoded so that minimum value is zero, i.e., by subtracting 1 off raw value)"), escape = FALSE) %>%
+  kable_styling(full_width = FALSE, latex_options = c("HOLD_position"))  
+```
+
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+dat_screener_vars %>%
+  select(-notable_observations) %>%
+  mutate(new_var_name = gsub("_"," ", .data[["new_var_name"]])) %>%
+  kable(booktabs = TRUE, align = c('c','c','c','c'),
+        col.names = c("Source Data","Variable","Min Possible Val","Max Possible Val"),
+        caption = paste("Variables Constructed from Screener Raw Dataset (All variables rated on a categorical scale were recoded so that minimum value is zero, i.e., by subtracting 1 off raw value); Value denoted by `NA' when not applicable"), escape = FALSE) %>%
+  kable_styling(full_width = FALSE, latex_options = c("HOLD_position"))  
+```
+
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+dat_wnw_vars %>%
+  select(-notable_observations) %>%
+  mutate(new_var_name = gsub("_"," ", .data[["new_var_name"]])) %>%
+  kable(booktabs = TRUE, align = c('c','c','c','c'),
+        col.names = c("Source Data","Variable","Min Possible Val","Max Possible Val"),
+        caption = paste("Variables Constructed from Working-Not-Working Raw Dataset (All variables rated on a categorical scale were recoded so that minimum value is zero, i.e., by subtracting 1 off raw value)"), escape = FALSE) %>%
+  kable_styling(full_width = FALSE, latex_options = c("HOLD_position"))  
+```
+
+

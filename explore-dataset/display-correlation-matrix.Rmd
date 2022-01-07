@@ -1,0 +1,71 @@
+---
+title: "Display correlation among constructed variables"
+author: 
+date: '`r format(Sys.Date(), "%B %d, %Y")`'
+geometry: margin=0.5in, paperheight=13.0in,paperwidth=8.5in, landscape
+output: 
+  pdf_document:
+    number_sections: TRUE
+---
+
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+library(rmarkdown)
+library(knitr)
+library(kableExtra)
+```
+
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(tidy = TRUE)
+knitr::opts_chunk$set(fig.pos = 'H')
+```
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+library(dplyr)
+path_output_data <- Sys.getenv("path_output_data")
+source("analysis-utils.R")
+
+# Read in variable description
+dat_baseline_vars <- read.csv(file.path(path_output_data, "dat_baseline_vars.csv"), header = TRUE)
+dat_screener_vars <- read.csv(file.path(path_output_data, "dat_screener_vars.csv"), header = TRUE)
+dat_wnw_vars <- read.csv(file.path(path_output_data, "dat_wnw_vars.csv"), header = TRUE)
+
+# Read in data
+dat_baseline_analysis <- read.csv(file.path(path_output_data, "dat_baseline_analysis.csv"), header = TRUE)
+dat_screener_analysis <- read.csv(file.path(path_output_data, "dat_screener_analysis.csv"), header = TRUE)
+dat_wnw_analysis <- read.csv(file.path(path_output_data, "dat_wnw_analysis.csv"), header = TRUE)
+```
+
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+dat_wnw_0 <- dat_wnw_analysis[dat_wnw_analysis$time==0,dat_wnw_vars$new_var_name]
+dat_wnw_1 <- dat_wnw_analysis[dat_wnw_analysis$time==1,dat_wnw_vars$new_var_name]
+
+colnames(dat_wnw_0) <- paste(colnames(dat_wnw_0), "_time_0", sep="")
+colnames(dat_wnw_1) <- paste(colnames(dat_wnw_1), "_time_1", sep="")
+
+dat_corr <- cbind(dat_screener_analysis[,dat_screener_vars$new_var_name],
+                  dat_baseline_analysis[,dat_baseline_vars$new_var_name],
+                  dat_wnw_0,
+                  dat_wnw_1)
+cormat <- cor(dat_corr, use = "pairwise.complete.obs")
+cormat <- round(cormat, digits=2)
+```
+
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+row.names(cormat) <- NULL
+cormat <- cbind(as.matrix(1:ncol(cormat)), cormat)
+colnames(cormat) <- c("", 1:(ncol(cormat)-1))
+
+kable(cormat, booktabs=TRUE) %>%
+  column_spec(1, border_left = FALSE, border_right = TRUE) %>%
+  kable_styling(position = "center")
+```
+
+
+
+
+
+
+
