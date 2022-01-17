@@ -1,3 +1,8 @@
+---
+output:
+  pdf_document: default
+  html_document: default
+---
 # The College-to-Work Transition Study (C2W)
 Focused on young adults transitioning from college to the work force, the College-to-Work Transition Study (C2W) involved a multi-year data collection effort where seniors in their final quarter/semester before graduation from universities located in the Pacific Northwest, Midwest, Southeast, and Northeast parts of the USA were invited to participate.
 
@@ -58,9 +63,10 @@ This repository contains code to process data collected during the study and inv
 
 | <img height=0 width=350> File <img height=0 width=350> | <img height=0 width=800> Brief Description <img height=0 width=800> |
 |:------------------------------------------:|:--------------------------------------------------------------------------------------------------|
-| display-possible-range-of-values.Rmd | Displays the range of possible variables (constructed using code within the `construct-dataset' folder) can take on. Results are displayed in display-possible-range-of-values.pdf |
-| display-actual-range-of-values.Rmd | Displays the range of actual variables (constructed using code within the `construct-dataset' folder) can take on. Results are displayed in display-actual-range-of-values.pdf |
-| display-correlation-matrix.Rmd | Displays the correlation among variables (constructed using code within the `construct-dataset' folder). Results are displayed in display-correlation-matrix.pdf; to enable results to fit in one page, variable names are not displayed. The numbers 1, 2, ..., 23 labelling the rows and columns in this file correspond to the variables listed in order from the 1st, 2nd, ..., 23rd row in the file display-actual-range-of-values.pdf |
+| display-possible-range-of-values.Rmd | Displays the range of possible range of values variables can take on. Results are displayed in display-possible-range-of-values.pdf |
+| display-actual-range-of-values.Rmd | Displays the range of actual range of values variables can take on. Results are displayed in display-actual-range-of-values.pdf |
+| display-correlation-matrix.Rmd | Displays the correlation among variables . Results are displayed in display-correlation-matrix.pdf; to enable results to fit in one page, variable names are not displayed. The numbers 1, 2, ..., 23 labeling the rows and columns in this file correspond to the variables listed in order from the 1st, 2nd, ..., 23rd row in the file display-actual-range-of-values.pdf |
+| test-homogeneity.Rmd |Conduct Chi-squared tests (for binary and count variables) or Kolmogorov-Smirnov tests (for continuous variables) to test for homogeneity across two samples; the two samples being compared are 1. Participants having missing data in the outcome (i.e., RAPI/HED), versus 2. Participants having data in the outcome. Results are displayed in test-homogeneity.pdf |
 
 ## 3. Record of R packages utilized
 

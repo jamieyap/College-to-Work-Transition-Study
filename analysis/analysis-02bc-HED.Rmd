@@ -1,5 +1,5 @@
 ---
-title: "Test H2 and H3 with RAPI as the outcome"
+title: "Test H2 and H3 with number of past-month heavy drinking days (HED) as the outcome"
 author: 
 date: '`r format(Sys.Date(), "%B %d, %Y")`'
 geometry: margin=0.7in
@@ -62,33 +62,33 @@ dat_analysis <- dat_analysis %>% select(colnames(dat_screener_analysis), colname
 ## Injunctive Norms
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
-fit_rutgers_1 <- geem(rutgers ~ sex + race + age 
-                      + baseline_rutgers + baseline_social_desirability + baseline_impulsivity + lifestress 
+fit_HED_1 <- geem(HED ~ sex + race + age 
+                      + baseline_HED + baseline_social_desirability + baseline_impulsivity + lifestress 
                       + injunctive_workplace_norms + qualitative_role_overload + quantitative_role_overload + DASS
                       + time 
                       + time:qualitative_role_overload + time:quantitative_role_overload
                       + time:DASS, 
                   data = dat_analysis, id = ParticipantID, waves = time, corstr = "exchangeable", family = "poisson")
 
-outfit_rutgers_1 <- FormatGEEOutput(fit_rutgers_1)
-N_rutgers_1 <- length(setdiff(unique(dat_analysis$ParticipantID), fit_rutgers_1$dropped))
+outfit_HED_1 <- FormatGEEOutput(fit_HED_1)
+N_HED_1 <- length(setdiff(unique(dat_analysis$ParticipantID), fit_HED_1$dropped))
 ```
 
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
-write.csv(outfit_rutgers_1, "prepare-publication-tables/RAPI/injunctive_model_05.csv", row.names=FALSE)
+write.csv(outfit_HED_1, "prepare-publication-tables/HED/injunctive_model_05.csv", row.names=FALSE)
 ```
 
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
-outfit_rutgers_1 %>%
+outfit_HED_1 %>%
   mutate(parameter = gsub("_"," ", .data[["parameter"]])) %>%
   mutate(parameter = gsub(":"," x ", .data[["parameter"]])) %>%
   select(parameter, everything()) %>%
   mutate_all(linebreak) %>%
   kable(booktabs = TRUE, align = c('c','c','c','c'),
         col.names = linebreak(c("Parameter","Estimates","SE","p-value"), align = "c"),
-        caption = paste("Outcome: RAPI; N = ", N_rutgers_1, "; QIC = ", round(QIC(fit_rutgers_1), digits = 2), sep=""), escape = FALSE) %>%
+        caption = paste("Outcome: Number of past-month heavy drinking days (HED); N = ", N_HED_1, "; QIC = ", round(QIC(fit_HED_1), digits = 2), sep=""), escape = FALSE) %>%
   kable_styling(full_width = FALSE, latex_options = c("HOLD_position"))  
 ```
 
@@ -96,28 +96,28 @@ outfit_rutgers_1 %>%
 ## Descriptive Norms
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
-fit_rutgers_2 <- geem(rutgers ~ sex + race + age 
-                     + baseline_rutgers + baseline_social_desirability + baseline_impulsivity + lifestress 
+fit_HED_2 <- geem(HED ~ sex + race + age 
+                     + baseline_HED + baseline_social_desirability + baseline_impulsivity + lifestress 
                      + descriptive_workplace_norms + qualitative_role_overload + quantitative_role_overload + DASS
                      + time 
                      + time:qualitative_role_overload + time:quantitative_role_overload
                      + time:DASS, 
                   data = dat_analysis, id = ParticipantID, waves = time, corstr = "exchangeable", family = "poisson")
 
-outfit_rutgers_2 <- FormatGEEOutput(fit_rutgers_2)
-N_rutgers_2 <- length(setdiff(unique(dat_analysis$ParticipantID), fit_rutgers_2$dropped))
+outfit_HED_2 <- FormatGEEOutput(fit_HED_2)
+N_HED_2 <- length(setdiff(unique(dat_analysis$ParticipantID), fit_HED_2$dropped))
 ```
 
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
-outfit_rutgers_2 %>%
+outfit_HED_2 %>%
   mutate(parameter = gsub("_"," ", .data[["parameter"]])) %>%
   mutate(parameter = gsub(":"," x ", .data[["parameter"]])) %>%
   select(parameter, everything()) %>%
   mutate_all(linebreak) %>%
   kable(booktabs = TRUE, align = c('c','c','c','c'),
         col.names = linebreak(c("Parameter","Estimates","SE","p-value"), align = "c"),
-        caption = paste("Outcome: RAPI; N = ", N_rutgers_2,  "; QIC = ", round(QIC(fit_rutgers_2), digits = 2), sep=""), escape = FALSE) %>%
+        caption = paste("Outcome: Number of past-month heavy drinking days (HED); N = ", N_HED_2,  "; QIC = ", round(QIC(fit_HED_2), digits = 2), sep=""), escape = FALSE) %>%
   kable_styling(full_width = FALSE, latex_options = c("HOLD_position"))  
 ```
 
@@ -126,7 +126,7 @@ outfit_rutgers_2 %>%
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
 fit_DASS_1 <- geem(DASS ~ sex + race + age 
-                  + baseline_rutgers + baseline_social_desirability + baseline_impulsivity + lifestress
+                  + baseline_HED + baseline_social_desirability + baseline_impulsivity + lifestress
                   + qualitative_role_overload + quantitative_role_overload
                   + time + time:qualitative_role_overload + time:quantitative_role_overload, 
                 data = dat_analysis, id = ParticipantID, waves = time, corstr = "exchangeable", family = "gaussian")
@@ -137,7 +137,7 @@ N_DASS_1 <- length(setdiff(unique(dat_analysis$ParticipantID), fit_DASS_1$droppe
 
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
-write.csv(outfit_DASS_1, "prepare-publication-tables/DASS/injunctive_with_baseline_RAPI_model_06.csv", row.names=FALSE)
+write.csv(outfit_DASS_1, "prepare-publication-tables/DASS/injunctive_with_baseline_HED_model_06.csv", row.names=FALSE)
 ```
 
 
@@ -161,8 +161,8 @@ outfit_DASS_1 %>%
 ## Injunctive Norms
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
-fit_rutgers_3 <- geem(rutgers ~ sex + race + age 
-                      + baseline_rutgers + baseline_social_desirability + baseline_impulsivity + lifestress 
+fit_HED_3 <- geem(HED ~ sex + race + age 
+                      + baseline_HED + baseline_social_desirability + baseline_impulsivity + lifestress 
                       + injunctive_workplace_norms + qualitative_role_overload + quantitative_role_overload + DASS
                       + time 
                       + time:qualitative_role_overload + time:quantitative_role_overload
@@ -171,33 +171,33 @@ fit_rutgers_3 <- geem(rutgers ~ sex + race + age
                       + I(time*DASS*DASS), 
                   data = dat_analysis, id = ParticipantID, waves = time, corstr = "exchangeable", family = "poisson")
 
-outfit_rutgers_3 <- FormatGEEOutput(fit_rutgers_3)
-N_rutgers_3 <- length(setdiff(unique(dat_analysis$ParticipantID), fit_rutgers_3$dropped))
+outfit_HED_3 <- FormatGEEOutput(fit_HED_3)
+N_HED_3 <- length(setdiff(unique(dat_analysis$ParticipantID), fit_HED_3$dropped))
 ```
 
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
-write.csv(outfit_rutgers_3, "prepare-publication-tables/RAPI/injunctive_model_07.csv", row.names=FALSE)
+write.csv(outfit_HED_3, "prepare-publication-tables/HED/injunctive_model_07.csv", row.names=FALSE)
 ```
 
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
-outfit_rutgers_3 %>%
+outfit_HED_3 %>%
   mutate(parameter = gsub("_"," ", .data[["parameter"]])) %>%
   mutate(parameter = gsub(":"," x ", .data[["parameter"]])) %>%
   select(parameter, everything()) %>%
   mutate_all(linebreak) %>%
   kable(booktabs = TRUE, align = c('c','c','c','c'),
         col.names = linebreak(c("Parameter","Estimates","SE","p-value"), align = "c"),
-        caption = paste("Outcome: RAPI; N = ", N_rutgers_3,  "; QIC = ", round(QIC(fit_rutgers_3), digits = 2), sep=""), escape = FALSE) %>%
+        caption = paste("Outcome: Number of past-month heavy drinking days (HED); N = ", N_HED_3,  "; QIC = ", round(QIC(fit_HED_3), digits = 2), sep=""), escape = FALSE) %>%
   kable_styling(full_width = FALSE, latex_options = c("HOLD_position"))  
 ```
 
 ## Descriptive Norms
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
-fit_rutgers_4 <- geem(rutgers ~ sex + race + age 
-                      + baseline_rutgers + baseline_social_desirability + baseline_impulsivity + lifestress 
+fit_HED_4 <- geem(HED ~ sex + race + age 
+                      + baseline_HED + baseline_social_desirability + baseline_impulsivity + lifestress 
                       + descriptive_workplace_norms + qualitative_role_overload + quantitative_role_overload + DASS
                       + time 
                       + time:qualitative_role_overload + time:quantitative_role_overload
@@ -206,20 +206,20 @@ fit_rutgers_4 <- geem(rutgers ~ sex + race + age
                       + I(time*DASS*DASS), 
                   data = dat_analysis, id = ParticipantID, waves = time, corstr = "exchangeable", family = "poisson")
 
-outfit_rutgers_4 <- FormatGEEOutput(fit_rutgers_4)
-N_rutgers_4 <- length(setdiff(unique(dat_analysis$ParticipantID), fit_rutgers_4$dropped))
+outfit_HED_4 <- FormatGEEOutput(fit_HED_4)
+N_HED_4 <- length(setdiff(unique(dat_analysis$ParticipantID), fit_HED_4$dropped))
 ```
 
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
-outfit_rutgers_4 %>%
+outfit_HED_4 %>%
   mutate(parameter = gsub("_"," ", .data[["parameter"]])) %>%
   mutate(parameter = gsub(":"," x ", .data[["parameter"]])) %>%
   select(parameter, everything()) %>%
   mutate_all(linebreak) %>%
   kable(booktabs = TRUE, align = c('c','c','c','c'),
         col.names = linebreak(c("Parameter","Estimates","SE","p-value"), align = "c"),
-        caption = paste("Outcome: RAPI; N = ", N_rutgers_4,  "; QIC = ", round(QIC(fit_rutgers_4), digits = 2), sep=""), escape = FALSE) %>%
+        caption = paste("Outcome: Number of past-month heavy drinking days (HED); N = ", N_HED_4,  "; QIC = ", round(QIC(fit_HED_4), digits = 2), sep=""), escape = FALSE) %>%
   kable_styling(full_width = FALSE, latex_options = c("HOLD_position"))  
 ```
 
@@ -231,17 +231,17 @@ outfit_rutgers_4 %>%
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
 # Read in bootstrap estimates
-load("bootstrap/list_models_rutgers_02b.RData")
+load("bootstrap/list_models_HED_02b.RData")
 alpha <- 0.05
 ```
 
 ## Injunctive Norms
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
-list_params_rutgers_02b <- list()
+list_params_HED_02b <- list()
 
-for(i in 1:length(list_models_rutgers_02b)){
-  curr_model_estimates <- list_models_rutgers_02b[[i]]
+for(i in 1:length(list_models_HED_02b)){
+  curr_model_estimates <- list_models_HED_02b[[i]]
   
   tab_DASS <- curr_model_estimates[["est_DASS"]]
   a2 <- tab_DASS[row.names(tab_DASS) == "qualitative_role_overload",][["estimates"]]
@@ -249,18 +249,18 @@ for(i in 1:length(list_models_rutgers_02b)){
   a3 <- tab_DASS[row.names(tab_DASS) == "quantitative_role_overload",][["estimates"]]
   a5 <- tab_DASS[row.names(tab_DASS) == "quantitative_role_overload:time",][["estimates"]]
 
-  tab_drinking <- curr_model_estimates[["est_rutgers_injunctive"]]
+  tab_drinking <- curr_model_estimates[["est_HED_injunctive"]]
   b1 <- tab_drinking[row.names(tab_drinking) == "DASS",][["estimates"]]
   b3 <- tab_drinking[row.names(tab_drinking) == "DASS:time",][["estimates"]]
   
-  curr_params_rutgers <- data.frame(a2=a2, a4=a4, a3=a3, a5=a5, b1=b1, b3=b3)
-  list_params_rutgers_02b <- append(list_params_rutgers_02b, list(curr_params_rutgers))
+  curr_params_HED <- data.frame(a2=a2, a4=a4, a3=a3, a5=a5, b1=b1, b3=b3)
+  list_params_HED_02b <- append(list_params_HED_02b, list(curr_params_HED))
 }
 ```
 
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
-bootdat_params_rutgers <- bind_rows(list_params_rutgers_02b) %>%
+bootdat_params_HED <- bind_rows(list_params_HED_02b) %>%
   # Mediated Effect: Qualitative Role Overload
   mutate(qualitative_role_overload_time_0 = a2*(b1),
          qualitative_role_overload_time_1 = (a2+a4)*(b1+b3)) %>%
@@ -272,13 +272,13 @@ bootdat_params_rutgers <- bind_rows(list_params_rutgers_02b) %>%
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
 # Qualitative Role Overload
-time_0 <- bootdat_params_rutgers %>%
+time_0 <- bootdat_params_HED %>%
   summarise(mean_time_0 = mean(qualitative_role_overload_time_0),
             LB_time_0 = quantile(qualitative_role_overload_time_0, probs = alpha/2),
             UB_time_0 = quantile(qualitative_role_overload_time_0, probs = 1-alpha/2))
 
 
-time_1 <- bootdat_params_rutgers %>%
+time_1 <- bootdat_params_HED %>%
   summarise(mean_time_1 = mean(qualitative_role_overload_time_1),
             LB_time_1 = quantile(qualitative_role_overload_time_1, probs = alpha/2),
             UB_time_1 = quantile(qualitative_role_overload_time_1, probs = 1-alpha/2))
@@ -294,13 +294,13 @@ row.names(summary_qualitative_role_overload) <- c("Early Onboarding Phase",
 colnames(summary_qualitative_role_overload) <- c("Bootstrap Mean","Bootstrap 95%-CI LB","Bootstrap 95%-CI UB")
 
 # Quantitative Role Overload
-time_0 <- bootdat_params_rutgers %>%
+time_0 <- bootdat_params_HED %>%
   summarise(mean_time_0 = mean(quantitative_role_overload_time_0),
             LB_time_0 = quantile(quantitative_role_overload_time_0, probs = alpha/2),
             UB_time_0 = quantile(quantitative_role_overload_time_0, probs = 1-alpha/2))
 
 
-time_1 <- bootdat_params_rutgers %>%
+time_1 <- bootdat_params_HED %>%
   summarise(mean_time_1 = mean(quantitative_role_overload_time_1),
             LB_time_1 = quantile(quantitative_role_overload_time_1, probs = alpha/2),
             UB_time_1 = quantile(quantitative_role_overload_time_1, probs = 1-alpha/2))
@@ -324,7 +324,7 @@ summary_qualitative_role_overload %>%
 
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
-write.csv(summary_qualitative_role_overload, "prepare-publication-tables/RAPI/injunctive_qualitative_role_overload_mediated_effect_model05_and_model_06.csv")
+write.csv(summary_qualitative_role_overload, "prepare-publication-tables/HED/injunctive_qualitative_role_overload_mediated_effect_model05_and_model_06.csv")
 ```
 
 
@@ -335,16 +335,16 @@ summary_quantitative_role_overload %>%
 ```
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
-write.csv(summary_quantitative_role_overload, "prepare-publication-tables/RAPI/injunctive_quantitative_role_overload_mediated_effect_model05_and_model_06.csv")
+write.csv(summary_quantitative_role_overload, "prepare-publication-tables/HED/injunctive_quantitative_role_overload_mediated_effect_model05_and_model_06.csv")
 ```
 
 ## Descriptive Norms
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
-list_params_rutgers_02b <- list()
+list_params_HED_02b <- list()
 
-for(i in 1:length(list_models_rutgers_02b)){
-  curr_model_estimates <- list_models_rutgers_02b[[i]]
+for(i in 1:length(list_models_HED_02b)){
+  curr_model_estimates <- list_models_HED_02b[[i]]
   
   tab_DASS <- curr_model_estimates[["est_DASS"]]
   a2 <- tab_DASS[row.names(tab_DASS) == "qualitative_role_overload",][["estimates"]]
@@ -352,18 +352,18 @@ for(i in 1:length(list_models_rutgers_02b)){
   a3 <- tab_DASS[row.names(tab_DASS) == "quantitative_role_overload",][["estimates"]]
   a5 <- tab_DASS[row.names(tab_DASS) == "quantitative_role_overload:time",][["estimates"]]
 
-  tab_drinking <- curr_model_estimates[["est_rutgers_descriptive"]]
+  tab_drinking <- curr_model_estimates[["est_HED_descriptive"]]
   b1 <- tab_drinking[row.names(tab_drinking) == "DASS",][["estimates"]]
   b3 <- tab_drinking[row.names(tab_drinking) == "DASS:time",][["estimates"]]
   
-  curr_params_rutgers <- data.frame(a2=a2, a4=a4, a3=a3, a5=a5, b1=b1, b3=b3)
-  list_params_rutgers_02b <- append(list_params_rutgers_02b, list(curr_params_rutgers))
+  curr_params_HED <- data.frame(a2=a2, a4=a4, a3=a3, a5=a5, b1=b1, b3=b3)
+  list_params_HED_02b <- append(list_params_HED_02b, list(curr_params_HED))
 }
 ```
 
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
-bootdat_params_rutgers <- bind_rows(list_params_rutgers_02b) %>%
+bootdat_params_HED <- bind_rows(list_params_HED_02b) %>%
   # Mediated Effect: Qualitative Role Overload
   mutate(qualitative_role_overload_time_0 = a2*(b1),
          qualitative_role_overload_time_1 = (a2+a4)*(b1+b3)) %>%
@@ -376,13 +376,13 @@ bootdat_params_rutgers <- bind_rows(list_params_rutgers_02b) %>%
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
 # Qualitative Role Overload
-time_0 <- bootdat_params_rutgers %>%
+time_0 <- bootdat_params_HED %>%
   summarise(mean_time_0 = mean(qualitative_role_overload_time_0),
             LB_time_0 = quantile(qualitative_role_overload_time_0, probs = alpha/2),
             UB_time_0 = quantile(qualitative_role_overload_time_0, probs = 1-alpha/2))
 
 
-time_1 <- bootdat_params_rutgers %>%
+time_1 <- bootdat_params_HED %>%
   summarise(mean_time_1 = mean(qualitative_role_overload_time_1),
             LB_time_1 = quantile(qualitative_role_overload_time_1, probs = alpha/2),
             UB_time_1 = quantile(qualitative_role_overload_time_1, probs = 1-alpha/2))
@@ -398,13 +398,13 @@ row.names(summary_qualitative_role_overload) <- c("Early Onboarding Phase",
 colnames(summary_qualitative_role_overload) <- c("Bootstrap Mean","Bootstrap 95%-CI LB","Bootstrap 95%-CI UB")
 
 # Quantitative Role Overload
-time_0 <- bootdat_params_rutgers %>%
+time_0 <- bootdat_params_HED %>%
   summarise(mean_time_0 = mean(quantitative_role_overload_time_0),
             LB_time_0 = quantile(quantitative_role_overload_time_0, probs = alpha/2),
             UB_time_0 = quantile(quantitative_role_overload_time_0, probs = 1-alpha/2))
 
 
-time_1 <- bootdat_params_rutgers %>%
+time_1 <- bootdat_params_HED %>%
   summarise(mean_time_1 = mean(quantitative_role_overload_time_1),
             LB_time_1 = quantile(quantitative_role_overload_time_1, probs = alpha/2),
             UB_time_1 = quantile(quantitative_role_overload_time_1, probs = 1-alpha/2))
@@ -439,17 +439,17 @@ summary_quantitative_role_overload %>%
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
 # Read in bootstrap estimates
-load("bootstrap/list_models_rutgers_02c.RData")
+load("bootstrap/list_models_HED_02c.RData")
 alpha <- 0.05
 ```
 
 ## Injunctive Norms
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
-list_params_rutgers <- list()
+list_params_HED <- list()
 
-for(i in 1:length(list_models_rutgers_02c)){
-  curr_model_estimates <- list_models_rutgers_02c[[i]]
+for(i in 1:length(list_models_HED_02c)){
+  curr_model_estimates <- list_models_HED_02c[[i]]
   
   tab_DASS <- curr_model_estimates[["est_DASS"]]
   a2 <- tab_DASS[row.names(tab_DASS) == "qualitative_role_overload",][["estimates"]]
@@ -457,21 +457,21 @@ for(i in 1:length(list_models_rutgers_02c)){
   a3 <- tab_DASS[row.names(tab_DASS) == "quantitative_role_overload",][["estimates"]]
   a5 <- tab_DASS[row.names(tab_DASS) == "quantitative_role_overload:time",][["estimates"]]
 
-  tab_drinking <- curr_model_estimates[["est_rutgers_injunctive"]]
+  tab_drinking <- curr_model_estimates[["est_HED_injunctive"]]
   b1 <- tab_drinking[row.names(tab_drinking) == "DASS",][["estimates"]]
   b2 <- tab_drinking[row.names(tab_drinking) == "I(DASS * DASS)",][["estimates"]]
   b3 <- tab_drinking[row.names(tab_drinking) == "DASS:time",][["estimates"]]
   b4 <- tab_drinking[row.names(tab_drinking) == "I(time * DASS * DASS)",][["estimates"]]
   
-  curr_params_rutgers <- data.frame(a2=a2, a4=a4, a3=a3, a5=a5, b1=b1, b2=b2, b3=b3, b4=b4)
-  list_params_rutgers <- append(list_params_rutgers, list(curr_params_rutgers))
+  curr_params_HED <- data.frame(a2=a2, a4=a4, a3=a3, a5=a5, b1=b1, b2=b2, b3=b3, b4=b4)
+  list_params_HED <- append(list_params_HED, list(curr_params_HED))
 }
 ```
 
 
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
-bootdat_params_rutgers <- bind_rows(list_params_rutgers) %>%
+bootdat_params_HED <- bind_rows(list_params_HED) %>%
   # Mediated Effect: Qualitative Role Overload
   mutate(qualitative_role_overload_time_0_DASS_low = a2*(b1-b2),
          qualitative_role_overload_time_0_DASS_moderate = a2*(b1),
@@ -490,32 +490,32 @@ bootdat_params_rutgers <- bind_rows(list_params_rutgers) %>%
 
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
-time_0_DASS_low <- bootdat_params_rutgers %>%
+time_0_DASS_low <- bootdat_params_HED %>%
   summarise(mean_time_0_DASS_low = mean(qualitative_role_overload_time_0_DASS_low),
             LB_time_0_DASS_low = quantile(qualitative_role_overload_time_0_DASS_low, probs = alpha/2),
             UB_time_0_DASS_low = quantile(qualitative_role_overload_time_0_DASS_low, probs = 1-alpha/2))
 
-time_0_DASS_moderate <- bootdat_params_rutgers %>%
+time_0_DASS_moderate <- bootdat_params_HED %>%
   summarise(mean_time_0_DASS_moderate = mean(qualitative_role_overload_time_0_DASS_moderate),
             LB_time_0_DASS_moderate = quantile(qualitative_role_overload_time_0_DASS_moderate, probs = alpha/2),
             UB_time_0_DASS_moderate = quantile(qualitative_role_overload_time_0_DASS_moderate, probs = 1-alpha/2))
 
-time_0_DASS_high <- bootdat_params_rutgers %>%
+time_0_DASS_high <- bootdat_params_HED %>%
   summarise(mean_time_0_DASS_high = mean(qualitative_role_overload_time_0_DASS_high),
             LB_time_0_DASS_high = quantile(qualitative_role_overload_time_0_DASS_high, probs = alpha/2),
             UB_time_0_DASS_high = quantile(qualitative_role_overload_time_0_DASS_high, probs = 1-alpha/2))
 
-time_1_DASS_low <- bootdat_params_rutgers %>%
+time_1_DASS_low <- bootdat_params_HED %>%
   summarise(mean_time_1_DASS_low = mean(qualitative_role_overload_time_1_DASS_low),
             LB_time_1_DASS_low = quantile(qualitative_role_overload_time_1_DASS_low, probs = alpha/2),
             UB_time_1_DASS_low = quantile(qualitative_role_overload_time_1_DASS_low, probs = 1-alpha/2))
 
-time_1_DASS_moderate <- bootdat_params_rutgers %>%
+time_1_DASS_moderate <- bootdat_params_HED %>%
   summarise(mean_time_1_DASS_moderate = mean(qualitative_role_overload_time_1_DASS_moderate),
             LB_time_1_DASS_moderate = quantile(qualitative_role_overload_time_1_DASS_moderate, probs = alpha/2),
             UB_time_1_DASS_moderate = quantile(qualitative_role_overload_time_1_DASS_moderate, probs = 1-alpha/2))
 
-time_1_DASS_high <- bootdat_params_rutgers %>%
+time_1_DASS_high <- bootdat_params_HED %>%
   summarise(mean_time_1_DASS_high = mean(qualitative_role_overload_time_1_DASS_high),
             LB_time_1_DASS_high = quantile(qualitative_role_overload_time_1_DASS_high, probs = alpha/2),
             UB_time_1_DASS_high = quantile(qualitative_role_overload_time_1_DASS_high, probs = 1-alpha/2))
@@ -536,32 +536,32 @@ colnames(summary_qualitative_role_overload) <- c("Bootstrap Mean","Bootstrap 95%
 
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
-time_0_DASS_low <- bootdat_params_rutgers %>%
+time_0_DASS_low <- bootdat_params_HED %>%
   summarise(mean_time_0_DASS_low = mean(quantitative_role_overload_time_0_DASS_low),
             LB_time_0_DASS_low = quantile(quantitative_role_overload_time_0_DASS_low, probs = alpha/2),
             UB_time_0_DASS_low = quantile(quantitative_role_overload_time_0_DASS_low, probs = 1-alpha/2))
 
-time_0_DASS_moderate <- bootdat_params_rutgers %>%
+time_0_DASS_moderate <- bootdat_params_HED %>%
   summarise(mean_time_0_DASS_moderate = mean(quantitative_role_overload_time_0_DASS_moderate),
             LB_time_0_DASS_moderate = quantile(quantitative_role_overload_time_0_DASS_moderate, probs = alpha/2),
             UB_time_0_DASS_moderate = quantile(quantitative_role_overload_time_0_DASS_moderate, probs = 1-alpha/2))
 
-time_0_DASS_high <- bootdat_params_rutgers %>%
+time_0_DASS_high <- bootdat_params_HED %>%
   summarise(mean_time_0_DASS_high = mean(quantitative_role_overload_time_0_DASS_high),
             LB_time_0_DASS_high = quantile(quantitative_role_overload_time_0_DASS_high, probs = alpha/2),
             UB_time_0_DASS_high = quantile(quantitative_role_overload_time_0_DASS_high, probs = 1-alpha/2))
 
-time_1_DASS_low <- bootdat_params_rutgers %>%
+time_1_DASS_low <- bootdat_params_HED %>%
   summarise(mean_time_1_DASS_low = mean(quantitative_role_overload_time_1_DASS_low),
             LB_time_1_DASS_low = quantile(quantitative_role_overload_time_1_DASS_low, probs = alpha/2),
             UB_time_1_DASS_low = quantile(quantitative_role_overload_time_1_DASS_low, probs = 1-alpha/2))
 
-time_1_DASS_moderate <- bootdat_params_rutgers %>%
+time_1_DASS_moderate <- bootdat_params_HED %>%
   summarise(mean_time_1_DASS_moderate = mean(quantitative_role_overload_time_1_DASS_moderate),
             LB_time_1_DASS_moderate = quantile(quantitative_role_overload_time_1_DASS_moderate, probs = alpha/2),
             UB_time_1_DASS_moderate = quantile(quantitative_role_overload_time_1_DASS_moderate, probs = 1-alpha/2))
 
-time_1_DASS_high <- bootdat_params_rutgers %>%
+time_1_DASS_high <- bootdat_params_HED %>%
   summarise(mean_time_1_DASS_high = mean(quantitative_role_overload_time_1_DASS_high),
             LB_time_1_DASS_high = quantile(quantitative_role_overload_time_1_DASS_high, probs = alpha/2),
             UB_time_1_DASS_high = quantile(quantitative_role_overload_time_1_DASS_high, probs = 1-alpha/2))
@@ -589,7 +589,7 @@ summary_qualitative_role_overload %>%
 
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
-write.csv(summary_qualitative_role_overload, "prepare-publication-tables/RAPI/injunctive_qualitative_role_overload_mediated_effect_model07_and_model_06.csv")
+write.csv(summary_qualitative_role_overload, "prepare-publication-tables/HED/injunctive_qualitative_role_overload_mediated_effect_model07_and_model_06.csv")
 ```
 
 
@@ -601,7 +601,7 @@ summary_quantitative_role_overload %>%
 
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
-write.csv(summary_quantitative_role_overload, "prepare-publication-tables/RAPI/injunctive_quantitative_role_overload_mediated_effect_model07_and_model_06.csv")
+write.csv(summary_quantitative_role_overload, "prepare-publication-tables/HED/injunctive_quantitative_role_overload_mediated_effect_model07_and_model_06.csv")
 ```
 
 
@@ -609,10 +609,10 @@ write.csv(summary_quantitative_role_overload, "prepare-publication-tables/RAPI/i
 ## Descriptive Norms
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
-list_params_rutgers <- list()
+list_params_HED <- list()
 
-for(i in 1:length(list_models_rutgers_02c)){
-  curr_model_estimates <- list_models_rutgers_02c[[i]]
+for(i in 1:length(list_models_HED_02c)){
+  curr_model_estimates <- list_models_HED_02c[[i]]
   
   tab_DASS <- curr_model_estimates[["est_DASS"]]
   a2 <- tab_DASS[row.names(tab_DASS) == "qualitative_role_overload",][["estimates"]]
@@ -620,14 +620,14 @@ for(i in 1:length(list_models_rutgers_02c)){
   a3 <- tab_DASS[row.names(tab_DASS) == "quantitative_role_overload",][["estimates"]]
   a5 <- tab_DASS[row.names(tab_DASS) == "quantitative_role_overload:time",][["estimates"]]
 
-  tab_drinking <- curr_model_estimates[["est_rutgers_descriptive"]]
+  tab_drinking <- curr_model_estimates[["est_HED_descriptive"]]
   b1 <- tab_drinking[row.names(tab_drinking) == "DASS",][["estimates"]]
   b2 <- tab_drinking[row.names(tab_drinking) == "I(DASS * DASS)",][["estimates"]]
   b3 <- tab_drinking[row.names(tab_drinking) == "DASS:time",][["estimates"]]
   b4 <- tab_drinking[row.names(tab_drinking) == "I(time * DASS * DASS)",][["estimates"]]
   
-  curr_params_rutgers <- data.frame(a2=a2, a4=a4, a3=a3, a5=a5, b1=b1, b2=b2, b3=b3, b4=b4)
-  list_params_rutgers <- append(list_params_rutgers, list(curr_params_rutgers))
+  curr_params_HED <- data.frame(a2=a2, a4=a4, a3=a3, a5=a5, b1=b1, b2=b2, b3=b3, b4=b4)
+  list_params_HED <- append(list_params_HED, list(curr_params_HED))
 }
 ```
 
@@ -635,7 +635,7 @@ for(i in 1:length(list_models_rutgers_02c)){
 
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
-bootdat_params_rutgers <- bind_rows(list_params_rutgers) %>%
+bootdat_params_HED <- bind_rows(list_params_HED) %>%
   # Mediated Effect: Qualitative Role Overload
   mutate(qualitative_role_overload_time_0_DASS_low = a2*(b1-b2),
          qualitative_role_overload_time_0_DASS_moderate = a2*(b1),
@@ -655,32 +655,32 @@ bootdat_params_rutgers <- bind_rows(list_params_rutgers) %>%
 
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
-time_0_DASS_low <- bootdat_params_rutgers %>%
+time_0_DASS_low <- bootdat_params_HED %>%
   summarise(mean_time_0_DASS_low = mean(qualitative_role_overload_time_0_DASS_low),
             LB_time_0_DASS_low = quantile(qualitative_role_overload_time_0_DASS_low, probs = alpha/2),
             UB_time_0_DASS_low = quantile(qualitative_role_overload_time_0_DASS_low, probs = 1-alpha/2))
 
-time_0_DASS_moderate <- bootdat_params_rutgers %>%
+time_0_DASS_moderate <- bootdat_params_HED %>%
   summarise(mean_time_0_DASS_moderate = mean(qualitative_role_overload_time_0_DASS_moderate),
             LB_time_0_DASS_moderate = quantile(qualitative_role_overload_time_0_DASS_moderate, probs = alpha/2),
             UB_time_0_DASS_moderate = quantile(qualitative_role_overload_time_0_DASS_moderate, probs = 1-alpha/2))
 
-time_0_DASS_high <- bootdat_params_rutgers %>%
+time_0_DASS_high <- bootdat_params_HED %>%
   summarise(mean_time_0_DASS_high = mean(qualitative_role_overload_time_0_DASS_high),
             LB_time_0_DASS_high = quantile(qualitative_role_overload_time_0_DASS_high, probs = alpha/2),
             UB_time_0_DASS_high = quantile(qualitative_role_overload_time_0_DASS_high, probs = 1-alpha/2))
 
-time_1_DASS_low <- bootdat_params_rutgers %>%
+time_1_DASS_low <- bootdat_params_HED %>%
   summarise(mean_time_1_DASS_low = mean(qualitative_role_overload_time_1_DASS_low),
             LB_time_1_DASS_low = quantile(qualitative_role_overload_time_1_DASS_low, probs = alpha/2),
             UB_time_1_DASS_low = quantile(qualitative_role_overload_time_1_DASS_low, probs = 1-alpha/2))
 
-time_1_DASS_moderate <- bootdat_params_rutgers %>%
+time_1_DASS_moderate <- bootdat_params_HED %>%
   summarise(mean_time_1_DASS_moderate = mean(qualitative_role_overload_time_1_DASS_moderate),
             LB_time_1_DASS_moderate = quantile(qualitative_role_overload_time_1_DASS_moderate, probs = alpha/2),
             UB_time_1_DASS_moderate = quantile(qualitative_role_overload_time_1_DASS_moderate, probs = 1-alpha/2))
 
-time_1_DASS_high <- bootdat_params_rutgers %>%
+time_1_DASS_high <- bootdat_params_HED %>%
   summarise(mean_time_1_DASS_high = mean(qualitative_role_overload_time_1_DASS_high),
             LB_time_1_DASS_high = quantile(qualitative_role_overload_time_1_DASS_high, probs = alpha/2),
             UB_time_1_DASS_high = quantile(qualitative_role_overload_time_1_DASS_high, probs = 1-alpha/2))
@@ -701,32 +701,32 @@ colnames(summary_qualitative_role_overload) <- c("Bootstrap Mean","Bootstrap 95%
 
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
-time_0_DASS_low <- bootdat_params_rutgers %>%
+time_0_DASS_low <- bootdat_params_HED %>%
   summarise(mean_time_0_DASS_low = mean(quantitative_role_overload_time_0_DASS_low),
             LB_time_0_DASS_low = quantile(quantitative_role_overload_time_0_DASS_low, probs = alpha/2),
             UB_time_0_DASS_low = quantile(quantitative_role_overload_time_0_DASS_low, probs = 1-alpha/2))
 
-time_0_DASS_moderate <- bootdat_params_rutgers %>%
+time_0_DASS_moderate <- bootdat_params_HED %>%
   summarise(mean_time_0_DASS_moderate = mean(quantitative_role_overload_time_0_DASS_moderate),
             LB_time_0_DASS_moderate = quantile(quantitative_role_overload_time_0_DASS_moderate, probs = alpha/2),
             UB_time_0_DASS_moderate = quantile(quantitative_role_overload_time_0_DASS_moderate, probs = 1-alpha/2))
 
-time_0_DASS_high <- bootdat_params_rutgers %>%
+time_0_DASS_high <- bootdat_params_HED %>%
   summarise(mean_time_0_DASS_high = mean(quantitative_role_overload_time_0_DASS_high),
             LB_time_0_DASS_high = quantile(quantitative_role_overload_time_0_DASS_high, probs = alpha/2),
             UB_time_0_DASS_high = quantile(quantitative_role_overload_time_0_DASS_high, probs = 1-alpha/2))
 
-time_1_DASS_low <- bootdat_params_rutgers %>%
+time_1_DASS_low <- bootdat_params_HED %>%
   summarise(mean_time_1_DASS_low = mean(quantitative_role_overload_time_1_DASS_low),
             LB_time_1_DASS_low = quantile(quantitative_role_overload_time_1_DASS_low, probs = alpha/2),
             UB_time_1_DASS_low = quantile(quantitative_role_overload_time_1_DASS_low, probs = 1-alpha/2))
 
-time_1_DASS_moderate <- bootdat_params_rutgers %>%
+time_1_DASS_moderate <- bootdat_params_HED %>%
   summarise(mean_time_1_DASS_moderate = mean(quantitative_role_overload_time_1_DASS_moderate),
             LB_time_1_DASS_moderate = quantile(quantitative_role_overload_time_1_DASS_moderate, probs = alpha/2),
             UB_time_1_DASS_moderate = quantile(quantitative_role_overload_time_1_DASS_moderate, probs = 1-alpha/2))
 
-time_1_DASS_high <- bootdat_params_rutgers %>%
+time_1_DASS_high <- bootdat_params_HED %>%
   summarise(mean_time_1_DASS_high = mean(quantitative_role_overload_time_1_DASS_high),
             LB_time_1_DASS_high = quantile(quantitative_role_overload_time_1_DASS_high, probs = alpha/2),
             UB_time_1_DASS_high = quantile(quantitative_role_overload_time_1_DASS_high, probs = 1-alpha/2))

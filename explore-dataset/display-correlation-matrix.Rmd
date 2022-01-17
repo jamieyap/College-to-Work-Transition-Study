@@ -1,8 +1,8 @@
 ---
-title: "Display correlation among constructed variables"
+title: "Display correlation among variables"
 author: 
 date: '`r format(Sys.Date(), "%B %d, %Y")`'
-geometry: margin=0.5in, paperheight=13.0in,paperwidth=8.5in, landscape
+geometry: margin=1in, paperheight=13.0in,paperwidth=8.5in, landscape
 output: 
   pdf_document:
     number_sections: TRUE
@@ -63,9 +63,47 @@ kable(cormat, booktabs=TRUE) %>%
   kable_styling(position = "center")
 ```
 
+\newpage
 
 
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+names_screener <- colnames(dat_screener_analysis[,dat_screener_vars$new_var_name])
+names_baseline <- colnames(dat_baseline_analysis[,dat_baseline_vars$new_var_name])
+names_wnw_0 <- colnames(dat_wnw_0)
+names_wnw_1 <- colnames(dat_wnw_1)
+names_allvars <- c(names_screener, names_baseline, names_wnw_0, names_wnw_1)
+
+dat_varnames <- data.frame(Label = 1:length(names_allvars),
+                           Variable = names_allvars)
+
+dat_varnames$Variable <- c("Baseline HED", 
+                           "Baseline RAPI",
+                           "Sex", "Race", "Age", 
+                           "Baseline social desirability", 
+                           "Baseline impulsivity",
+                           "Time 0: Life stress",
+                           "Time 0: HED",
+                           "Time 0: RAPI",
+                           "Time 0: Qualitative role overload",
+                           "Time 0: Quantitative role overload",
+                           "Time 0: Injunctive norms",
+                           "Time 0: Descriptive norms",
+                           "Time 0: DASS",
+                           "Time 1: Life stress",
+                           "Time 1: HED",
+                           "Time 1: RAPI",
+                           "Time 1: Qualitative role overload",
+                           "Time 1: Quantitative role overload",
+                           "Time 1: Injunctive norms",
+                           "Time 1: Descriptive norms",
+                           "Time 1: DASS")
+```
 
 
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+kable(dat_varnames, booktabs=TRUE) %>%
+  row_spec(c(7,15), hline_after = TRUE) %>%
+  kable_styling(position = "center")
+```
 
 

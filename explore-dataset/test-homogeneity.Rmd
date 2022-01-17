@@ -1,0 +1,696 @@
+---
+title: "Tests of Homogeneity"
+author: 
+date: '`r format(Sys.Date(), "%B %d, %Y")`'
+geometry: margin=1in
+output: 
+  pdf_document:
+    number_sections: TRUE
+header-includes:
+- \usepackage{pdflscape}
+- \newcommand{\blandscape}{\begin{landscape}}
+- \newcommand{\elandscape}{\end{landscape}}
+---
+
+
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(tidy = TRUE)
+knitr::opts_chunk$set(fig.pos = 'H')
+```
+
+# Overview
+
+Conduct Chi-squared tests (for binary and count variables) or Kolmogorov-Smirnov tests (for continuous variables) to test for homogeneity across two samples; the two samples being compared are 
+
+1. Participants having missing data in the outcome (i.e., RAPI/HED), versus
+2. Participants having data in the outcome 
+
+# Results
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+library(rmarkdown)
+library(knitr)
+library(kableExtra)
+set.seed(12345678)
+```
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+library(dplyr)
+path_output_data <- Sys.getenv("path_output_data")
+
+###############################################################################
+# Data preparation
+###############################################################################
+
+# Read in data
+dat_baseline_analysis <- read.csv(file.path(path_output_data, "dat_baseline_analysis.csv"), header = TRUE)
+dat_screener_analysis <- read.csv(file.path(path_output_data, "dat_screener_analysis.csv"), header = TRUE)
+dat_wnw_analysis <- read.csv(file.path(path_output_data, "dat_wnw_analysis.csv"), header = TRUE)
+
+# Merge datasets into one data frame
+dat_wnw_analysis_0 <- dat_wnw_analysis %>% filter(time==0)
+dat_analysis_0 <- left_join(x = dat_wnw_analysis_0, y = dat_screener_analysis, by = "ParticipantID")
+dat_analysis_0 <- left_join(x = dat_analysis_0, y = dat_baseline_analysis, by = "ParticipantID")
+dat_analysis_0 <- dat_analysis_0 %>% 
+  select(colnames(dat_screener_analysis), colnames(dat_baseline_analysis), everything()) %>%
+  mutate(age = floor(age))
+
+dat_wnw_analysis_1 <- dat_wnw_analysis %>% filter(time==1)
+dat_analysis_1 <- left_join(x = dat_wnw_analysis_1, y = dat_screener_analysis, by = "ParticipantID")
+dat_analysis_1 <- left_join(x = dat_analysis_1, y = dat_baseline_analysis, by = "ParticipantID")
+dat_analysis_1 <- dat_analysis_1 %>% 
+  select(colnames(dat_screener_analysis), colnames(dat_baseline_analysis), everything())
+```
+
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+covariate <- c("age")
+outcome <- c("rutgers")
+check_these_vars <- c(covariate, outcome)
+
+dat_complete_case <- dat_analysis_0 %>% 
+  filter(complete.cases(.[, check_these_vars])) %>%
+  select(all_of(covariate))
+
+dat_with_miss <- dat_analysis_0 %>%
+  filter(complete.cases(.[, covariate])) %>%
+  select(all_of(covariate))
+
+rutgers_0 <- ks.test(x = dat_complete_case[["age"]], dat_with_miss[["age"]], exact = TRUE)
+```
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+covariate <- c("age")
+outcome <- c("rutgers")
+check_these_vars <- c(covariate, outcome)
+
+dat_complete_case <- dat_analysis_1 %>% 
+  filter(complete.cases(.[, check_these_vars])) %>%
+  select(all_of(covariate))
+
+dat_with_miss <- dat_analysis_1 %>%
+  filter(complete.cases(.[, covariate])) %>%
+  select(all_of(covariate))
+
+rutgers_1 <- ks.test(x = dat_complete_case[["age"]], dat_with_miss[["age"]], exact = TRUE)
+```
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+covariate <- c("age")
+outcome <- c("HED")
+check_these_vars <- c(covariate, outcome)
+
+dat_complete_case <- dat_analysis_0 %>% 
+  filter(complete.cases(.[, check_these_vars])) %>%
+  select(all_of(covariate))
+
+dat_with_miss <- dat_analysis_0 %>%
+  filter(complete.cases(.[, covariate])) %>%
+  select(all_of(covariate))
+
+HED_0 <- ks.test(x = dat_complete_case[["age"]], dat_with_miss[["age"]], exact = TRUE)
+```
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+covariate <- c("age")
+outcome <- c("HED")
+check_these_vars <- c(covariate, outcome)
+
+dat_complete_case <- dat_analysis_1 %>% 
+  filter(complete.cases(.[, check_these_vars])) %>%
+  select(all_of(covariate))
+
+dat_with_miss <- dat_analysis_1 %>%
+  filter(complete.cases(.[, covariate])) %>%
+  select(all_of(covariate))
+
+HED_1 <- ks.test(x = dat_complete_case[["age"]], dat_with_miss[["age"]], exact = TRUE)
+```
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+pvals <- c(rutgers_0[["p.value"]], rutgers_1[["p.value"]], HED_0[["p.value"]], HED_1[["p.value"]])
+pvals <- format(round(pvals, 3), nsmall = 3)
+
+results <- data.frame(comparison = c("Time 0: Participants having RAPI missing vs. not missing",
+                                     "Time 1: Participants having RAPI missing vs. not missing",
+                                     "Time 0: Participants having HED missing vs. not missing",
+                                     "Time 1: Participants having HED missing vs. not missing"),
+                      p = pvals)
+
+colnames(results) <- c("The two samples being compared", "p value")
+```
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+kable(results, 
+      booktabs=TRUE, 
+      caption = "$H_0: \\text{There is no difference in the distribution of the variable `age' across the two samples}$", 
+      escape = FALSE) %>%
+  kable_styling(position = "center", latex_options = "HOLD_position")
+```
+
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+covariate <- c("race")
+outcome <- c("rutgers")
+check_these_vars <- c(covariate, outcome)
+
+dat_complete_case <- dat_analysis_0 %>% 
+  filter(complete.cases(.[, check_these_vars])) %>%
+  select(all_of(covariate))
+
+dat_with_miss <- dat_analysis_0 %>%
+  filter(complete.cases(.[, covariate])) %>%
+  select(all_of(covariate))
+
+tab_complete <- table(dat_complete_case)
+tab_miss <- table(dat_with_miss)
+df_tab_complete <- as.data.frame(tab_complete)
+df_tab_miss <- as.data.frame(tab_miss)
+colnames(df_tab_complete) <- c("value", "count_complete")
+colnames(df_tab_miss) <- c("value", "count_missing")
+df_merged <- merge(x = df_tab_complete, y = df_tab_miss)
+df_merged <- df_merged[order(df_merged$value),]
+df_merged$count_complete <- ifelse(is.na(df_merged$count_complete), 0, df_merged$count_complete)
+df_merged$count_missing <- ifelse(is.na(df_merged$count_missing), 0, df_merged$count_missing)
+mat <- df_merged[, c("count_complete", "count_missing")]
+
+rutgers_0 <- chisq.test(mat, simulate.p.value = TRUE)
+```
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+covariate <- c("race")
+outcome <- c("rutgers")
+check_these_vars <- c(covariate, outcome)
+
+dat_complete_case <- dat_analysis_1 %>% 
+  filter(complete.cases(.[, check_these_vars])) %>%
+  select(all_of(covariate))
+
+dat_with_miss <- dat_analysis_1 %>%
+  filter(complete.cases(.[, covariate])) %>%
+  select(all_of(covariate))
+
+tab_complete <- table(dat_complete_case)
+tab_miss <- table(dat_with_miss)
+df_tab_complete <- as.data.frame(tab_complete)
+df_tab_miss <- as.data.frame(tab_miss)
+colnames(df_tab_complete) <- c("value", "count_complete")
+colnames(df_tab_miss) <- c("value", "count_missing")
+df_merged <- merge(x = df_tab_complete, y = df_tab_miss)
+df_merged <- df_merged[order(df_merged$value),]
+df_merged$count_complete <- ifelse(is.na(df_merged$count_complete), 0, df_merged$count_complete)
+df_merged$count_missing <- ifelse(is.na(df_merged$count_missing), 0, df_merged$count_missing)
+mat <- df_merged[, c("count_complete", "count_missing")]
+
+rutgers_1 <- chisq.test(mat, simulate.p.value = TRUE)
+```
+
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+covariate <- c("race")
+outcome <- c("HED")
+check_these_vars <- c(covariate, outcome)
+
+dat_complete_case <- dat_analysis_0 %>% 
+  filter(complete.cases(.[, check_these_vars])) %>%
+  select(all_of(covariate))
+
+dat_with_miss <- dat_analysis_0 %>%
+  filter(complete.cases(.[, covariate])) %>%
+  select(all_of(covariate))
+
+tab_complete <- table(dat_complete_case)
+tab_miss <- table(dat_with_miss)
+df_tab_complete <- as.data.frame(tab_complete)
+df_tab_miss <- as.data.frame(tab_miss)
+colnames(df_tab_complete) <- c("value", "count_complete")
+colnames(df_tab_miss) <- c("value", "count_missing")
+df_merged <- merge(x = df_tab_complete, y = df_tab_miss)
+df_merged <- df_merged[order(df_merged$value),]
+df_merged$count_complete <- ifelse(is.na(df_merged$count_complete), 0, df_merged$count_complete)
+df_merged$count_missing <- ifelse(is.na(df_merged$count_missing), 0, df_merged$count_missing)
+mat <- df_merged[, c("count_complete", "count_missing")]
+
+HED_0 <- chisq.test(mat, simulate.p.value = TRUE)
+```
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+covariate <- c("race")
+outcome <- c("HED")
+check_these_vars <- c(covariate, outcome)
+
+dat_complete_case <- dat_analysis_1 %>% 
+  filter(complete.cases(.[, check_these_vars])) %>%
+  select(all_of(covariate))
+
+dat_with_miss <- dat_analysis_1 %>%
+  filter(complete.cases(.[, covariate])) %>%
+  select(all_of(covariate))
+
+tab_complete <- table(dat_complete_case)
+tab_miss <- table(dat_with_miss)
+df_tab_complete <- as.data.frame(tab_complete)
+df_tab_miss <- as.data.frame(tab_miss)
+colnames(df_tab_complete) <- c("value", "count_complete")
+colnames(df_tab_miss) <- c("value", "count_missing")
+df_merged <- merge(x = df_tab_complete, y = df_tab_miss)
+df_merged <- df_merged[order(df_merged$value),]
+df_merged$count_complete <- ifelse(is.na(df_merged$count_complete), 0, df_merged$count_complete)
+df_merged$count_missing <- ifelse(is.na(df_merged$count_missing), 0, df_merged$count_missing)
+mat <- df_merged[, c("count_complete", "count_missing")]
+
+HED_1 <- chisq.test(mat, simulate.p.value = TRUE)
+```
+
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+pvals <- c(rutgers_0[["p.value"]], rutgers_1[["p.value"]], HED_0[["p.value"]], HED_1[["p.value"]])
+pvals <- format(round(pvals, 3), nsmall = 3)
+
+results <- data.frame(comparison = c("Time 0: Participants having RAPI missing vs. not missing",
+                                     "Time 1: Participants having RAPI missing vs. not missing",
+                                     "Time 0: Participants having HED missing vs. not missing",
+                                     "Time 1: Participants having HED missing vs. not missing"),
+                      p = pvals)
+
+colnames(results) <- c("The two samples being compared", "p value")
+```
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+kable(results, 
+      booktabs=TRUE, 
+      caption = "$H_0: \\text{There is no difference in the distribution of the variable `race' across the two samples}$", 
+      escape = FALSE) %>%
+  kable_styling(position = "center", latex_options = "HOLD_position")
+```
+
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+covariate <- c("sex")
+outcome <- c("rutgers")
+check_these_vars <- c(covariate, outcome)
+
+dat_complete_case <- dat_analysis_0 %>% 
+  filter(complete.cases(.[, check_these_vars])) %>%
+  select(all_of(covariate))
+
+dat_with_miss <- dat_analysis_0 %>%
+  filter(complete.cases(.[, covariate])) %>%
+  select(all_of(covariate))
+
+tab_complete <- table(dat_complete_case)
+tab_miss <- table(dat_with_miss)
+df_tab_complete <- as.data.frame(tab_complete)
+df_tab_miss <- as.data.frame(tab_miss)
+colnames(df_tab_complete) <- c("value", "count_complete")
+colnames(df_tab_miss) <- c("value", "count_missing")
+df_merged <- merge(x = df_tab_complete, y = df_tab_miss)
+df_merged <- df_merged[order(df_merged$value),]
+df_merged$count_complete <- ifelse(is.na(df_merged$count_complete), 0, df_merged$count_complete)
+df_merged$count_missing <- ifelse(is.na(df_merged$count_missing), 0, df_merged$count_missing)
+mat <- df_merged[, c("count_complete", "count_missing")]
+
+rutgers_0 <- chisq.test(mat, simulate.p.value = TRUE)
+```
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+covariate <- c("sex")
+outcome <- c("rutgers")
+check_these_vars <- c(covariate, outcome)
+
+dat_complete_case <- dat_analysis_1 %>% 
+  filter(complete.cases(.[, check_these_vars])) %>%
+  select(all_of(covariate))
+
+dat_with_miss <- dat_analysis_1 %>%
+  filter(complete.cases(.[, covariate])) %>%
+  select(all_of(covariate))
+
+tab_complete <- table(dat_complete_case)
+tab_miss <- table(dat_with_miss)
+df_tab_complete <- as.data.frame(tab_complete)
+df_tab_miss <- as.data.frame(tab_miss)
+colnames(df_tab_complete) <- c("value", "count_complete")
+colnames(df_tab_miss) <- c("value", "count_missing")
+df_merged <- merge(x = df_tab_complete, y = df_tab_miss)
+df_merged <- df_merged[order(df_merged$value),]
+df_merged$count_complete <- ifelse(is.na(df_merged$count_complete), 0, df_merged$count_complete)
+df_merged$count_missing <- ifelse(is.na(df_merged$count_missing), 0, df_merged$count_missing)
+mat <- df_merged[, c("count_complete", "count_missing")]
+
+rutgers_1 <- chisq.test(mat, simulate.p.value = TRUE)
+```
+
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+covariate <- c("sex")
+outcome <- c("HED")
+check_these_vars <- c(covariate, outcome)
+
+dat_complete_case <- dat_analysis_0 %>% 
+  filter(complete.cases(.[, check_these_vars])) %>%
+  select(all_of(covariate))
+
+dat_with_miss <- dat_analysis_0 %>%
+  filter(complete.cases(.[, covariate])) %>%
+  select(all_of(covariate))
+
+tab_complete <- table(dat_complete_case)
+tab_miss <- table(dat_with_miss)
+df_tab_complete <- as.data.frame(tab_complete)
+df_tab_miss <- as.data.frame(tab_miss)
+colnames(df_tab_complete) <- c("value", "count_complete")
+colnames(df_tab_miss) <- c("value", "count_missing")
+df_merged <- merge(x = df_tab_complete, y = df_tab_miss)
+df_merged <- df_merged[order(df_merged$value),]
+df_merged$count_complete <- ifelse(is.na(df_merged$count_complete), 0, df_merged$count_complete)
+df_merged$count_missing <- ifelse(is.na(df_merged$count_missing), 0, df_merged$count_missing)
+mat <- df_merged[, c("count_complete", "count_missing")]
+
+HED_0 <- chisq.test(mat, simulate.p.value = TRUE)
+```
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+covariate <- c("sex")
+outcome <- c("HED")
+check_these_vars <- c(covariate, outcome)
+
+dat_complete_case <- dat_analysis_1 %>% 
+  filter(complete.cases(.[, check_these_vars])) %>%
+  select(all_of(covariate))
+
+dat_with_miss <- dat_analysis_1 %>%
+  filter(complete.cases(.[, covariate])) %>%
+  select(all_of(covariate))
+
+tab_complete <- table(dat_complete_case)
+tab_miss <- table(dat_with_miss)
+df_tab_complete <- as.data.frame(tab_complete)
+df_tab_miss <- as.data.frame(tab_miss)
+colnames(df_tab_complete) <- c("value", "count_complete")
+colnames(df_tab_miss) <- c("value", "count_missing")
+df_merged <- merge(x = df_tab_complete, y = df_tab_miss)
+df_merged <- df_merged[order(df_merged$value),]
+df_merged$count_complete <- ifelse(is.na(df_merged$count_complete), 0, df_merged$count_complete)
+df_merged$count_missing <- ifelse(is.na(df_merged$count_missing), 0, df_merged$count_missing)
+mat <- df_merged[, c("count_complete", "count_missing")]
+
+HED_1 <- chisq.test(mat, simulate.p.value = TRUE)
+```
+
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+pvals <- c(rutgers_0[["p.value"]], rutgers_1[["p.value"]], HED_0[["p.value"]], HED_1[["p.value"]])
+pvals <- format(round(pvals, 3), nsmall = 3)
+
+results <- data.frame(comparison = c("Time 0: Participants having RAPI missing vs. not missing",
+                                     "Time 1: Participants having RAPI missing vs. not missing",
+                                     "Time 0: Participants having HED missing vs. not missing",
+                                     "Time 1: Participants having HED missing vs. not missing"),
+                      p = pvals)
+
+colnames(results) <- c("The two samples being compared", "p value")
+```
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+kable(results, 
+      booktabs=TRUE, 
+      caption = "$H_0: \\text{There is no difference in the distribution of the variable `sex' across the two samples}$", 
+      escape = FALSE) %>%
+  kable_styling(position = "center", latex_options = "HOLD_position")
+```
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+covariate <- c("baseline_rutgers")
+outcome <- c("rutgers")
+check_these_vars <- c(covariate, outcome)
+
+dat_complete_case <- dat_analysis_0 %>% 
+  filter(complete.cases(.[, check_these_vars])) %>%
+  select(all_of(covariate))
+
+dat_with_miss <- dat_analysis_0 %>%
+  filter(complete.cases(.[, covariate])) %>%
+  select(all_of(covariate))
+
+tab_complete <- table(dat_complete_case)
+tab_miss <- table(dat_with_miss)
+df_tab_complete <- as.data.frame(tab_complete)
+df_tab_miss <- as.data.frame(tab_miss)
+colnames(df_tab_complete) <- c("value", "count_complete")
+colnames(df_tab_miss) <- c("value", "count_missing")
+df_merged <- merge(x = df_tab_complete, y = df_tab_miss)
+df_merged <- df_merged[order(df_merged$value),]
+df_merged$count_complete <- ifelse(is.na(df_merged$count_complete), 0, df_merged$count_complete)
+df_merged$count_missing <- ifelse(is.na(df_merged$count_missing), 0, df_merged$count_missing)
+mat <- df_merged[, c("count_complete", "count_missing")]
+
+rutgers_0 <- chisq.test(mat, simulate.p.value = TRUE)
+```
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+covariate <- c("baseline_rutgers")
+outcome <- c("rutgers")
+check_these_vars <- c(covariate, outcome)
+
+dat_complete_case <- dat_analysis_1 %>% 
+  filter(complete.cases(.[, check_these_vars])) %>%
+  select(all_of(covariate))
+
+dat_with_miss <- dat_analysis_1 %>%
+  filter(complete.cases(.[, covariate])) %>%
+  select(all_of(covariate))
+
+tab_complete <- table(dat_complete_case)
+tab_miss <- table(dat_with_miss)
+df_tab_complete <- as.data.frame(tab_complete)
+df_tab_miss <- as.data.frame(tab_miss)
+colnames(df_tab_complete) <- c("value", "count_complete")
+colnames(df_tab_miss) <- c("value", "count_missing")
+df_merged <- merge(x = df_tab_complete, y = df_tab_miss)
+df_merged <- df_merged[order(df_merged$value),]
+df_merged$count_complete <- ifelse(is.na(df_merged$count_complete), 0, df_merged$count_complete)
+df_merged$count_missing <- ifelse(is.na(df_merged$count_missing), 0, df_merged$count_missing)
+mat <- df_merged[, c("count_complete", "count_missing")]
+
+rutgers_1 <- chisq.test(mat, simulate.p.value = TRUE)
+```
+
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+covariate <- c("baseline_rutgers")
+outcome <- c("HED")
+check_these_vars <- c(covariate, outcome)
+
+dat_complete_case <- dat_analysis_0 %>% 
+  filter(complete.cases(.[, check_these_vars])) %>%
+  select(all_of(covariate))
+
+dat_with_miss <- dat_analysis_0 %>%
+  filter(complete.cases(.[, covariate])) %>%
+  select(all_of(covariate))
+
+tab_complete <- table(dat_complete_case)
+tab_miss <- table(dat_with_miss)
+df_tab_complete <- as.data.frame(tab_complete)
+df_tab_miss <- as.data.frame(tab_miss)
+colnames(df_tab_complete) <- c("value", "count_complete")
+colnames(df_tab_miss) <- c("value", "count_missing")
+df_merged <- merge(x = df_tab_complete, y = df_tab_miss)
+df_merged <- df_merged[order(df_merged$value),]
+df_merged$count_complete <- ifelse(is.na(df_merged$count_complete), 0, df_merged$count_complete)
+df_merged$count_missing <- ifelse(is.na(df_merged$count_missing), 0, df_merged$count_missing)
+mat <- df_merged[, c("count_complete", "count_missing")]
+
+HED_0 <- chisq.test(mat, simulate.p.value = TRUE)
+```
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+covariate <- c("baseline_rutgers")
+outcome <- c("HED")
+check_these_vars <- c(covariate, outcome)
+
+dat_complete_case <- dat_analysis_1 %>% 
+  filter(complete.cases(.[, check_these_vars])) %>%
+  select(all_of(covariate))
+
+dat_with_miss <- dat_analysis_1 %>%
+  filter(complete.cases(.[, covariate])) %>%
+  select(all_of(covariate))
+
+tab_complete <- table(dat_complete_case)
+tab_miss <- table(dat_with_miss)
+df_tab_complete <- as.data.frame(tab_complete)
+df_tab_miss <- as.data.frame(tab_miss)
+colnames(df_tab_complete) <- c("value", "count_complete")
+colnames(df_tab_miss) <- c("value", "count_missing")
+df_merged <- merge(x = df_tab_complete, y = df_tab_miss)
+df_merged <- df_merged[order(df_merged$value),]
+df_merged$count_complete <- ifelse(is.na(df_merged$count_complete), 0, df_merged$count_complete)
+df_merged$count_missing <- ifelse(is.na(df_merged$count_missing), 0, df_merged$count_missing)
+mat <- df_merged[, c("count_complete", "count_missing")]
+
+HED_1 <- chisq.test(mat, simulate.p.value = TRUE)
+```
+
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+pvals <- c(rutgers_0[["p.value"]], rutgers_1[["p.value"]], HED_0[["p.value"]], HED_1[["p.value"]])
+pvals <- format(round(pvals, 3), nsmall = 3)
+
+results <- data.frame(comparison = c("Time 0: Participants having RAPI missing vs. not missing",
+                                     "Time 1: Participants having RAPI missing vs. not missing",
+                                     "Time 0: Participants having HED missing vs. not missing",
+                                     "Time 1: Participants having HED missing vs. not missing"),
+                      p = pvals)
+
+colnames(results) <- c("The two samples being compared", "p value")
+```
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+kable(results, 
+      booktabs=TRUE, 
+      caption = "$H_0: \\text{There is no difference in the distribution of the variable `baseline RAPI' across the two samples}$", 
+      escape = FALSE) %>%
+  kable_styling(position = "center", latex_options = "HOLD_position")
+```
+
+
+
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+covariate <- c("baseline_HED")
+outcome <- c("rutgers")
+check_these_vars <- c(covariate, outcome)
+
+dat_complete_case <- dat_analysis_0 %>% 
+  filter(complete.cases(.[, check_these_vars])) %>%
+  select(all_of(covariate))
+
+dat_with_miss <- dat_analysis_0 %>%
+  filter(complete.cases(.[, covariate])) %>%
+  select(all_of(covariate))
+
+tab_complete <- table(dat_complete_case)
+tab_miss <- table(dat_with_miss)
+df_tab_complete <- as.data.frame(tab_complete)
+df_tab_miss <- as.data.frame(tab_miss)
+colnames(df_tab_complete) <- c("value", "count_complete")
+colnames(df_tab_miss) <- c("value", "count_missing")
+df_merged <- merge(x = df_tab_complete, y = df_tab_miss)
+df_merged <- df_merged[order(df_merged$value),]
+df_merged$count_complete <- ifelse(is.na(df_merged$count_complete), 0, df_merged$count_complete)
+df_merged$count_missing <- ifelse(is.na(df_merged$count_missing), 0, df_merged$count_missing)
+mat <- df_merged[, c("count_complete", "count_missing")]
+
+rutgers_0 <- chisq.test(mat, simulate.p.value = TRUE)
+```
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+covariate <- c("baseline_HED")
+outcome <- c("rutgers")
+check_these_vars <- c(covariate, outcome)
+
+dat_complete_case <- dat_analysis_1 %>% 
+  filter(complete.cases(.[, check_these_vars])) %>%
+  select(all_of(covariate))
+
+dat_with_miss <- dat_analysis_1 %>%
+  filter(complete.cases(.[, covariate])) %>%
+  select(all_of(covariate))
+
+tab_complete <- table(dat_complete_case)
+tab_miss <- table(dat_with_miss)
+df_tab_complete <- as.data.frame(tab_complete)
+df_tab_miss <- as.data.frame(tab_miss)
+colnames(df_tab_complete) <- c("value", "count_complete")
+colnames(df_tab_miss) <- c("value", "count_missing")
+df_merged <- merge(x = df_tab_complete, y = df_tab_miss)
+df_merged <- df_merged[order(df_merged$value),]
+df_merged$count_complete <- ifelse(is.na(df_merged$count_complete), 0, df_merged$count_complete)
+df_merged$count_missing <- ifelse(is.na(df_merged$count_missing), 0, df_merged$count_missing)
+mat <- df_merged[, c("count_complete", "count_missing")]
+
+rutgers_1 <- chisq.test(mat, simulate.p.value = TRUE)
+```
+
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+covariate <- c("baseline_HED")
+outcome <- c("HED")
+check_these_vars <- c(covariate, outcome)
+
+dat_complete_case <- dat_analysis_0 %>% 
+  filter(complete.cases(.[, check_these_vars])) %>%
+  select(all_of(covariate))
+
+dat_with_miss <- dat_analysis_0 %>%
+  filter(complete.cases(.[, covariate])) %>%
+  select(all_of(covariate))
+
+tab_complete <- table(dat_complete_case)
+tab_miss <- table(dat_with_miss)
+df_tab_complete <- as.data.frame(tab_complete)
+df_tab_miss <- as.data.frame(tab_miss)
+colnames(df_tab_complete) <- c("value", "count_complete")
+colnames(df_tab_miss) <- c("value", "count_missing")
+df_merged <- merge(x = df_tab_complete, y = df_tab_miss)
+df_merged <- df_merged[order(df_merged$value),]
+df_merged$count_complete <- ifelse(is.na(df_merged$count_complete), 0, df_merged$count_complete)
+df_merged$count_missing <- ifelse(is.na(df_merged$count_missing), 0, df_merged$count_missing)
+mat <- df_merged[, c("count_complete", "count_missing")]
+
+HED_0 <- chisq.test(mat, simulate.p.value = TRUE)
+```
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+covariate <- c("baseline_HED")
+outcome <- c("HED")
+check_these_vars <- c(covariate, outcome)
+
+dat_complete_case <- dat_analysis_1 %>% 
+  filter(complete.cases(.[, check_these_vars])) %>%
+  select(all_of(covariate))
+
+dat_with_miss <- dat_analysis_1 %>%
+  filter(complete.cases(.[, covariate])) %>%
+  select(all_of(covariate))
+
+tab_complete <- table(dat_complete_case)
+tab_miss <- table(dat_with_miss)
+df_tab_complete <- as.data.frame(tab_complete)
+df_tab_miss <- as.data.frame(tab_miss)
+colnames(df_tab_complete) <- c("value", "count_complete")
+colnames(df_tab_miss) <- c("value", "count_missing")
+df_merged <- merge(x = df_tab_complete, y = df_tab_miss)
+df_merged <- df_merged[order(df_merged$value),]
+df_merged$count_complete <- ifelse(is.na(df_merged$count_complete), 0, df_merged$count_complete)
+df_merged$count_missing <- ifelse(is.na(df_merged$count_missing), 0, df_merged$count_missing)
+mat <- df_merged[, c("count_complete", "count_missing")]
+
+HED_1 <- chisq.test(mat, simulate.p.value = TRUE)
+```
+
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+pvals <- c(rutgers_0[["p.value"]], rutgers_1[["p.value"]], HED_0[["p.value"]], HED_1[["p.value"]])
+pvals <- format(round(pvals, 3), nsmall = 3)
+
+results <- data.frame(comparison = c("Time 0: Participants having RAPI missing vs. not missing",
+                                     "Time 1: Participants having RAPI missing vs. not missing",
+                                     "Time 0: Participants having HED missing vs. not missing",
+                                     "Time 1: Participants having HED missing vs. not missing"),
+                      p = pvals)
+
+colnames(results) <- c("The two samples being compared", "p value")
+```
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+kable(results, 
+      booktabs=TRUE, 
+      caption = "$H_0: \\text{There is no difference in the distribution of the variable `baseline HED' across the two samples}$", 
+      escape = FALSE) %>%
+  kable_styling(position = "center", latex_options = "HOLD_position")
+```
+
+

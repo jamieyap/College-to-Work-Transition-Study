@@ -1,5 +1,5 @@
 ---
-title: "Test Hypotheses H1a, H1b, and H4 with RAPI as the outcome"
+title: "Test Hypotheses H1a, H1b, and H4 with number of past-month heavy drinking days (HED) as the outcome"
 author: 
 date: '`r format(Sys.Date(), "%B %d, %Y")`'
 geometry: margin=0.7in
@@ -63,49 +63,49 @@ dat_analysis <- dat_analysis %>% select(colnames(dat_screener_analysis), colname
 # Model 1
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
-fit_rutgers_1 <- geem(rutgers ~ sex + race + age 
-                                + baseline_rutgers + baseline_social_desirability + baseline_impulsivity + lifestress
+fit_HED_1 <- geem(HED ~ sex + race + age 
+                                + baseline_HED + baseline_social_desirability + baseline_impulsivity + lifestress
                                 + injunctive_workplace_norms + qualitative_role_overload + quantitative_role_overload, 
                   data = dat_analysis, id = ParticipantID, waves = time, corstr = "exchangeable", family = "poisson")
 
-outfit_rutgers_1 <- FormatGEEOutput(fit_rutgers_1)
-N_rutgers_1 <- length(setdiff(unique(dat_analysis$ParticipantID), fit_rutgers_1$dropped))
+outfit_HED_1 <- FormatGEEOutput(fit_HED_1)
+N_HED_1 <- length(setdiff(unique(dat_analysis$ParticipantID), fit_HED_1$dropped))
 ```
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
-write.csv(outfit_rutgers_1, "prepare-publication-tables/RAPI/injunctive_model_01.csv", row.names=FALSE)
+write.csv(outfit_HED_1, "prepare-publication-tables/HED/injunctive_model_01.csv", row.names=FALSE)
 ```
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
-fit_rutgers_2 <- geem(rutgers ~ sex + race + age 
-                                + baseline_rutgers + baseline_social_desirability + baseline_impulsivity + lifestress
+fit_HED_2 <- geem(HED ~ sex + race + age 
+                                + baseline_HED + baseline_social_desirability + baseline_impulsivity + lifestress
                                 + descriptive_workplace_norms + qualitative_role_overload + quantitative_role_overload, 
                   data = dat_analysis, id = ParticipantID, waves = time, corstr = "exchangeable", family = "poisson")
 
-outfit_rutgers_2 <- FormatGEEOutput(fit_rutgers_2)
-N_rutgers_2 <- length(setdiff(unique(dat_analysis$ParticipantID), fit_rutgers_2$dropped))
+outfit_HED_2 <- FormatGEEOutput(fit_HED_2)
+N_HED_2 <- length(setdiff(unique(dat_analysis$ParticipantID), fit_HED_2$dropped))
 ```
 
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
-outfit_rutgers_1 %>%
+outfit_HED_1 %>%
   mutate(parameter = gsub("_"," ", .data[["parameter"]])) %>%
   mutate(parameter = gsub(":"," x ", .data[["parameter"]])) %>%
   select(parameter, everything()) %>%
   mutate_all(linebreak) %>%
   kable(booktabs = TRUE, align = c('c','c','c','c'),
         col.names = linebreak(c("Parameter","Estimates","SE","p-value"), align = "c"),
-        caption = paste("Outcome: Rutgers Alcohol Problem Index; N = ", N_rutgers_1,   "; QIC = ", round(QIC(fit_rutgers_1), digits = 2), sep=""), escape = FALSE) %>%
+        caption = paste("Outcome: Number of past-month heavy drinking days (HED); N = ", N_HED_1,   "; QIC = ", round(QIC(fit_HED_1), digits = 2), sep=""), escape = FALSE) %>%
   kable_styling(full_width = FALSE, latex_options = c("HOLD_position"))  
 
-outfit_rutgers_2 %>%
+outfit_HED_2 %>%
   select(parameter, everything()) %>%
   mutate(parameter = gsub("_"," ", .data[["parameter"]])) %>%
   mutate(parameter = gsub(":"," x ", .data[["parameter"]])) %>%
   mutate_all(linebreak) %>%
   kable(booktabs = TRUE, align = c('c','c','c','c'),
         col.names = linebreak(c("Parameter","Estimates","SE","p-value"), align = "c"),
-        caption = paste("Outcome: Rutgers Alcohol Problem Index; N = ", N_rutgers_2,   "; QIC = ", round(QIC(fit_rutgers_2), digits = 2), sep=""), escape = FALSE) %>%
+        caption = paste("Outcome: Number of past-month heavy drinking days (HED); N = ", N_HED_2,   "; QIC = ", round(QIC(fit_HED_2), digits = 2), sep=""), escape = FALSE) %>%
   kable_styling(full_width = FALSE, latex_options = c("HOLD_position"))  
 ```
 
@@ -113,15 +113,15 @@ outfit_rutgers_2 %>%
 # Model 2
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
-fit_rutgers_3 <- geem(rutgers ~ sex + race + age 
-                                + baseline_rutgers + baseline_social_desirability + baseline_impulsivity + lifestress
+fit_HED_3 <- geem(HED ~ sex + race + age 
+                                + baseline_HED + baseline_social_desirability + baseline_impulsivity + lifestress
                                 + injunctive_workplace_norms + qualitative_role_overload + quantitative_role_overload
                                 + time
                                 + time:injunctive_workplace_norms + time:qualitative_role_overload + time:quantitative_role_overload, 
                   data = dat_analysis, id = ParticipantID, waves = time, corstr = "exchangeable", family = "poisson")
 
-outfit_rutgers_3 <- FormatGEEOutput(fit_rutgers_3)
-N_rutgers_3 <- length(setdiff(unique(dat_analysis$ParticipantID), fit_rutgers_3$dropped))
+outfit_HED_3 <- FormatGEEOutput(fit_HED_3)
+N_HED_3 <- length(setdiff(unique(dat_analysis$ParticipantID), fit_HED_3$dropped))
 ```
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
@@ -132,7 +132,7 @@ Lmat <- matrix(c(0,0,0,0,0,0,0,0,
                  0,0,0,0),
                byrow=TRUE, nrow=1)
 Lmat_labels <- c("Qualitative Role Overload (time=0)")
-qualitative_role_overload_0 <- GetSS(use_this_model = fit_rutgers_3, L = Lmat, contrast_labels = Lmat_labels)
+qualitative_role_overload_0 <- GetSS(use_this_model = fit_HED_3, L = Lmat, contrast_labels = Lmat_labels)
 
 Lmat <- matrix(c(0,0,0,0,0,0,0,0,
                  0, # Norms at time 0
@@ -141,7 +141,7 @@ Lmat <- matrix(c(0,0,0,0,0,0,0,0,
                  0,0,0,0),
                byrow=TRUE, nrow=1)
 Lmat_labels <- c("Quantitative Role Overload (time=0)")
-quantitative_role_overload_0 <- GetSS(use_this_model = fit_rutgers_3, L = Lmat, contrast_labels = Lmat_labels)
+quantitative_role_overload_0 <- GetSS(use_this_model = fit_HED_3, L = Lmat, contrast_labels = Lmat_labels)
 
 Lmat <- matrix(c(0,0,0,0,0,0,0,0,
                  1, # Norms at time 0
@@ -150,7 +150,7 @@ Lmat <- matrix(c(0,0,0,0,0,0,0,0,
                  0,0,0,0),
                byrow=TRUE, nrow=1)
 Lmat_labels <- c("Norms (time=0)")
-norms_0 <- GetSS(use_this_model = fit_rutgers_3, L = Lmat, contrast_labels = Lmat_labels)
+norms_0 <- GetSS(use_this_model = fit_HED_3, L = Lmat, contrast_labels = Lmat_labels)
 
 Lmat <- matrix(c(0,0,0,0,0,0,0,0,
                  0, # Norms at time 0
@@ -163,7 +163,7 @@ Lmat <- matrix(c(0,0,0,0,0,0,0,0,
                  ),
                byrow=TRUE, nrow=1)
 Lmat_labels <- c("Qualitative Role Overload (time=1)")
-qualitative_role_overload_1 <- GetSS(use_this_model = fit_rutgers_3, L = Lmat, contrast_labels = Lmat_labels)
+qualitative_role_overload_1 <- GetSS(use_this_model = fit_HED_3, L = Lmat, contrast_labels = Lmat_labels)
 
 Lmat <- matrix(c(0,0,0,0,0,0,0,0,
                  0, # Norms at time 0
@@ -176,7 +176,7 @@ Lmat <- matrix(c(0,0,0,0,0,0,0,0,
                  ),
                byrow=TRUE, nrow=1)
 Lmat_labels <- c("Quantitative Role Overload (time=1)")
-quantitative_role_overload_1 <- GetSS(use_this_model = fit_rutgers_3, L = Lmat, contrast_labels = Lmat_labels)
+quantitative_role_overload_1 <- GetSS(use_this_model = fit_HED_3, L = Lmat, contrast_labels = Lmat_labels)
 
 Lmat <- matrix(c(0,0,0,0,0,0,0,0,
                  1, # Norms at time 0
@@ -189,7 +189,7 @@ Lmat <- matrix(c(0,0,0,0,0,0,0,0,
                  ),
                byrow=TRUE, nrow=1)
 Lmat_labels <- c("Norms (time=1)")
-norms_1 <- GetSS(use_this_model = fit_rutgers_3, L = Lmat, contrast_labels = Lmat_labels)
+norms_1 <- GetSS(use_this_model = fit_HED_3, L = Lmat, contrast_labels = Lmat_labels)
 
 dat_all_ss <- rbind(qualitative_role_overload_0,
                     quantitative_role_overload_0,
@@ -198,26 +198,26 @@ dat_all_ss <- rbind(qualitative_role_overload_0,
                     quantitative_role_overload_1,
                     norms_1)
 
-ss_fit_rutgers_3 <- dat_all_ss
+ss_fit_HED_3 <- dat_all_ss
 ```
 
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
-write.csv(outfit_rutgers_3, "prepare-publication-tables/RAPI/injunctive_model_02.csv", row.names=FALSE)
-write.csv(ss_fit_rutgers_3, "prepare-publication-tables/RAPI/injunctive_ss_model_02.csv", row.names=FALSE)
+write.csv(outfit_HED_3, "prepare-publication-tables/HED/injunctive_model_02.csv", row.names=FALSE)
+write.csv(ss_fit_HED_3, "prepare-publication-tables/HED/injunctive_ss_model_02.csv", row.names=FALSE)
 ```
 
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
-fit_rutgers_4 <- geem(rutgers ~ sex + race + age 
-                                + baseline_rutgers + baseline_social_desirability + baseline_impulsivity + lifestress
+fit_HED_4 <- geem(HED ~ sex + race + age 
+                                + baseline_HED + baseline_social_desirability + baseline_impulsivity + lifestress
                                 + descriptive_workplace_norms + qualitative_role_overload + quantitative_role_overload
                                 + time
                                 + time:descriptive_workplace_norms + time:qualitative_role_overload + time:quantitative_role_overload, 
                   data = dat_analysis, id = ParticipantID, waves = time, corstr = "exchangeable", family = "poisson")
 
-outfit_rutgers_4 <- FormatGEEOutput(fit_rutgers_4)
-N_rutgers_4 <- length(setdiff(unique(dat_analysis$ParticipantID), fit_rutgers_4$dropped))
+outfit_HED_4 <- FormatGEEOutput(fit_HED_4)
+N_HED_4 <- length(setdiff(unique(dat_analysis$ParticipantID), fit_HED_4$dropped))
 ```
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
@@ -228,7 +228,7 @@ Lmat <- matrix(c(0,0,0,0,0,0,0,0,
                  0,0,0,0),
                byrow=TRUE, nrow=1)
 Lmat_labels <- c("Qualitative Role Overload (time=0)")
-qualitative_role_overload_0 <- GetSS(use_this_model = fit_rutgers_4, L = Lmat, contrast_labels = Lmat_labels)
+qualitative_role_overload_0 <- GetSS(use_this_model = fit_HED_4, L = Lmat, contrast_labels = Lmat_labels)
 
 Lmat <- matrix(c(0,0,0,0,0,0,0,0,
                  0, # Norms at time 0
@@ -237,7 +237,7 @@ Lmat <- matrix(c(0,0,0,0,0,0,0,0,
                  0,0,0,0),
                byrow=TRUE, nrow=1)
 Lmat_labels <- c("Quantitative Role Overload (time=0)")
-quantitative_role_overload_0 <- GetSS(use_this_model = fit_rutgers_4, L = Lmat, contrast_labels = Lmat_labels)
+quantitative_role_overload_0 <- GetSS(use_this_model = fit_HED_4, L = Lmat, contrast_labels = Lmat_labels)
 
 Lmat <- matrix(c(0,0,0,0,0,0,0,0,
                  1, # Norms at time 0
@@ -246,7 +246,7 @@ Lmat <- matrix(c(0,0,0,0,0,0,0,0,
                  0,0,0,0),
                byrow=TRUE, nrow=1)
 Lmat_labels <- c("Norms (time=0)")
-norms_0 <- GetSS(use_this_model = fit_rutgers_4, L = Lmat, contrast_labels = Lmat_labels)
+norms_0 <- GetSS(use_this_model = fit_HED_4, L = Lmat, contrast_labels = Lmat_labels)
 
 Lmat <- matrix(c(0,0,0,0,0,0,0,0,
                  0, # Norms at time 0
@@ -259,7 +259,7 @@ Lmat <- matrix(c(0,0,0,0,0,0,0,0,
                  ),
                byrow=TRUE, nrow=1)
 Lmat_labels <- c("Qualitative Role Overload (time=1)")
-qualitative_role_overload_1 <- GetSS(use_this_model = fit_rutgers_4, L = Lmat, contrast_labels = Lmat_labels)
+qualitative_role_overload_1 <- GetSS(use_this_model = fit_HED_4, L = Lmat, contrast_labels = Lmat_labels)
 
 Lmat <- matrix(c(0,0,0,0,0,0,0,0,
                  0, # Norms at time 0
@@ -272,7 +272,7 @@ Lmat <- matrix(c(0,0,0,0,0,0,0,0,
                  ),
                byrow=TRUE, nrow=1)
 Lmat_labels <- c("Quantitative Role Overload (time=1)")
-quantitative_role_overload_1 <- GetSS(use_this_model = fit_rutgers_4, L = Lmat, contrast_labels = Lmat_labels)
+quantitative_role_overload_1 <- GetSS(use_this_model = fit_HED_4, L = Lmat, contrast_labels = Lmat_labels)
 
 Lmat <- matrix(c(0,0,0,0,0,0,0,0,
                  1, # Norms at time 0
@@ -285,7 +285,7 @@ Lmat <- matrix(c(0,0,0,0,0,0,0,0,
                  ),
                byrow=TRUE, nrow=1)
 Lmat_labels <- c("Norms (time=1)")
-norms_1 <- GetSS(use_this_model = fit_rutgers_4, L = Lmat, contrast_labels = Lmat_labels)
+norms_1 <- GetSS(use_this_model = fit_HED_4, L = Lmat, contrast_labels = Lmat_labels)
 
 dat_all_ss <- rbind(qualitative_role_overload_0,
                     quantitative_role_overload_0,
@@ -294,22 +294,22 @@ dat_all_ss <- rbind(qualitative_role_overload_0,
                     quantitative_role_overload_1,
                     norms_1)
 
-ss_fit_rutgers_4 <- dat_all_ss
+ss_fit_HED_4 <- dat_all_ss
 ```
 
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
-outfit_rutgers_3 %>%
+outfit_HED_3 %>%
   mutate(parameter = gsub("_"," ", .data[["parameter"]])) %>%
   mutate(parameter = gsub(":"," x ", .data[["parameter"]])) %>%
   select(parameter, everything()) %>%
   mutate_all(linebreak) %>%
   kable(booktabs = TRUE, align = c('c','c','c','c'),
         col.names = linebreak(c("Parameter","Estimates","SE","p-value"), align = "c"),
-        caption = paste("Outcome: Rutgers Alcohol Problem Index; N = ", N_rutgers_3,   "; QIC = ", round(QIC(fit_rutgers_3), digits = 2), sep=""), escape = FALSE) %>%
+        caption = paste("Outcome: Number of past-month heavy drinking days (HED); N = ", N_HED_3,   "; QIC = ", round(QIC(fit_HED_3), digits = 2), sep=""), escape = FALSE) %>%
   kable_styling(full_width = FALSE, latex_options = c("HOLD_position"))  
 
-ss_fit_rutgers_3 %>%
+ss_fit_HED_3 %>%
   kable(booktabs = TRUE, 
         col.names = c("Parameter","Estimates","SE","p-value")) %>%
   kable_styling(full_width = FALSE, latex_options = c("HOLD_position"))
@@ -318,17 +318,17 @@ ss_fit_rutgers_3 %>%
 \newpage
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
-outfit_rutgers_4 %>%
+outfit_HED_4 %>%
   select(parameter, everything()) %>%
   mutate(parameter = gsub("_"," ", .data[["parameter"]])) %>%
   mutate(parameter = gsub(":"," x ", .data[["parameter"]])) %>%
   mutate_all(linebreak) %>%
   kable(booktabs = TRUE, align = c('c','c','c','c'),
         col.names = c("Parameter","Estimates","SE","p-value"),
-        caption = paste("Outcome: Rutgers Alcohol Problem Index; N = ", N_rutgers_4,   "; QIC = ", round(QIC(fit_rutgers_4), digits = 2), sep=""), escape = FALSE) %>%
+        caption = paste("Outcome: Number of past-month heavy drinking days (HED); N = ", N_HED_4,   "; QIC = ", round(QIC(fit_HED_4), digits = 2), sep=""), escape = FALSE) %>%
   kable_styling(full_width = FALSE, latex_options = c("HOLD_position"))  
 
-ss_fit_rutgers_4 %>%
+ss_fit_HED_4 %>%
   kable(booktabs = TRUE, 
         col.names = c("Parameter","Estimates","SE","p-value")) %>%
   kable_styling(full_width = FALSE, latex_options = c("HOLD_position"))

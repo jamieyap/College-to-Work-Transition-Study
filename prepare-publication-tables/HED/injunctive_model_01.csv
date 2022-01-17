@@ -1,0 +1,12 @@
+"parameter","estimates","se","p"
+"(Intercept)","0.4***",0.08,0
+"sex","-0.13†",0.07,0.07
+"race","0.28***",0.08,0
+"age","0.01",0.04,0.88
+"baseline_HED","0.41***",0.03,0
+"baseline_social_desirability","-0.03",0.04,0.48
+"baseline_impulsivity","0.05",0.03,0.15
+"lifestress","0.08***",0.03,0
+"injunctive_workplace_norms","0.04",0.03,0.23
+"qualitative_role_overload","0.07*",0.03,0.02
+"quantitative_role_overload","0.12***",0.02,0
