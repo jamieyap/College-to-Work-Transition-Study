@@ -1,8 +1,3 @@
----
-output:
-  pdf_document: default
-  html_document: default
----
 # The College-to-Work Transition Study (C2W)
 Focused on young adults transitioning from college to the work force, the College-to-Work Transition Study (C2W) involved a multi-year data collection effort where seniors in their final quarter/semester before graduation from universities located in the Pacific Northwest, Midwest, Southeast, and Northeast parts of the USA were invited to participate.
 
