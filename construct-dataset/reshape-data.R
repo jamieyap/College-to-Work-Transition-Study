@@ -20,11 +20,78 @@ refdata <- wnwdata %>% select(ParticipantID, survey_timepoint, wnw1) %>% arrange
 # Do this in two parts: first, for participants who do not have any missing data in wnw1
 # second, for participants who have any missing data in wnw1
 
+# Note: participants_all would be the complete list of participant ID's who were sent a wnw survey
 participants_all <- unique(refdata[["ParticipantID"]])
+# How many participants are there in the wnwdataset?
+length(participants_all)
+
 participants_with_miss <- wnwdata %>% filter(is.na(wnw1)) %>% select(ParticipantID) %>% unique(.) %>% .[["ParticipantID"]]
 participants_with_nomiss <- setdiff(participants_all, participants_with_miss)
 
+# Check if ID's within participants_with_miss are also within participants_with_nomiss
+# Output:
+# > sum(participants_with_miss %in% participants_with_nomiss)
+# [1] 0
+
+sum(participants_with_miss %in% participants_with_nomiss)
+
+###############################################################################
+# Investigate participants having missing wnw1 values
+###############################################################################
+
+# Inspect wnwi, an item where participants were asked to confirm whether 
+# they indeed graduated already
+# Note: no missing values in wnwi
+summary(wnwdata$wnwi)
+
+# Take the subset of data corresponding to those participants whose
+# ID's are within participants_with_miss
+tmpdat <- wnwdata %>% 
+  filter(ParticipantID %in% participants_with_miss) %>% 
+  select(wnwi, wnw1, ParticipantID, Timepoint, everything()) %>%
+  arrange(ParticipantID, Timepoint)
+
+# These participants may not have any value for wnw1 since they
+# reported to not have graduated in wnwi (i.e., they have wnwi=2)
+# Let's confirm whether this is the case.
+
+# First, separate tmpdat into two smaller data frames.
+# tmp_dat_more_than_one are those rows corresponding to ParticipantID's which
+# have appeared more than once in tmpdat
+more_than_one <- duplicated(tmpdat$ParticipantID)
+tmpdat_more_than_one <- tmpdat %>%
+  filter(more_than_one) %>%
+  arrange(ParticipantID, Timepoint)
+
+# tmp_dat_exactly_one are those rows corresponding to ParticipantID's which
+# have appeared exactly once in tmpdat
+tmpdat_exactly_one <- tmpdat %>% 
+  filter(!(ParticipantID %in% unique(tmpdat_more_than_one$ParticipantID)))
+
+remove(tmpdat)
+
+dat_did_not_graduate <- rbind(tmpdat_more_than_one, tmpdat_exactly_one)
+dat_did_not_graduate <- dat_did_not_graduate %>% select(ParticipantID, Timepoint, wnwi, wnw1)
+
+write.csv(dat_did_not_graduate, file.path(path_output_data, "dat_did_not_graduate.csv"), row.names = FALSE)
+
+###############################################################################
+# Investigate participants having no missing wnw1 values
+###############################################################################
+
+# All these participants always report wnwi=1 (they confirmed that they
+# graduated)
+# ID's are within participants_with_miss
+tmpdat <- wnwdata %>% 
+  filter(ParticipantID %in% participants_with_nomiss)
+
+summary(tmpdat$wnwi)
+
+remove(tmpdat)
+
+###############################################################################
 # Begin data preparation for participants having no missing wnw1 values
+###############################################################################
 list_with_begin_month_participants <- list()
 list_exclusion_rule <- list()
 
@@ -74,72 +141,16 @@ for(i in 1:nrow(dat_exclusion_rule)){
   }
 }
 
-# Now, work with participant ID's in participants_with_miss
-tab_count <- refdata %>% filter(ParticipantID %in% participants_with_miss) %>% 
-  group_by(ParticipantID) %>% summarise(count_row=n())
+###############################################################################
+# Finally, create data frame having an indicator for whether individual will be
+# included in analysis
+###############################################################################
 
-# which participant only had one row?
-miss_ids_1 <- tab_count %>% filter(count_row==1) %>% select(ParticipantID) %>% .[["ParticipantID"]]
-
-for(i in 1:length(miss_ids_1)){
-  curr_participant_id <- miss_ids_1[i]
-  # update record of how exclusion criteria applied to a participant
-  tmpdat <- data.frame(ParticipantID=curr_participant_id, 
-                       any_ft = NA, 
-                       begin_month = NA, post_begin_month = NA, 
-                       begin_month_wnw1 = NA, post_begin_month_wnw1 = NA)
-  list_exclusion_rule <- append(list_exclusion_rule, list(tmpdat))
-}
-
-# which participant had two or more rows?
-miss_ids_2 <- tab_count %>% filter(count_row>1) %>% select(ParticipantID) %>% .[["ParticipantID"]]
-
-# View data; only three participants
-#refdata %>% filter(ParticipantID %in% miss_ids_2)
-
-for(i in 1:length(miss_ids_2)){
-  if(i==1){
-    curr_participant_id <- miss_ids_2[i]
-    # update record of how exclusion criteria applied to a participant
-    tmpdat <- data.frame(ParticipantID=curr_participant_id, 
-                         any_ft = NA, 
-                         begin_month = NA, post_begin_month = NA, 
-                         begin_month_wnw1 = NA, post_begin_month_wnw1 = NA)
-    list_exclusion_rule <- append(list_exclusion_rule, list(tmpdat))
-  }else{
-    curr_participant_id <- miss_ids_2[i]
-    curr_dat <- refdata %>% filter(ParticipantID == curr_participant_id)
-    full_time_idx <- which((curr_dat[["wnw1"]]==1) | (curr_dat[["wnw1"]]==3) | (curr_dat[["wnw1"]]==5))
-    # update record of how exclusion criteria applied to a participant
-    this_idx <- min(full_time_idx)
-    tmpdat <- data.frame(ParticipantID=curr_participant_id, 
-                         any_ft = 1, 
-                         begin_month = curr_dat[this_idx,][["survey_timepoint"]], post_begin_month = curr_dat[this_idx,][["survey_timepoint"]]+12, 
-                         begin_month_wnw1 = curr_dat[this_idx,][["wnw1"]], post_begin_month_wnw1 = NA)
-    list_exclusion_rule <- append(list_exclusion_rule, list(tmpdat))
-  }
-}
-
-# Finally, create data frame having an indicator for whether individual will be included in analysis
 dat_exclusion_rule <- bind_rows(list_exclusion_rule)
 check_include1 <- (dat_exclusion_rule[["begin_month_wnw1"]]==1 | dat_exclusion_rule[["begin_month_wnw1"]]==3 | dat_exclusion_rule[["begin_month_wnw1"]]==5)
 check_include2 <- (dat_exclusion_rule[["post_begin_month_wnw1"]]==1 | dat_exclusion_rule[["post_begin_month_wnw1"]]==3 | dat_exclusion_rule[["post_begin_month_wnw1"]]==5)
 dat_exclusion_rule[["include"]] <- if_else(check_include1 & check_include2, 1, 0)
 dat_exclusion_rule[["include"]] <- replace(dat_exclusion_rule[["include"]], is.na(dat_exclusion_rule[["include"]]), 0)
-
-# Account for those participants who will be excluded from all data analysis
-# ex1: 32-did not report at least one value for wnw1; 1-reported to not be working full time twice and had missing value for wnw1 on last available assessment
-# ex2: reported at least one value for wnw1; but in all cases, reported to not be working full time
-# ex3: twelve months after having reported to be working full time, no indication of whether the individual worked full time (no reported value for wnw1 twelve months after first reporting wnw1=1,3,5)
-# ex4: twelve months after having reported to be working full time, reported to not be working full time (reported a value of wnw1, but wnw1 is not 1,3 or 5)
-tabulate_excluded_by_source <- dat_exclusion_rule %>% 
-  summarise(ex1 = sum(is.na(any_ft)),
-            ex2 = sum(any_ft==0, na.rm=TRUE),
-            ex3 = sum(any_ft==1 & is.na(post_begin_month_wnw1), na.rm=TRUE),
-            ex4 = sum(any_ft==1 & !is.na(post_begin_month_wnw1) & (!(post_begin_month_wnw1==1 | post_begin_month_wnw1==3 | post_begin_month_wnw1==5)), na.rm=TRUE))
-
-tabulate_excluded_by_source[["total_excluded"]] <- rowSums(tabulate_excluded_by_source)
-print(tabulate_excluded_by_source) 
 
 # The data frame dat_exclusion_rule contains the following columns
 # ParticipantID -- unique identifier for each participant
@@ -174,8 +185,10 @@ long_subset_dat_exclusion_rule <- long_subset_dat_exclusion_rule %>%
   mutate(time = time-1)
 
 # Write output to csv file
+# 1,614 unique participant IDs in dat_exclusion_rule.csv
 write.csv(dat_exclusion_rule, file.path(path_output_data, "dat_exclusion_rule.csv"), row.names = FALSE)
+
+# 1,240 unique participant IDs in both csv files below
 write.csv(long_subset_dat_exclusion_rule, file.path(path_output_data, "longformat_analysis_ids.csv"), row.names = FALSE)
 write.csv(wide_subset_dat_exclusion_rule, file.path(path_output_data, "wideformat_analysis_ids.csv"), row.names = FALSE)
-
 
