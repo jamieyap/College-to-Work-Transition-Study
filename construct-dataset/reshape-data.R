@@ -161,10 +161,6 @@ dat_exclusion_rule[["include"]] <- replace(dat_exclusion_rule[["include"]], is.n
 # post_begin_month_wnw1 -- what was the value of wnw1 reported at post_begin_month_wnw1? (regardless of the value of any_ft, possible values are 1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
 # include -- whether individual will be included (1) or not (0) in data analysis
 
-# Sanity check: count number of individuals having each possible combination of values of wnw1 reported
-# during begin_month_wnw1 and post_begin_month_wnw1
-dat_exclusion_rule %>% filter(include==1) %>% group_by(begin_month_wnw1, post_begin_month_wnw1) %>% summarise(n())
-
 # Select those rows in wnwdata corresponding to individuals who will be included in data analysis
 # To determine which participants to include in data analysis, simply obtain those rows having include=1
 # Among those rows having include=1, 'time 0' is the value of begin_month and 'time 1' is the value of post_begin_month

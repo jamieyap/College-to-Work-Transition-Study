@@ -38,9 +38,9 @@ dat_wnw_analysis <- read.csv(file.path(path_output_data, "dat_wnw_analysis.csv")
 
 # Center and scale variables
 dat_baseline_analysis <- dat_baseline_analysis %>% mutate(across(!c("ParticipantID"), scale))
-dat_screener_analysis <- dat_screener_analysis %>% mutate(across(!c("ParticipantID","sex","race"), scale))
-dat_wnw_analysis_0 <- dat_wnw_analysis %>% filter(time==0) %>% mutate(across(!c("ParticipantID","time","survey_timepoint","CASEID","HED","rutgers"), scale))
-dat_wnw_analysis_1 <- dat_wnw_analysis %>% filter(time==1) %>% mutate(across(!c("ParticipantID","time","survey_timepoint","CASEID","HED","rutgers"), scale))
+dat_screener_analysis <- dat_screener_analysis %>% mutate(across(!c("ParticipantID","sex","race","baseline_condition"), scale))
+dat_wnw_analysis_0 <- dat_wnw_analysis %>% filter(time==0) %>% mutate(across(!c("ParticipantID","time","survey_timepoint","CASEID","HED","rutgers","condition"), scale))
+dat_wnw_analysis_1 <- dat_wnw_analysis %>% filter(time==1) %>% mutate(across(!c("ParticipantID","time","survey_timepoint","CASEID","HED","rutgers","condition"), scale))
 dat_wnw_analysis <- rbind(dat_wnw_analysis_0, dat_wnw_analysis_1)
 remove(dat_wnw_analysis_0, dat_wnw_analysis_1)
 

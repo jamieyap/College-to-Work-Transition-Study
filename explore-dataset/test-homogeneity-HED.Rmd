@@ -1,0 +1,239 @@
+---
+title: "Tests of Homogeneity"
+author: 
+date: '`r format(Sys.Date(), "%B %d, %Y")`'
+geometry: margin=1in
+output: 
+  pdf_document:
+    number_sections: TRUE
+---
+
+
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(tidy = TRUE)
+knitr::opts_chunk$set(fig.pos = 'H')
+```
+
+# Overview
+
+Conduct Chi-squared tests (for binary variables) or Kolmogorov-Smirnov tests (for continuous variables) to test for homogeneity across two samples. The two samples are:
+
+1. Participants who were **included** in analyses having HED as the outcome of interest 
+1. Participants who were **excluded** in analyses having HED as the outcome of interest 
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+library(rmarkdown)
+library(knitr)
+library(kableExtra)
+set.seed(87654321)
+```
+
+# Results for HED as outcome of interest
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+library(dplyr)
+library(geeM)
+library(MuMIn)
+path_output_data <- Sys.getenv("path_output_data")
+
+# Read in functions for data analysis
+source("analysis-utils.R")
+
+# Read in data
+dat_baseline_analysis <- read.csv(file.path(path_output_data, "dat_baseline_analysis.csv"), header = TRUE)
+dat_screener_analysis <- read.csv(file.path(path_output_data, "dat_screener_analysis.csv"), header = TRUE)
+dat_wnw_analysis <- read.csv(file.path(path_output_data, "dat_wnw_analysis.csv"), header = TRUE)
+
+# Merge datasets into one data frame
+dat_wnw_analysis <- dat_wnw_analysis %>% arrange(ParticipantID, time)
+dat_analysis <- left_join(x = dat_wnw_analysis, y = dat_screener_analysis, by = "ParticipantID")
+dat_analysis <- left_join(x = dat_analysis, y = dat_baseline_analysis, by = "ParticipantID")
+dat_analysis <- dat_analysis %>% select(colnames(dat_screener_analysis), colnames(dat_baseline_analysis), everything())
+```
+
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+keep_rows <- complete.cases(dat_analysis[, !(colnames(dat_analysis) %in% c("baseline_rutgers", "rutgers"))])
+
+dat_sample_complete <- dat_analysis %>% 
+  filter(keep_rows)
+
+dat_sample_notcomplete <- dat_analysis %>% 
+  filter(!keep_rows)
+```
+
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+ids_sample_complete <- unique(dat_sample_complete$ParticipantID)
+ids_sample_notcomplete <- unique(dat_sample_notcomplete$ParticipantID)
+```
+
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+dat_results_HED <- data.frame(variable = NULL, time = NULL, pval = NULL)
+```
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+covariate <- c("sex")
+
+dat_complete_case <- dat_sample_complete %>% 
+  filter(ParticipantID %in% ids_sample_complete) %>%
+  select(ParticipantID, all_of(covariate)) %>%
+  filter(!duplicated(.)) %>%
+  select(all_of(covariate))
+
+dat_with_miss <- dat_sample_notcomplete %>% 
+  select(ParticipantID, all_of(covariate)) %>%
+  filter(!duplicated(.)) %>%
+  select(all_of(covariate))
+
+tab_complete <- table(dat_complete_case)
+tab_miss <- table(dat_with_miss)
+df_tab_complete <- as.data.frame(tab_complete)
+df_tab_miss <- as.data.frame(tab_miss)
+colnames(df_tab_complete) <- c("value", "count_complete")
+colnames(df_tab_miss) <- c("value", "count_missing")
+
+
+df_merged <- full_join(x = df_tab_complete, y = df_tab_miss, by = "value")
+df_merged <- df_merged[order(df_merged$value),]
+df_merged$count_complete <- ifelse(is.na(df_merged$count_complete), 0, df_merged$count_complete)
+df_merged$count_missing <- ifelse(is.na(df_merged$count_missing), 0, df_merged$count_missing)
+mat <- df_merged[, c("count_complete", "count_missing")]
+
+res <- chisq.test(mat, simulate.p.value = TRUE)
+
+dat_results_tmp <- data.frame(variable = "sex", pval = res[["p.value"]])
+dat_results_HED <- rbind(dat_results_HED, dat_results_tmp)
+
+df_merged_sex <- df_merged
+```
+
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+covariate <- c("age")
+
+dat_complete_case <- dat_sample_complete %>% 
+  select(ParticipantID, all_of(covariate)) %>%
+  filter(!duplicated(.)) %>%
+  select(all_of(covariate))
+
+dat_with_miss <- dat_sample_notcomplete %>%
+  select(ParticipantID, all_of(covariate)) %>%
+  filter(!duplicated(.)) %>%
+  select(all_of(covariate))
+
+res <- ks.test(x = dat_complete_case[["age"]], dat_with_miss[["age"]], exact = TRUE)
+
+dat_results_tmp <- data.frame(variable = "age", pval = res[["p.value"]])
+dat_results_HED <- rbind(dat_results_HED, dat_results_tmp)
+```
+
+
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+covariate <- c("race")
+
+dat_complete_case <- dat_sample_complete %>% 
+  select(ParticipantID, all_of(covariate)) %>%
+  filter(!duplicated(.)) %>%
+  select(all_of(covariate))
+
+dat_with_miss <- dat_sample_notcomplete %>% 
+  select(ParticipantID, all_of(covariate)) %>%
+  filter(!duplicated(.)) %>%
+  select(all_of(covariate))
+
+tab_complete <- table(dat_complete_case)
+tab_miss <- table(dat_with_miss)
+df_tab_complete <- as.data.frame(tab_complete)
+df_tab_miss <- as.data.frame(tab_miss)
+colnames(df_tab_complete) <- c("value", "count_complete")
+colnames(df_tab_miss) <- c("value", "count_missing")
+
+
+df_merged <- full_join(x = df_tab_complete, y = df_tab_miss, by = "value")
+df_merged <- df_merged[order(df_merged$value),]
+df_merged$count_complete <- ifelse(is.na(df_merged$count_complete), 0, df_merged$count_complete)
+df_merged$count_missing <- ifelse(is.na(df_merged$count_missing), 0, df_merged$count_missing)
+mat <- df_merged[, c("count_complete", "count_missing")]
+
+res <- chisq.test(mat, simulate.p.value = TRUE)
+
+dat_results_tmp <- data.frame(variable = "race", pval = res[["p.value"]])
+dat_results_HED <- rbind(dat_results_HED, dat_results_tmp)
+
+df_merged_race <- df_merged
+```
+
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+dat_results_HED[["pval"]] <- format(round(dat_results_HED[["pval"]], 3), nsmall = 3)
+```
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+colnames(dat_results_HED) <- c("Variable", "p")
+
+kable(dat_results_HED, 
+      booktabs=TRUE, 
+      caption = "$H_0:$ There is no difference in the distribution of the variable of interest (Column 1) across the two samples being compared", 
+      escape = FALSE) %>%
+  kable_styling(position = "center", latex_options = "HOLD_position")
+```
+
+
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+df_merged_sex <- df_merged_sex %>% 
+  arrange(desc(value)) %>%
+  mutate(value = if_else(value==1, "female", "others"),
+         percent_of_complete = 100 * (count_complete/sum(df_merged_sex[["count_complete"]])),
+         percent_of_missing = 100 * (count_missing/sum(df_merged_sex[["count_missing"]])))
+
+df_merged_sex <- rbind(df_merged_sex, c(NA, colSums(df_merged_sex[,2:5])))
+df_merged_sex[3,1] <- "Grand Total"
+df_merged_sex[["percent_of_complete"]] <- format(round(df_merged_sex[["percent_of_complete"]], 3), nsmall = 3)
+df_merged_sex[["percent_of_missing"]] <- format(round(df_merged_sex[["percent_of_missing"]], 3), nsmall = 3)
+```
+
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+colnames(df_merged_sex) <- c("Category", "Count among included", "Count among excluded", "Percent among included", "Percent among excluded")
+
+kable(df_merged_sex, 
+      booktabs=TRUE, 
+      caption = "Participants who reported their sex to be female vs. others", 
+      escape = FALSE) %>%
+  kable_styling(position = "center", latex_options = "HOLD_position")
+```
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+df_merged_race <- df_merged_race %>% 
+  arrange(desc(value)) %>%
+  mutate(value = if_else(value==1, "white", "others"),
+         percent_of_complete = 100 * (count_complete/sum(df_merged_race[["count_complete"]])),
+         percent_of_missing = 100 * (count_missing/sum(df_merged_race[["count_missing"]])))
+
+df_merged_race <- rbind(df_merged_race, c(NA, colSums(df_merged_race[,2:5])))
+df_merged_race[3,1] <- "Grand Total"
+df_merged_race[["percent_of_complete"]] <- format(round(df_merged_race[["percent_of_complete"]], 3), nsmall = 3)
+df_merged_race[["percent_of_missing"]] <- format(round(df_merged_race[["percent_of_missing"]], 3), nsmall = 3)
+```
+
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+colnames(df_merged_race) <- c("Category", "Count among included", "Count among excluded", "Percent among included", "Percent among excluded")
+
+kable(df_merged_race, 
+      booktabs=TRUE, 
+      caption = "Participants who reported their race to be white vs. others", 
+      escape = FALSE) %>%
+  kable_styling(position = "center", latex_options = "HOLD_position")
+```
+
+
+
+
+
+
+

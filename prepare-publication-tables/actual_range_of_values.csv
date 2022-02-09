@@ -1,24 +1,24 @@
-"","variable","MEAN","SD","MIN","MAX","NMISS","PMISS","alpha"
-"1","baseline_HED",2.385,3.658,0,25,94,0.076,
-"2","baseline_rutgers",2.785,4.329,0,45,287,0.231,0.863
-"3","sex",0.594,0.491,0,1,0,0,
-"4","race",0.684,0.465,0,1,2,0.002,
-"5","age",22.221,0.742,18.583,24.833,0,0,
-"6","baseline_social_desirability",5.169,2.099,0,10,1,0.001,0.595
-"7","baseline_impulsivity",0.936,0.639,0,3,1,0.001,0.776
-"8","Time 0: lifestress",1.187,0.965,0,4,0,0,0.737
-"9","Time 0: HED",1.833,2.771,0,21,3,0.002,
-"10","Time 0: rutgers",2.226,4.522,0,48,176,0.142,0.905
-"11","Time 0: qualitative_role_overload",2.492,1.293,0,6,2,0.002,0.758
-"12","Time 0: quantitative_role_overload",3.998,6.342,0,30,4,0.003,
-"13","Time 0: injunctive_workplace_norms",0.69,0.882,0,4,3,0.002,0.776
-"14","Time 0: descriptive_workplace_norms",0.256,0.496,0,4,4,0.003,0.537
-"15","Time 0: DASS",4.78,3.424,0,15,1,0.001,0.881
-"16","Time 1: lifestress",1.058,0.916,0,4,0,0,0.715
-"17","Time 1: HED",1.897,2.891,0,30,0,0,
-"18","Time 1: rutgers",2.492,4.607,0,43,162,0.131,0.892
-"19","Time 1: qualitative_role_overload",2.433,1.391,0,6,2,0.002,0.789
-"20","Time 1: quantitative_role_overload",5.354,6.826,0,30,0,0,
-"21","Time 1: injunctive_workplace_norms",0.725,0.874,0,4,2,0.002,0.727
-"22","Time 1: descriptive_workplace_norms",0.286,0.503,0,3,2,0.002,0.415
-"23","Time 1: DASS",5.052,3.436,0,15,1,0.001,0.877
+"variable","MEAN","SD","MIN","MAX","NMISS","PMISS","NOB","alpha"
+"baseline_HED",2.38,3.66,0,25,94,8,1240,
+"baseline_rutgers",2.78,4.33,0,45,274,22.33,1227,0.86
+"sex",0.59,0.49,0,1,0,0,1240,
+"race",0.68,0.47,0,1,2,0,1240,
+"age",22.22,0.74,18.58,24.83,0,0,1240,
+"baseline_social_desirability",5.17,2.1,0,10,1,0,1240,0.6
+"baseline_impulsivity",0.94,0.64,0,3,1,0,1240,0.78
+"Time 0: lifestress",1.19,0.96,0,4,0,0,1240,0.74
+"Time 0: HED",1.83,2.77,0,21,3,0,1240,
+"Time 0: rutgers",2.23,4.52,0,48,4,0.37,1068,0.91
+"Time 0: qualitative_role_overload",2.49,1.29,0,6,2,0,1240,0.76
+"Time 0: quantitative_role_overload",4,6.34,0,30,4,0,1240,
+"Time 0: injunctive_workplace_norms",0.69,0.88,0,4,3,0,1240,0.78
+"Time 0: descriptive_workplace_norms",0.26,0.5,0,4,4,0,1240,0.54
+"Time 0: DASS",4.78,3.42,0,15,1,0,1240,0.88
+"Time 1: lifestress",1.06,0.92,0,4,0,0,1240,0.71
+"Time 1: HED",1.9,2.89,0,30,0,0,1240,
+"Time 1: rutgers",2.49,4.61,0,43,1,0.09,1079,0.89
+"Time 1: qualitative_role_overload",2.43,1.39,0,6,2,0,1240,0.79
+"Time 1: quantitative_role_overload",5.35,6.83,0,30,0,0,1240,
+"Time 1: injunctive_workplace_norms",0.72,0.87,0,4,2,0,1240,0.73
+"Time 1: descriptive_workplace_norms",0.29,0.5,0,3,2,0,1240,0.41
+"Time 1: DASS",5.05,3.44,0,15,1,0,1240,0.88

@@ -2,14 +2,10 @@
 title: "Display actual range of values in constructed variables and reliability"
 author: 
 date: '`r format(Sys.Date(), "%B %d, %Y")`'
-geometry: margin=0.5in
+geometry: margin=0.5in, landscape
 output: 
   pdf_document:
     number_sections: TRUE
-header-includes:
-- \usepackage{pdflscape}
-- \newcommand{\blandscape}{\begin{landscape}}
-- \newcommand{\elandscape}{\end{landscape}}
 ---
 
 
@@ -49,11 +45,14 @@ list_summary_wnw_1 <- apply(dat_wnw_analysis[dat_wnw_analysis$time==1,dat_wnw_va
 ```
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
-tab_baseline <- bind_rows(list_summary_baseline) %>% round(., 3)
-tab_screener <- bind_rows(list_summary_screener) %>% round(., 3)
-tab_wnw_0 <- bind_rows(list_summary_wnw_0) %>% round(., 3)
-tab_wnw_1 <- bind_rows(list_summary_wnw_1) %>% round(., 3)
+tab_baseline <- bind_rows(list_summary_baseline) %>% round(., 2)
+tab_screener <- bind_rows(list_summary_screener) %>% round(., 2)
+tab_wnw_0 <- bind_rows(list_summary_wnw_0) %>% round(., 2)
+tab_wnw_1 <- bind_rows(list_summary_wnw_1) %>% round(., 2)
+```
 
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
 tab_baseline$variable <- names(list_summary_baseline)
 tab_screener$variable <- names(list_summary_screener)
 tab_wnw_0$variable <- paste("Time 0: ", names(list_summary_wnw_0), sep="")
@@ -61,6 +60,68 @@ tab_wnw_1$variable <- paste("Time 1: ", names(list_summary_wnw_1), sep="")
 
 tab_all <- rbind(tab_screener, tab_baseline, tab_wnw_0, tab_wnw_1)
 tab_all <- tab_all %>% select(variable, everything())
+```
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+tab_all <- tab_all %>% 
+  mutate(NOB = nrow(dat_wnw_analysis[dat_wnw_analysis$time==0,]))
+```
+
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+dat_subset <- dat_screener_analysis[, c("baseline_rutgers","baseline_condition")]
+dat_subset <- dat_subset %>% filter(baseline_condition!=1)
+
+true_nrows <- nrow(dat_subset)
+true_missing <- sum(is.na(dat_subset$baseline_rutgers))
+true_prop_missing <- true_missing/true_nrows
+```
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+tab_all <- tab_all %>%
+  mutate(NMISS = replace(NMISS, variable == "baseline_rutgers", true_missing),
+         PMISS = replace(PMISS, variable == "baseline_rutgers", true_prop_missing),
+         NOB = replace(NOB, variable == "baseline_rutgers", true_nrows))
+```
+
+
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+dat_subset <- dat_wnw_analysis[dat_wnw_analysis$time==0, c("rutgers","condition")]
+dat_subset <- dat_subset %>% filter(condition!=1)
+
+true_nrows <- nrow(dat_subset)
+true_missing <- sum(is.na(dat_subset$rutgers))
+true_prop_missing <- true_missing/true_nrows
+```
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+tab_all <- tab_all %>%
+  mutate(NMISS = replace(NMISS, variable == "Time 0: rutgers", true_missing),
+         PMISS = replace(PMISS, variable == "Time 0: rutgers", true_prop_missing),
+         NOB = replace(NOB, variable == "Time 0: rutgers", true_nrows))
+```
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+dat_subset <- dat_wnw_analysis[dat_wnw_analysis$time==1, c("rutgers","condition")]
+dat_subset <- dat_subset %>% filter(condition!=1)
+
+true_nrows <- nrow(dat_subset)
+true_missing <- sum(is.na(dat_subset$rutgers))
+true_prop_missing <- true_missing/true_nrows
+```
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+tab_all <- tab_all %>%
+  mutate(NMISS = replace(NMISS, variable == "Time 1: rutgers", true_missing),
+         PMISS = replace(PMISS, variable == "Time 1: rutgers", true_prop_missing),
+         NOB = replace(NOB, variable == "Time 1: rutgers", true_nrows))
+```
+
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+tab_all <- tab_all %>%
+  mutate(PMISS = round(PMISS*100, 2))
 ```
 
 
@@ -116,18 +177,20 @@ tab_all <- tab_all %>%
   mutate(alpha = replace(alpha, variable == "Time 1: injunctive_workplace_norms", cronbach.alpha(wnw_1_injunctive, na.rm=TRUE)[["alpha"]])) %>%
   mutate(alpha = replace(alpha, variable == "Time 1: descriptive_workplace_norms", cronbach.alpha(wnw_1_descriptive, na.rm=TRUE)[["alpha"]])) %>%
   mutate(alpha = replace(alpha, variable == "Time 1: lifestress", cronbach.alpha(wnw_1_lifestress, na.rm=TRUE)[["alpha"]])) %>%
-  mutate(alpha = round(alpha, digits = 3))
-
-write.csv(tab_all, "prepare-publication-tables/actual_range_of_values.csv", na = "")
+  mutate(alpha = round(alpha, digits = 2))
 ```
 
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
+write.csv(tab_all, "prepare-publication-tables/actual_range_of_values.csv", na = "", row.names=FALSE) 
+```
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
 tab_all %>%
   mutate(variable = gsub("_"," ", .data[["variable"]])) %>%
-  kable(booktabs = TRUE, align = c('c','c','c','c','c','c','c'),
-        col.names = c("Variable","Mean","SD","Min","Max","No. Missing", "Percent Missing", "Cronbach Alpha"),
-        caption = paste("Empirical Summary Statistics; N = 1240 Participants in Total; Cronbach Alphas are denoted by `NA' when not applicable"), escape = FALSE) %>%
+  kable(booktabs = TRUE, align = c('c','c','c','c','c','c','c','c'),
+        col.names = c("Variable","Mean","SD","Min","Max","No. Missing", "Percent Missing", "No. Participants", "Cronbach Alpha"),
+        caption = paste("Summary statistics of variables used in analyses; Note that calculation of summary statistics displayed for the variables baseline RAPI and RAPI at time 0 and 1 were restricted to only those participants who reported (within the same survey) to have no drinking in the past month; Cronbach Alphas are denoted by `NA' when not applicable"), escape = FALSE) %>%
   kable_styling(full_width = FALSE, latex_options = c("HOLD_position"))  
 ```
 

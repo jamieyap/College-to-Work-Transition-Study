@@ -15,6 +15,7 @@ dat_wnw_analysis <- read.csv(file.path(path_output_data, "dat_wnw_analysis.csv")
 dat_analysis <- left_join(x = dat_wnw_analysis, y = dat_screener_analysis, by = "ParticipantID")
 dat_analysis <- left_join(x = dat_analysis, y = dat_baseline_analysis, by = "ParticipantID")
 dat_analysis <- dat_analysis %>% select(colnames(dat_screener_analysis), colnames(dat_baseline_analysis), everything())
+dat_analysis <- dat_analysis %>% select(-baseline_condition, -condition)
 
 # Perform resampling of ParticipantID to prepare for bootstrapping
 all_participant_ids <- unique(dat_analysis[["ParticipantID"]])

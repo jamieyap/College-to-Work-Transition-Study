@@ -72,6 +72,14 @@ dat_screener_analysis <- dat_screener_analysis %>%
          sq44 = sq44 - 1) %>%
   mutate(baseline_rutgers = sq25 + sq26 + sq27 + sq28 + sq29 + sq30 + sq31 + sq32 + sq33 + sq34 + sq35 + sq36 + sq37 + sq38 + sq39 + sq40 + sq41 + sq42 + sq43 + sq44)
 
+
+dat_screener_analysis <- dat_screener_analysis %>%
+  mutate(baseline_summed_drinking_vars = sq46a+sq46b+sq46c+sq46d+sq46e+sq46f+sq46g+sq47) %>%
+  mutate(baseline_condition = 0) %>%
+  mutate(baseline_condition = replace(baseline_condition, is.na(baseline_rutgers) & baseline_summed_drinking_vars==0, 1))
+
+
+
 curr_new_var <- data.frame(source_raw_dat = "screener", new_var_name = "baseline_rutgers", min_val = 0, max_val = 4*20, notable_observations = "Rutgers alcohol problem index is a sum of 20 (sq25-sq44) and 19 (wnw41-wnw59) items respectively when constructed using screener and wnw datasets, respectively. Subtract 1 off raw data values prior to summing when calculating the index")
 list_new_var_names <- append(list_new_var_names, list(curr_new_var))
 
@@ -122,10 +130,10 @@ dat_screener_analysis %>% select(archived_age, self_reported_age, sq3, sq4, fini
 dat_new_var_names <- bind_rows(list_new_var_names)
 
 bigdat_screener_analysis <- dat_screener_analysis %>%
-  select("ParticipantID", dat_new_var_names[["new_var_name"]], everything())
+  select("ParticipantID", dat_new_var_names[["new_var_name"]], "baseline_condition", everything())
 
 dat_screener_analysis <- dat_screener_analysis %>%
-  select("ParticipantID", dat_new_var_names[["new_var_name"]])
+  select("ParticipantID", dat_new_var_names[["new_var_name"]], "baseline_condition")
 
 
 write.csv(dat_new_var_names, file.path(path_output_data, "dat_screener_vars.csv"), row.names = FALSE)

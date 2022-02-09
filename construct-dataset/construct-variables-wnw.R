@@ -83,6 +83,12 @@ dat_wnw_analysis <- dat_wnw_analysis %>%
          wnw59 = wnw59 - 1) %>%
   mutate(rutgers = wnw41 + wnw42 + wnw43 + wnw44 + wnw45 + wnw46 + wnw47 + wnw48 + wnw49 + wnw50 + wnw51 + wnw52 + wnw53 + wnw54 + wnw55 + wnw56 + wnw57 + wnw58 + wnw59)
 
+dat_wnw_analysis <- dat_wnw_analysis %>%
+  mutate(summed_drinking_vars = wnw39a+wnw39b+wnw39c+wnw39d+wnw39e+wnw39f+wnw39g+wnw40) %>%
+  mutate(condition = 0) %>%
+  mutate(condition = replace(condition, is.na(rutgers) & summed_drinking_vars==0, 1))
+
+
 curr_new_var <- data.frame(source_raw_dat = "wnw", new_var_name = "rutgers", min_val = 0*19, max_val = 4*19, notable_observations = "Rutgers alcohol problem index is a sum of 20 (sq25-sq44) and 19 (wnw41-wnw59) items respectively when constructed using screener and wnw datasets, respectively. Subtract 1 off raw data values prior to summing when calculating the index")
 list_new_var_names <- append(list_new_var_names, list(curr_new_var))
 
@@ -157,10 +163,10 @@ list_new_var_names <- append(list_new_var_names, list(curr_new_var))
 dat_new_var_names <- bind_rows(list_new_var_names)
 
 bigdat_wnw_analysis <- dat_wnw_analysis %>%
-  select("ParticipantID", "time", "survey_timepoint", "CASEID", dat_new_var_names[["new_var_name"]], everything())
+  select("ParticipantID", "time", "survey_timepoint", "CASEID", "condition", dat_new_var_names[["new_var_name"]], everything())
 
 dat_wnw_analysis <- dat_wnw_analysis %>%
-  select("ParticipantID", "time", "survey_timepoint", "CASEID", dat_new_var_names[["new_var_name"]])
+  select("ParticipantID", "time", "survey_timepoint", "CASEID", "condition", dat_new_var_names[["new_var_name"]])
 
 dat_new_var_names <- dat_new_var_names %>% filter(!(new_var_name %in% c("wnw111","wnw114","wnw116","wnw117")))
 dat_wnw_analysis <- dat_wnw_analysis %>% select(-wnw111, -wnw114, -wnw116, -wnw117)

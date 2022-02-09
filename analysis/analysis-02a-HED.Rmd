@@ -38,9 +38,9 @@ dat_wnw_analysis <- read.csv(file.path(path_output_data, "dat_wnw_analysis.csv")
 
 # Center and scale variables
 dat_baseline_analysis <- dat_baseline_analysis %>% mutate(across(!c("ParticipantID"), scale))
-dat_screener_analysis <- dat_screener_analysis %>% mutate(across(!c("ParticipantID","sex","race"), scale))
-dat_wnw_analysis_0 <- dat_wnw_analysis %>% filter(time==0) %>% mutate(across(!c("ParticipantID","time","survey_timepoint","CASEID","HED","rutgers"), scale))
-dat_wnw_analysis_1 <- dat_wnw_analysis %>% filter(time==1) %>% mutate(across(!c("ParticipantID","time","survey_timepoint","CASEID","HED","rutgers"), scale))
+dat_screener_analysis <- dat_screener_analysis %>% mutate(across(!c("ParticipantID","sex","race","baseline_condition"), scale))
+dat_wnw_analysis_0 <- dat_wnw_analysis %>% filter(time==0) %>% mutate(across(!c("ParticipantID","time","survey_timepoint","CASEID","HED","rutgers","condition"), scale))
+dat_wnw_analysis_1 <- dat_wnw_analysis %>% filter(time==1) %>% mutate(across(!c("ParticipantID","time","survey_timepoint","CASEID","HED","rutgers","condition"), scale))
 dat_wnw_analysis <- rbind(dat_wnw_analysis_0, dat_wnw_analysis_1)
 remove(dat_wnw_analysis_0, dat_wnw_analysis_1)
 
@@ -69,6 +69,8 @@ fit_HED_1 <- geem(HED ~ sex + race + age
 outfit_HED_1 <- FormatGEEOutput(fit_HED_1)
 N_HED_1 <- length(setdiff(unique(dat_analysis$ParticipantID), fit_HED_1$dropped))
 ```
+
+
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
 write.csv(outfit_HED_1, "prepare-publication-tables/HED/injunctive_model_03.csv", row.names=FALSE)
@@ -100,6 +102,9 @@ N_HED_2 <- length(setdiff(unique(dat_analysis$ParticipantID), fit_HED_2$dropped)
 ```
 
 
+
+
+
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
 outfit_HED_2 %>%
   mutate(parameter = gsub("_"," ", .data[["parameter"]])) %>%
@@ -124,6 +129,8 @@ fit_DASS_1 <- geem(DASS ~ sex + race + age
 outfit_DASS_1 <- FormatGEEOutput(fit_DASS_1)
 N_DASS_1 <- length(setdiff(unique(dat_analysis$ParticipantID), fit_DASS_1$dropped))
 ```
+
+
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
 write.csv(outfit_DASS_1, "prepare-publication-tables/DASS/injunctive_with_baseline_HED_model_04.csv", row.names=FALSE)
@@ -298,8 +305,5 @@ summary_quantitative_role_overload %>%
   kable(booktabs = TRUE, align = c('c','c','c'), caption = "DASS-mediated effect of Quantitative Role Overload; Norms Covariate: Descriptive Norms")  %>%
   kable_styling(full_width = FALSE, latex_options = c("HOLD_position"))  
 ```
-
-
-
 
 
