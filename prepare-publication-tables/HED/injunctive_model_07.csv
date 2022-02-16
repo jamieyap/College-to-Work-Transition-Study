@@ -1,19 +1,19 @@
 "parameter","estimates","se","p"
-"(Intercept)","0.46***",0.09,0
-"sex","-0.14*",0.07,0.05
-"race","0.27***",0.08,0
-"age","0.01",0.04,0.76
-"baseline_HED","0.41***",0.03,0
-"baseline_social_desirability","-0.02",0.04,0.56
-"baseline_impulsivity","0.04",0.04,0.23
-"lifestress","0.08***",0.03,0
-"injunctive_workplace_norms","0.04",0.03,0.19
-"qualitative_role_overload","0.14***",0.04,0
-"quantitative_role_overload","0.11***",0.03,0
-"DASS","0.06",0.04,0.12
-"time","0.02",0.05,0.73
-"I(DASS * DASS)","-0.07**",0.03,0.01
-"I(time * DASS * DASS)","0.02",0.04,0.6
-"qualitative_role_overload:time","-0.15***",0.04,0
-"quantitative_role_overload:time","0.02",0.03,0.52
-"DASS:time","0.00",0.04,0.97
+"(Intercept)"," 0.46***","0.09","0.000"
+"sex","-0.14†","0.07","0.051"
+"race"," 0.27***","0.08","0.001"
+"age"," 0.01","0.04","0.757"
+"baseline_HED"," 0.41***","0.03","0.000"
+"baseline_social_desirability","-0.02","0.04","0.557"
+"baseline_impulsivity"," 0.04","0.04","0.232"
+"lifestress"," 0.08**","0.03","0.004"
+"injunctive_workplace_norms"," 0.04","0.03","0.192"
+"qualitative_role_overload"," 0.14***","0.04","0.000"
+"quantitative_role_overload"," 0.11***","0.03","0.000"
+"DASS"," 0.06","0.04","0.123"
+"time"," 0.02","0.05","0.728"
+"I(DASS * DASS)","-0.07**","0.03","0.008"
+"I(time * DASS * DASS)"," 0.02","0.04","0.604"
+"qualitative_role_overload:time","-0.15***","0.04","0.001"
+"quantitative_role_overload:time"," 0.02","0.03","0.521"
+"DASS:time"," 0.00","0.04","0.975"

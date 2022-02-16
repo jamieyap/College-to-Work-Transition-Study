@@ -14,12 +14,13 @@ ColumnSummary <- function(x){
 }
 
 FormatGEEOutput <- function(fit){
-  outfit <- round(cbind(estimates = summary(fit)$beta, se = summary(fit)$se.robust, p = summary(fit)$p), digits=2)
+  outfit <- cbind(estimates = summary(fit)$beta, se = summary(fit)$se.robust, p = summary(fit)$p)
   outfit <- as.data.frame(outfit)
   outfit$parameter <- summary(fit)$coefnames
   
   # Column 'estimates' is of character type
   outfit <- outfit %>%
+    mutate(estimates = format(round(estimates, 2), nsmall=2)) %>%
     mutate(estimates = case_when(
       p <= 0.10 & p > 0.05 ~ paste(estimates, "\206", sep=""),
       p <= 0.05 & p > 0.01 ~ paste(estimates, "*", sep=""),
@@ -27,7 +28,8 @@ FormatGEEOutput <- function(fit){
       p <= 0.001 ~ paste(estimates, "***", sep=""),
       TRUE ~ as.character(estimates)
     )) %>%
-    mutate(estimates = replace(estimates, estimates == "0" & p>0.10, "0.00"))
+    mutate(se = format(round(se, 2), nsmall=2)) %>%
+    mutate(p = format(round(p, 3), nsmall=3))
   
   outfit <- outfit %>% select(parameter, everything())
   
@@ -77,10 +79,10 @@ GetSS <- function(use_this_model, L, contrast_labels = NULL){
     UB95_ss <- round(UB95_ss, digits=4)
     
     if(is.null(contrast_labels)){
-      results_ss <- data.frame(estimates = est_ss, SE = est_stderr_ss, p = pval_ss)
-      results_ss <- round(results_ss, digits=3)
+      results_ss <- data.frame(estimates = est_ss, se = est_stderr_ss, p = pval_ss)
       
       results_ss <- results_ss %>%
+        mutate(estimates = format(round(estimates, 2), nsmall=2)) %>%
         mutate(estimates = case_when(
           p <= 0.10 & p > 0.05 ~ paste(estimates, "\206", sep=""),
           p <= 0.05 & p > 0.01 ~ paste(estimates, "*", sep=""),
@@ -88,13 +90,14 @@ GetSS <- function(use_this_model, L, contrast_labels = NULL){
           p <= 0.001 ~ paste(estimates, "***", sep=""),
           TRUE ~ as.character(estimates)
         )) %>%
-        mutate(estimates = replace(estimates, estimates == "0" & p>0.10, "0.00"))
+        mutate(se = format(round(se, 2), nsmall=2)) %>%
+        mutate(p = format(round(p, 3), nsmall=3))
       
     }else{
-      results_ss <- data.frame(contrast = contrast_labels, estimates = est_ss, SE = est_stderr_ss, p = pval_ss)
-      results_ss[,2:ncol(results_ss)] <- round(results_ss[,2:ncol(results_ss)], digits=2)
+      results_ss <- data.frame(contrast = contrast_labels, estimates = est_ss, se = est_stderr_ss, p = pval_ss)
       
       results_ss <- results_ss %>%
+        mutate(estimates = format(round(estimates, 2), nsmall=2)) %>%
         mutate(estimates = case_when(
           p <= 0.10 & p > 0.05 ~ paste(estimates, "\206", sep=""),
           p <= 0.05 & p > 0.01 ~ paste(estimates, "*", sep=""),
@@ -102,7 +105,8 @@ GetSS <- function(use_this_model, L, contrast_labels = NULL){
           p <= 0.001 ~ paste(estimates, "***", sep=""),
           TRUE ~ as.character(estimates)
         )) %>%
-        mutate(estimates = replace(estimates, estimates == "0" & p>0.10, "0.00"))
+        mutate(se = format(round(se, 2), nsmall=2)) %>%
+        mutate(p = format(round(p, 3), nsmall=3))
       
     }
   }else{

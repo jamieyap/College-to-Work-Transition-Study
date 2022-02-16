@@ -1,14 +1,14 @@
 "","Parameter","Estimate","SE","Estimate","SE"
-"1","(Intercept)","-0.1*",0.05,"-0.11*",0.06
-"2","sex","0.24***",0.05,"0.24***",0.05
+"1","(Intercept)","-0.10†",0.05,"-0.11*",0.06
+"2","sex"," 0.24***",0.05," 0.24***",0.05
 "3","race","-0.07",0.05,"-0.07",0.05
 "4","age","-0.01",0.03,"-0.01",0.03
-"5","baseline_rutgers","0.01",0.03,"0.01",0.02
+"5","baseline_rutgers"," 0.01",0.03," 0.01",0.02
 "6","baseline_social_desirability","-0.06*",0.03,"-0.06*",0.03
-"7","baseline_impulsivity","0.26***",0.03,"0.26***",0.03
-"8","lifestress","0.2***",0.02,"0.2***",0.02
-"9","qualitative_role_overload","0.09***",0.02,"0.08**",0.03
-"10","quantitative_role_overload","0.09***",0.02,"0.09***",0.03
-"11","time",,,"0.01",0.03
-"12","qualitative_role_overload:time",,,"0.03",0.04
-"13","quantitative_role_overload:time",,,"0.00",0.03
+"7","baseline_impulsivity"," 0.26***",0.03," 0.26***",0.03
+"8","lifestress"," 0.20***",0.02," 0.20***",0.02
+"9","qualitative_role_overload"," 0.09***",0.02," 0.08*",0.03
+"10","quantitative_role_overload"," 0.09***",0.02," 0.09**",0.03
+"11","time",,," 0.01",0.03
+"12","qualitative_role_overload:time",,," 0.03",0.04
+"13","quantitative_role_overload:time",,," 0.00",0.03
