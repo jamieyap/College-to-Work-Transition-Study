@@ -80,6 +80,7 @@ N_HED_1 <- length(setdiff(unique(dat_analysis$ParticipantID), fit_HED_1$dropped)
 write.csv(outfit_HED_1, "prepare-publication-tables/HED/injunctive_model_01.csv", row.names=FALSE)
 ```
 
+
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
 fit_HED_2 <- geem(HED ~ sex + race + age 
                                 + baseline_HED + baseline_social_desirability + baseline_impulsivity + lifestress
@@ -90,6 +91,10 @@ outfit_HED_2 <- FormatGEEOutput(fit_HED_2)
 N_HED_2 <- length(setdiff(unique(dat_analysis$ParticipantID), fit_HED_2$dropped))
 ```
 
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+write.csv(outfit_HED_2, "prepare-publication-tables/HED/descriptive_model_01.csv", row.names=FALSE)
+```
 
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
@@ -228,9 +233,6 @@ N_HED_4 <- length(setdiff(unique(dat_analysis$ParticipantID), fit_HED_4$dropped)
 ```
 
 
-
-
-
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
 Lmat <- matrix(c(0,0,0,0,0,0,0,0,
                  0, # Norms at time 0
@@ -310,6 +312,14 @@ ss_fit_HED_4 <- dat_all_ss
 
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
+write.csv(outfit_HED_4, "prepare-publication-tables/HED/descriptive_model_02.csv", row.names=FALSE)
+write.csv(ss_fit_HED_4, "prepare-publication-tables/HED/descriptive_ss_model_02.csv", row.names=FALSE)
+```
+
+
+
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
 outfit_HED_3 %>%
   mutate(parameter = gsub("_"," ", .data[["parameter"]])) %>%
   mutate(parameter = gsub(":"," x ", .data[["parameter"]])) %>%
@@ -326,7 +336,9 @@ ss_fit_HED_3 %>%
   kable_styling(full_width = FALSE, latex_options = c("HOLD_position"))
 ```
 
-\newpage
+
+
+
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
 outfit_HED_4 %>%

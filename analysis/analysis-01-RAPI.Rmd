@@ -86,6 +86,9 @@ outfit_rutgers_2 <- FormatGEEOutput(fit_rutgers_2)
 N_rutgers_2 <- length(setdiff(unique(dat_analysis$ParticipantID), fit_rutgers_2$dropped))
 ```
 
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+write.csv(outfit_rutgers_2, "prepare-publication-tables/RAPI/descriptive_model_01.csv", row.names=FALSE)
+```
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
 outfit_rutgers_1 %>%
@@ -297,6 +300,11 @@ dat_all_ss <- rbind(qualitative_role_overload_0,
 ss_fit_rutgers_4 <- dat_all_ss
 ```
 
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+write.csv(outfit_rutgers_4, "prepare-publication-tables/RAPI/descriptive_model_02.csv", row.names=FALSE)
+write.csv(ss_fit_rutgers_4, "prepare-publication-tables/RAPI/descriptive_ss_model_02.csv", row.names=FALSE)
+```
+
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
 outfit_rutgers_3 %>%
@@ -315,7 +323,6 @@ ss_fit_rutgers_3 %>%
   kable_styling(full_width = FALSE, latex_options = c("HOLD_position"))
 ```
 
-\newpage
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
 outfit_rutgers_4 %>%

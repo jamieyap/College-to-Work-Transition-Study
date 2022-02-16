@@ -110,6 +110,9 @@ N_HED_2 <- length(setdiff(unique(dat_analysis$ParticipantID), fit_HED_2$dropped)
 ```
 
 
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+write.csv(outfit_HED_2, "prepare-publication-tables/HED/descriptive_model_05.csv", row.names=FALSE)
+```
 
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
@@ -141,7 +144,7 @@ N_DASS_1 <- length(setdiff(unique(dat_analysis$ParticipantID), fit_DASS_1$droppe
 
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
-write.csv(outfit_DASS_1, "prepare-publication-tables/DASS/injunctive_with_baseline_HED_model_06.csv", row.names=FALSE)
+write.csv(outfit_DASS_1, "prepare-publication-tables/DASS/baseline_HED_model_06.csv", row.names=FALSE)
 ```
 
 
@@ -218,6 +221,9 @@ N_HED_4 <- length(setdiff(unique(dat_analysis$ParticipantID), fit_HED_4$dropped)
 
 
 
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+write.csv(outfit_HED_4, "prepare-publication-tables/HED/descriptive_model_07.csv", row.names=FALSE)
+```
 
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
@@ -331,16 +337,14 @@ summary_qualitative_role_overload %>%
   kable_styling(full_width = FALSE, latex_options = c("HOLD_position"))  
 ```
 
-
-```{r, echo = FALSE, message = FALSE, warning = FALSE}
-write.csv(summary_qualitative_role_overload, "prepare-publication-tables/HED/injunctive_qualitative_role_overload_mediated_effect_model05_and_model_06.csv")
-```
-
-
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
 summary_quantitative_role_overload %>%
   kable(booktabs = TRUE, align = c('c','c','c'), caption = "DASS-mediated effect of Quantitative Role Overload; Norms Covariate: Injunctive Norms")  %>%
   kable_styling(full_width = FALSE, latex_options = c("HOLD_position"))  
+```
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+write.csv(summary_qualitative_role_overload, "prepare-publication-tables/HED/injunctive_qualitative_role_overload_mediated_effect_model05_and_model_06.csv")
 ```
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
@@ -439,6 +443,14 @@ summary_qualitative_role_overload %>%
 summary_quantitative_role_overload %>%
   kable(booktabs = TRUE, align = c('c','c','c'), caption = "DASS-mediated effect of Qualitative Role Overload; Norms Covariate: Descriptive Norms")  %>%
   kable_styling(full_width = FALSE, latex_options = c("HOLD_position"))  
+```
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+write.csv(summary_qualitative_role_overload, "prepare-publication-tables/HED/descriptive_qualitative_role_overload_mediated_effect_model05_and_model_06.csv")
+```
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+write.csv(summary_quantitative_role_overload, "prepare-publication-tables/HED/descriptive_quantitative_role_overload_mediated_effect_model05_and_model_06.csv")
 ```
 
 \newpage
@@ -596,18 +608,17 @@ summary_qualitative_role_overload %>%
   kable_styling(full_width = FALSE, latex_options = c("HOLD_position"))  
 ```
 
-
-```{r, echo = FALSE, message = FALSE, warning = FALSE}
-write.csv(summary_qualitative_role_overload, "prepare-publication-tables/HED/injunctive_qualitative_role_overload_mediated_effect_model07_and_model_06.csv")
-```
-
-
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
 summary_quantitative_role_overload %>%
   kable(booktabs = TRUE, align = c('c','c','c'), caption = "DASS-mediated effect of Quantitative Role Overload; Norms Covariate: Injunctive Norms")  %>%
   kable_styling(full_width = FALSE, latex_options = c("HOLD_position"))  
 ```
 
+
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+write.csv(summary_qualitative_role_overload, "prepare-publication-tables/HED/injunctive_qualitative_role_overload_mediated_effect_model07_and_model_06.csv")
+```
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
 write.csv(summary_quantitative_role_overload, "prepare-publication-tables/HED/injunctive_quantitative_role_overload_mediated_effect_model07_and_model_06.csv")
@@ -769,5 +780,11 @@ summary_quantitative_role_overload %>%
 ```
 
 
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+write.csv(summary_qualitative_role_overload, "prepare-publication-tables/HED/descriptive_qualitative_role_overload_mediated_effect_model07_and_model_06.csv")
+```
 
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+write.csv(summary_quantitative_role_overload, "prepare-publication-tables/HED/descriptive_quantitative_role_overload_mediated_effect_model07_and_model_06.csv")
+```
 

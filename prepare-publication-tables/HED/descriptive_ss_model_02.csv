@@ -1,0 +1,7 @@
+"contrast","estimates","se","p"
+"Qualitative Role Overload (time=0)","0.14***","0.04","0.000"
+"Quantitative Role Overload (time=0)","0.11***","0.03","0.000"
+"Norms (time=0)","0.03","0.03","0.354"
+"Qualitative Role Overload (time=1)","0.00","0.04","0.932"
+"Quantitative Role Overload (time=1)","-0.02","0.06","0.704"
+"Norms (time=1)","0.05","0.04","0.169"

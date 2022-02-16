@@ -100,6 +100,9 @@ outfit_rutgers_2 <- FormatGEEOutput(fit_rutgers_2)
 N_rutgers_2 <- length(setdiff(unique(dat_analysis$ParticipantID), fit_rutgers_2$dropped))
 ```
 
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+write.csv(outfit_rutgers_2, "prepare-publication-tables/RAPI/descriptive_model_03.csv", row.names=FALSE)
+```
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
 outfit_rutgers_2 %>%
@@ -127,8 +130,10 @@ N_DASS_1 <- length(setdiff(unique(dat_analysis$ParticipantID), fit_DASS_1$droppe
 ```
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
-write.csv(outfit_DASS_1, "prepare-publication-tables/DASS/injunctive_with_baseline_RAPI_model_04.csv", row.names=FALSE)
+write.csv(outfit_DASS_1, "prepare-publication-tables/DASS/baseline_RAPI_model_04.csv", row.names=FALSE)
 ```
+
+
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
 outfit_DASS_1 %>%
@@ -300,6 +305,15 @@ summary_quantitative_role_overload %>%
   kable_styling(full_width = FALSE, latex_options = c("HOLD_position"))  
 ```
 
+
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+write.csv(summary_qualitative_role_overload, "prepare-publication-tables/RAPI/descriptive_qualitative_role_overload_mediated_effect_model03_and_model_04.csv")
+```
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+write.csv(summary_quantitative_role_overload, "prepare-publication-tables/RAPI/descriptive_quantitative_role_overload_mediated_effect_model03_and_model_04.csv")
+```
 
 
 
