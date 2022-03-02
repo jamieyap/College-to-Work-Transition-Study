@@ -8,7 +8,11 @@ The code in this repository was utilized to prepare and analyze data collected f
 
 * **Number of days within the past month with any heavy drinking (HED):** HED was assessed with a one-item measure. Participants were asked, 'How often in the past month did you drink more than 4 (if you are a woman) or 5 (if you are a man) standard drinks in a single day?' Responses for each item ranged from 0 (= None in the past month) to 30 (= 30 days in the past month).
 
-## 1. Constructing datasets used in analyses
+## 1. Supplementary files
+
+The folder `publication-supplementary-files' contains supplementary files referenced in the manuscript.
+
+## 2. Constructing datasets used in analyses
 
 ### Code within the `construct-dataset' folder
 
@@ -28,7 +32,7 @@ The code in this repository was utilized to prepare and analyze data collected f
 | boot-mediation-02b.R | Obtain bootstrap samples to be used for testing Hypothesis H2 |
 | boot-mediation-02c.R | Obtain bootstrap samples to be used for testing Hypothesis H3 |
 
-## 2. Testing hypotheses
+## 3. Testing hypotheses
 
 ### Code within the `analysis' folder
 
@@ -60,9 +64,9 @@ The code in this repository was utilized to prepare and analyze data collected f
 | display-possible-range-of-values.Rmd | Displays the range of possible range of values variables can take on. Results are displayed in display-possible-range-of-values.pdf |
 | display-actual-range-of-values.Rmd | Displays the range of actual range of values variables can take on. Results are displayed in display-actual-range-of-values.pdf |
 | display-correlation-matrix.Rmd | Displays the correlation among variables . Results are displayed in display-correlation-matrix.pdf; to enable results to fit in one page, variable names are not displayed. The numbers 1, 2, ..., 23 labeling the rows and columns in this file correspond to the variables listed in order from the 1st, 2nd, ..., 23rd row in the file display-actual-range-of-values.pdf |
-| test-homogeneity.Rmd |Conduct Chi-squared tests (for binary and count variables) or Kolmogorov-Smirnov tests (for continuous variables) to test for homogeneity across two samples; the two samples being compared are 1. Participants having missing data in the outcome (i.e., RAPI/HED), versus 2. Participants having data in the outcome. Results are displayed in test-homogeneity.pdf |
+| test-homogeneity-RAPI.Rmd and test-homogeneity-HED.Rmd |Conduct Chi-squared tests (for binary variables) or Kolmogorov-Smirnov tests (for continuous variables) to test for homogeneity. Results are displayed in test-homogeneity-RAPI.pdf and test-homogeneity-HED.pdf |
 
-## 3. Record of R packages utilized
+## 4. Record of R packages utilized
 
 | <img height=0 width=350> File <img height=0 width=350> | <img height=0 width=800> Brief Description <img height=0 width=800> |
 |:------------------------------------------:|:--------------------------------------------------------------------------------------------------|
