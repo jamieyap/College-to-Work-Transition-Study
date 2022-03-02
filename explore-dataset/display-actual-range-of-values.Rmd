@@ -69,11 +69,10 @@ tab_all <- tab_all %>%
 
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
-dat_subset <- dat_screener_analysis[, c("baseline_rutgers","baseline_condition")]
-dat_subset <- dat_subset %>% filter(baseline_condition!=1)
-
-true_nrows <- nrow(dat_subset)
-true_missing <- sum(is.na(dat_subset$baseline_rutgers))
+dat_subset <- dat_screener_analysis[["baseline_rutgers"]]
+# Note: In the screener questionnaire, all participants were asked to complete RAPI
+true_nrows <- length(dat_subset)
+true_missing <- sum(is.na(dat_subset))
 true_prop_missing <- true_missing/true_nrows
 ```
 

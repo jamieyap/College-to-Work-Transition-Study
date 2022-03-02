@@ -53,7 +53,6 @@ dat_analysis <- dat_analysis %>% select(colnames(dat_screener_analysis), colname
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
 dat_analysis <- dat_analysis %>%
-  filter(baseline_condition!=1) %>%
   filter(condition!=1)
 ```
 
