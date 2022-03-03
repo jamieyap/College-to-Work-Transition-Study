@@ -16,7 +16,7 @@ knitr::opts_chunk$set(fig.pos = 'H')
 
 # Overview
 
-Conduct Chi-squared tests (for binary variables) or Kolmogorov-Smirnov tests (for continuous variables) to test for homogeneity across two samples. The two samples are:
+Conduct Chi-squared tests (for binary or count variables) or Kolmogorov-Smirnov tests (for continuous variables) to test for homogeneity across two samples. The two samples are:
 
 1. Participants who were **included** in analyses having HED as the outcome of interest 
 1. Participants who were **excluded** in analyses having HED as the outcome of interest 
@@ -123,12 +123,11 @@ dat_with_miss <- dat_sample_notcomplete %>%
   filter(!duplicated(.)) %>%
   select(all_of(covariate))
 
-res <- ks.test(x = dat_complete_case[["age"]], dat_with_miss[["age"]], exact = TRUE)
+res <- ks.test(x = dat_complete_case[["age"]], dat_with_miss[["age"]], exact = FALSE)
 
 dat_results_tmp <- data.frame(variable = "age", pval = res[["p.value"]])
 dat_results_HED <- rbind(dat_results_HED, dat_results_tmp)
 ```
-
 
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
@@ -164,6 +163,42 @@ dat_results_tmp <- data.frame(variable = "race", pval = res[["p.value"]])
 dat_results_HED <- rbind(dat_results_HED, dat_results_tmp)
 
 df_merged_race <- df_merged
+```
+
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+covariate <- c("baseline_rutgers")
+
+dat_complete_case <- dat_sample_complete %>% 
+  select(ParticipantID, all_of(covariate)) %>%
+  filter(!duplicated(.)) %>%
+  select(all_of(covariate))
+
+dat_with_miss <- dat_sample_notcomplete %>% 
+  select(ParticipantID, all_of(covariate)) %>%
+  filter(!duplicated(.)) %>%
+  select(all_of(covariate))
+
+tab_complete <- table(dat_complete_case)
+tab_miss <- table(dat_with_miss)
+df_tab_complete <- as.data.frame(tab_complete)
+df_tab_miss <- as.data.frame(tab_miss)
+colnames(df_tab_complete) <- c("value", "count_complete")
+colnames(df_tab_miss) <- c("value", "count_missing")
+
+
+df_merged <- full_join(x = df_tab_complete, y = df_tab_miss, by = "value")
+df_merged <- df_merged[order(df_merged$value),]
+df_merged$count_complete <- ifelse(is.na(df_merged$count_complete), 0, df_merged$count_complete)
+df_merged$count_missing <- ifelse(is.na(df_merged$count_missing), 0, df_merged$count_missing)
+mat <- df_merged[, c("count_complete", "count_missing")]
+
+res <- chisq.test(mat, simulate.p.value = TRUE)
+
+dat_results_tmp <- data.frame(variable = "baseline RAPI", pval = res[["p.value"]])
+dat_results_HED <- rbind(dat_results_HED, dat_results_tmp)
+
+df_merged_baseline_drinking <- df_merged
 ```
 
 
@@ -231,9 +266,24 @@ kable(df_merged_race,
   kable_styling(position = "center", latex_options = "HOLD_position")
 ```
 
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+mean_among_complete <- weighted.mean(x = as.numeric(df_merged_baseline_drinking$value), w = df_merged_baseline_drinking$count_complete)
+mean_among_missing <- weighted.mean(x = as.numeric(df_merged_baseline_drinking$value), w = df_merged_baseline_drinking$count_missing)
+```
 
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+colnames(df_merged_baseline_drinking) <- c("Category", "Count among included", "Count among excluded")
+df_merged_baseline_drinking[["Category"]] <- as.numeric(df_merged_baseline_drinking[["Category"]])
+df_merged_baseline_drinking <- rbind(df_merged_baseline_drinking, c(NA, round(mean_among_complete, 1), round(mean_among_missing, 1)))
+df_merged_baseline_drinking[["Category"]] <- format(df_merged_baseline_drinking[["Category"]], nsmall = 0)
+df_merged_baseline_drinking[nrow(df_merged_baseline_drinking),1] <- "Average value of baseline RAPI"
 
-
+kable(df_merged_baseline_drinking, 
+      booktabs=TRUE, 
+      caption = "Frequency table for baseline RAPI (among those participants in each sample whose baseline RAPI is not missing)", 
+      escape = FALSE) %>%
+  kable_styling(position = "center", latex_options = "HOLD_position")
+```
 
 
 

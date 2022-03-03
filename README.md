@@ -64,7 +64,7 @@ The folder `publication-supplementary-files' contains supplementary files refere
 | display-possible-range-of-values.Rmd | Displays the range of possible range of values variables can take on. Results are displayed in display-possible-range-of-values.pdf |
 | display-actual-range-of-values.Rmd | Displays the range of actual range of values variables can take on. Results are displayed in display-actual-range-of-values.pdf |
 | display-correlation-matrix.Rmd | Displays the correlation among variables . Results are displayed in display-correlation-matrix.pdf; to enable results to fit in one page, variable names are not displayed. The numbers 1, 2, ..., 23 labeling the rows and columns in this file correspond to the variables listed in order from the 1st, 2nd, ..., 23rd row in the file display-actual-range-of-values.pdf |
-| test-homogeneity-RAPI.Rmd and test-homogeneity-HED.Rmd |Conduct Chi-squared tests (for binary variables) or Kolmogorov-Smirnov tests (for continuous variables) to test for homogeneity. Results are displayed in test-homogeneity-RAPI.pdf and test-homogeneity-HED.pdf |
+| test-homogeneity-RAPI.Rmd and test-homogeneity-HED.Rmd |Conduct Chi-squared tests (for binary or count variables) or Kolmogorov-Smirnov tests (for continuous variables) to test for homogeneity. Results are displayed in test-homogeneity-RAPI.pdf and test-homogeneity-HED.pdf |
 
 ## 4. Record of R packages utilized
 
