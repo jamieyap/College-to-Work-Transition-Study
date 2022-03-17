@@ -8,9 +8,11 @@ The code in this repository was utilized to prepare and analyze data collected f
 
 * **Number of days within the past month with any heavy drinking (HED):** HED was assessed with a one-item measure. Participants were asked, 'How often in the past month did you drink more than 4 (if you are a woman) or 5 (if you are a man) standard drinks in a single day?' Responses for each item ranged from 0 (= None in the past month) to 30 (= 30 days in the past month).
 
-## 1. Supplementary files
+## 1. Record of R packages utilized
 
-The folder `publication-supplementary-files' contains supplementary files referenced in the manuscript.
+| <img height=0 width=350> File <img height=0 width=350> | <img height=0 width=800> Brief Description <img height=0 width=800> |
+|:------------------------------------------:|:--------------------------------------------------------------------------------------------------|
+| renv.lock | Records the collection of R packages and specific versions utilized. |
 
 ## 2. Constructing datasets used in analyses
 
@@ -24,38 +26,7 @@ The folder `publication-supplementary-files' contains supplementary files refere
 | construct-variables-wnw.R | Construct variables using raw data collected after baseline (i.e., the 'wnw dataset'); raw data is in tabular format.  |
 | reshape-data.R | Identify rows within the wnw dataset to associate with the first time an individual reports to be full-time employed and twelve months after that time. In addition, apply exclusion criteria (e.g., exclude individuals who are not full time employed at both of these timepoints). |
 
-### Code within the `bootstrap' folder
-
-| <img height=0 width=350> File <img height=0 width=350> | <img height=0 width=800> Brief Description <img height=0 width=800> |
-|:------------------------------------------:|:--------------------------------------------------------------------------------------------------|
-| boot-mediation-02a.R | Obtain bootstrap samples to be used for testing Hypothesis H1c |
-| boot-mediation-02b.R | Obtain bootstrap samples to be used for testing Hypothesis H2 |
-| boot-mediation-02c.R | Obtain bootstrap samples to be used for testing Hypothesis H3 |
-
-## 3. Testing hypotheses
-
-### Code within the `analysis' folder
-
-| <img height=0 width=350> File <img height=0 width=350> | <img height=0 width=800> Brief Description <img height=0 width=800> |
-|:------------------------------------------:|:--------------------------------------------------------------------------------------------------|
-| analysis-01-RAPI.Rmd | Investigate Hypothesis H1a, H1b, H4, H5 with RAPI as alcohol use outcome. Results are displayed in analysis-01-RAPI.pdf |
-| analysis-02a-RAPI.Rmd | Investigate Hypothesis H1c with RAPI as alcohol use outcome. Results are displayed in analysis-02a-RAPI.pdf |
-| analysis-02bc-RAPI.Rmd | Investigate Hypothesis H2, H3 with RAPI as alcohol use outcome. Results are displayed in analysis-02bc-RAPI.pdf |
-| analysis-01-HED.Rmd | Investigate Hypothesis H1a, H1b, H4, H5 with HED as alcohol use outcome. Results are displayed in analysis-01-HED.pdf |
-| analysis-02a-HED.Rmd | Investigate Hypothesis H1c with HED as alcohol use outcome. Results are displayed in analysis-02a-HED.pdf |
-| analysis-02bc-HED.Rmd | Investigate Hypothesis H2, H3 with HED as alcohol use outcome. Results are displayed in analysis-02bc-HED.pdf |
-| analysis-utils.R | A collection of functions for obtaining summary statistics, estimating moderated effects, and formatting output. |
-
-### Intermediate output within the `bootstrap' folder
-
-| <img height=0 width=350> File <img height=0 width=350> | <img height=0 width=800> Brief Description <img height=0 width=800> |
-|:------------------------------------------:|:--------------------------------------------------------------------------------------------------|
-| list_models_rutgers_02a.RData | Output of boot-mediation-2a.R |
-| list_models_rutgers_02b.RData | Output of boot-mediation-2b.R |
-| list_models_rutgers_02c.RData | Output of boot-mediation-2c.R |
-| list_models_HED_02a.RData | Output of boot-mediation-2a.R |
-| list_models_HED_02b.RData | Output of boot-mediation-2b.R |
-| list_models_HED_02c.RData | Output of boot-mediation-2c.R |
+## 3. Exploratory data analyses
 
 ### Code within the `explore-dataset' folder
 
@@ -66,9 +37,19 @@ The folder `publication-supplementary-files' contains supplementary files refere
 | display-correlation-matrix.Rmd | Displays the correlation among variables . Results are displayed in display-correlation-matrix.pdf; to enable results to fit in one page, variable names are not displayed. The numbers 1, 2, ..., 23 labeling the rows and columns in this file correspond to the variables listed in order from the 1st, 2nd, ..., 23rd row in the file display-actual-range-of-values.pdf |
 | test-homogeneity-RAPI.Rmd and test-homogeneity-HED.Rmd |Conduct Chi-squared tests (for binary or count variables) or Kolmogorov-Smirnov tests (for continuous variables) to test for homogeneity. Results are displayed in test-homogeneity-RAPI.pdf and test-homogeneity-HED.pdf |
 
-## 4. Record of R packages utilized
+## 3. Testing hypotheses
 
 | <img height=0 width=350> File <img height=0 width=350> | <img height=0 width=800> Brief Description <img height=0 width=800> |
 |:------------------------------------------:|:--------------------------------------------------------------------------------------------------|
-| renv.lock | Records the collection of R packages and specific versions utilized. |
+| analysis-utils.R | A collection of functions for obtaining summary statistics, estimating moderated effects, and formatting output. |
+
+### Code within the `analysis' folder
+
+| <img height=0 width=500> Subfolder <img height=0 width=500> | <img height=0 width=200> Brief Description <img height=0 width=200> |
+|:------------------------------------------:|:--------------------------------------------------------------------------------------------------|
+| Hypothesis H01a and Hypothesis 01b | Code and results relating to H1a and H1b |
+| Hypothesis H01c | Code and results relating to H1c |
+| Hypothesis H02 | Code and results relating to H2 |
+| Hypothesis H03 | Code and results relating to H3 |
+| Hypothesis H04 | Code and results relating to H4 |
 

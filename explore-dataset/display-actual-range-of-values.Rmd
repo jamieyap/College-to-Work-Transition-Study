@@ -181,7 +181,7 @@ tab_all <- tab_all %>%
 
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
-write.csv(tab_all, "prepare-publication-tables/actual_range_of_values.csv", na = "", row.names=FALSE) 
+write.csv(tab_all, "explore-dataset/actual_range_of_values.csv", na = "", row.names=FALSE) 
 ```
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}

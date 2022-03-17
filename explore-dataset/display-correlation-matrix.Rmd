@@ -101,7 +101,7 @@ dat_varnames$Variable <- c("Baseline HED",
 
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
-kable(dat_varnames, booktabs=TRUE, caption = "Note that when the variables baseline RAPI and RAPI at time 0 and 1 were used to calculate specific values within the correlation matrix, calculation of correlation was restricted to only those participants who reported (within the same survey) to have no drinking in the past month") %>%
+kable(dat_varnames, booktabs=TRUE, caption = "Note that when RAPI at time 0 and 1 were used to calculate specific values within the correlation matrix, calculation of correlation was restricted to only those participants who reported (within the same survey) to have no drinking in the past month") %>%
   row_spec(c(7,15), hline_after = TRUE) %>%
   kable_styling(position = "center")
 ```
