@@ -97,6 +97,3 @@ combined <- cbind(qualitative, quantitative[,-1])
 write.csv(combined, "prepare-publication-tables/HED/merged_injunctive_mediated_effect_model_05_and_model_07.csv", na = "")
 
 
-
-
-
