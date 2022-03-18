@@ -39,10 +39,6 @@ The code in this repository was utilized to prepare and analyze data collected f
 
 ## 3. Testing hypotheses
 
-| <img height=0 width=350> File <img height=0 width=350> | <img height=0 width=800> Brief Description <img height=0 width=800> |
-|:------------------------------------------:|:--------------------------------------------------------------------------------------------------|
-| analysis-utils.R | A collection of functions for obtaining summary statistics, estimating moderated effects, and formatting output. |
-
 ### Code within the `analysis' folder
 
 | <img height=0 width=500> Subfolder <img height=0 width=500> | <img height=0 width=200> Brief Description <img height=0 width=200> |
@@ -52,4 +48,11 @@ The code in this repository was utilized to prepare and analyze data collected f
 | Hypothesis H02 | Code and results relating to H2 |
 | Hypothesis H03 | Code and results relating to H3 |
 | Hypothesis H04 | Code and results relating to H4 |
+
+### Other
+
+| <img height=0 width=350> File <img height=0 width=350> | <img height=0 width=800> Brief Description <img height=0 width=800> |
+|:------------------------------------------:|:--------------------------------------------------------------------------------------------------|
+| analysis-utils.R | A collection of functions for obtaining summary statistics, estimating moderated effects, and formatting output. |
+| word-documents | A folder containing results displayed in camera-ready format. |
 
