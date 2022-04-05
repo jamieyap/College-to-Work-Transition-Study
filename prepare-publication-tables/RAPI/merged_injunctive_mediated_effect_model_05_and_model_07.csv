@@ -1,3 +1,7 @@
 "","X","Bootstrap.Mean","Bootstrap.95..CI.LB","Bootstrap.95..CI.UB","Bootstrap.Mean","Bootstrap.95..CI.LB","Bootstrap.95..CI.UB"
-"1","Early Onboarding Phase",0.015,0.002,0.031,0.017,0.005,0.032
-"2","Late Onboarding Phase",0.029,0.011,0.052,0.023,0.008,0.042
+"1","Early Onboarding Phase and Low Psychological Distress",0.03,0.005,0.06,0.034,0.01,0.065
+"2","Early Onboarding Phase and Moderate Psychological Distress",0.023,0.004,0.046,0.027,0.008,0.049
+"3","Early Onboarding Phase and High Psychological Distress",0.017,0.003,0.034,0.019,0.006,0.036
+"4","Late Onboarding Phase and Low Psychological Distress",0.035,0.009,0.07,0.027,0.007,0.056
+"5","Late Onboarding Phase and Moderate Psychological Distress",0.032,0.012,0.059,0.026,0.008,0.047
+"6","Late Onboarding Phase and High Psychological Distress",0.03,0.012,0.052,0.024,0.008,0.043

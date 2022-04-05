@@ -117,7 +117,7 @@ Lmat <- matrix(c(0,0,0,0,0,0,0,0,
                  1, # Quantitative Overload at time=0
                  0, # Time
                  0, # Time x norms
-                 1, # Time x qualitative role overload
+                 0, # Time x qualitative role overload
                  1  # Time x quantitative role overload
                  ),
                byrow=TRUE, nrow=1)
@@ -237,7 +237,7 @@ Lmat <- matrix(c(0,0,0,0,0,0,0,0,
                  1, # Quantitative Overload at time=0
                  0, # Time
                  0, # Time x norms
-                 1, # Time x qualitative role overload
+                 0, # Time x qualitative role overload
                  1  # Time x quantitative role overload
                  ),
                byrow=TRUE, nrow=1)

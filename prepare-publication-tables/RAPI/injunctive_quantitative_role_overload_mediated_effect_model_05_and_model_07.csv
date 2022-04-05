@@ -1,3 +1,7 @@
 "","Bootstrap Mean","Bootstrap 95%-CI LB","Bootstrap 95%-CI UB"
-"Early Onboarding Phase",0.017,0.005,0.032
-"Late Onboarding Phase",0.023,0.008,0.042
+"Early Onboarding Phase and Low Psychological Distress",0.034,0.01,0.065
+"Early Onboarding Phase and Moderate Psychological Distress",0.027,0.008,0.049
+"Early Onboarding Phase and High Psychological Distress",0.019,0.006,0.036
+"Late Onboarding Phase and Low Psychological Distress",0.027,0.007,0.056
+"Late Onboarding Phase and Moderate Psychological Distress",0.026,0.008,0.047
+"Late Onboarding Phase and High Psychological Distress",0.024,0.008,0.043

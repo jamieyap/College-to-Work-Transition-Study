@@ -76,19 +76,12 @@ list_models_rutgers <- parLapply(cl=cl,
                                    # When scale.fix=FALSE, an overdispersion parameter is estimated.
                                    fit_rutgers_injunctive <- geem(rutgers ~ sex + race + age 
                                                                   + baseline_rutgers + baseline_social_desirability + baseline_impulsivity + lifestress 
-                                                                  + injunctive_workplace_norms + qualitative_role_overload + quantitative_role_overload + DASS
+                                                                  + injunctive_workplace_norms + qualitative_role_overload + quantitative_role_overload + DASS + I(DASS*DASS)
                                                                   + time 
                                                                   + time:qualitative_role_overload + time:quantitative_role_overload
-                                                                  + time:DASS, 
+                                                                  + time:DASS 
+                                                                  + time:I(DASS*DASS), 
                                                                   data = curr_bootdat, id = AnalysisID, waves = time, corstr = "exchangeable", family = "poisson")
-                                   
-                                   fit_rutgers_descriptive <- geem(rutgers ~ sex + race + age 
-                                                                   + baseline_rutgers + baseline_social_desirability + baseline_impulsivity + lifestress 
-                                                                   + descriptive_workplace_norms + qualitative_role_overload + quantitative_role_overload + DASS
-                                                                   + time 
-                                                                   + time:qualitative_role_overload + time:quantitative_role_overload
-                                                                   + time:DASS, 
-                                                                   data = curr_bootdat, id = AnalysisID, waves = time, corstr = "exchangeable", family = "poisson")
                                    
                                    fit_DASS <- geem(DASS ~ sex + race + age 
                                                     + baseline_rutgers + baseline_social_desirability + baseline_impulsivity + lifestress
@@ -97,11 +90,9 @@ list_models_rutgers <- parLapply(cl=cl,
                                                     data = curr_bootdat, id = AnalysisID, waves = time, corstr = "exchangeable", family = "gaussian")
                                    
                                    tab_rutgers_injunctive <- CondenseGEEOutput(fit_rutgers_injunctive)
-                                   tab_rutgers_descriptive <- CondenseGEEOutput(fit_rutgers_descriptive)
                                    tab_DASS <- CondenseGEEOutput(fit_DASS)
                                    
-                                   list_models_rutgers <- list(est_rutgers_injunctive = tab_rutgers_injunctive, 
-                                                               est_rutgers_descriptive = tab_rutgers_descriptive, 
+                                   list_models_rutgers <- list(est_rutgers_injunctive = tab_rutgers_injunctive,
                                                                est_DASS = tab_DASS)
                                    
                                    return(list_models_rutgers)
@@ -132,19 +123,12 @@ list_models_HED <- parLapply(cl=cl,
                                    
                                    fit_HED_injunctive <- geem(HED ~ sex + race + age 
                                                                   + baseline_HED + baseline_social_desirability + baseline_impulsivity + lifestress 
-                                                                  + injunctive_workplace_norms + qualitative_role_overload + quantitative_role_overload + DASS
+                                                                  + injunctive_workplace_norms + qualitative_role_overload + quantitative_role_overload + DASS + I(DASS*DASS)
                                                                   + time 
                                                                   + time:qualitative_role_overload + time:quantitative_role_overload
-                                                                  + time:DASS, 
+                                                                  + time:DASS 
+                                                              + time:I(DASS*DASS), 
                                                                   data = curr_bootdat, id = AnalysisID, waves = time, corstr = "exchangeable", family = "poisson")
-                                   
-                                   fit_HED_descriptive <- geem(HED ~ sex + race + age 
-                                                                   + baseline_HED + baseline_social_desirability + baseline_impulsivity + lifestress 
-                                                                   + descriptive_workplace_norms + qualitative_role_overload + quantitative_role_overload + DASS
-                                                                   + time 
-                                                                   + time:qualitative_role_overload + time:quantitative_role_overload
-                                                                   + time:DASS, 
-                                                                   data = curr_bootdat, id = AnalysisID, waves = time, corstr = "exchangeable", family = "poisson")
                                    
                                    fit_DASS <- geem(DASS ~ sex + race + age 
                                                     + baseline_HED + baseline_social_desirability + baseline_impulsivity + lifestress
@@ -153,11 +137,9 @@ list_models_HED <- parLapply(cl=cl,
                                                     data = curr_bootdat, id = AnalysisID, waves = time, corstr = "exchangeable", family = "gaussian")
                                    
                                    tab_HED_injunctive <- CondenseGEEOutput(fit_HED_injunctive)
-                                   tab_HED_descriptive <- CondenseGEEOutput(fit_HED_descriptive)
                                    tab_DASS <- CondenseGEEOutput(fit_DASS)
                                    
                                    list_models_HED <- list(est_HED_injunctive = tab_HED_injunctive, 
-                                                               est_HED_descriptive = tab_HED_descriptive, 
                                                                est_DASS = tab_DASS)
                                    
                                    return(list_models_HED)
