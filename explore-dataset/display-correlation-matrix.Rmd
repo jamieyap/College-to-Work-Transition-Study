@@ -107,3 +107,29 @@ kable(dat_varnames, booktabs=TRUE, caption = "Note that when RAPI at time 0 and 
 ```
 
 
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+library(Hmisc)
+dat_pval <- rcorr(x = as.matrix(dat_corr), type = "pearson")[["P"]]
+```
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+for(j in 2:ncol(cormat)){
+  dat_cordisplay <- data.frame(r = cormat[,j], p = dat_pval[,j-1])
+  dat_cordisplay <-  dat_cordisplay %>%
+    mutate(r_annotated = case_when(
+      p <= 0.10 & p > 0.05 ~ paste(r, "\206", sep=""),
+      p <= 0.05 & p > 0.01 ~ paste(r, "*", sep=""),
+      p <= 0.01 & p > 0.001 ~ paste(r, "**", sep=""),
+      p <= 0.001 ~ paste(r, "***", sep=""),
+      TRUE ~ as.character(r)
+    ))
+  cormat[,j] <- dat_cordisplay[["r_annotated"]]
+}
+```
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+out_corr_table <- as.data.frame(cbind(dat_varnames$Variable, cormat[,2:ncol(cormat)]))
+colnames(out_corr_table) <- c("variable", paste(1:(ncol(out_corr_table)-1)))
+write.csv(out_corr_table, "explore-dataset/out_corr_table.csv", row.names = FALSE)
+```

@@ -181,7 +181,26 @@ tab_all <- tab_all %>%
 
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
-write.csv(tab_all, "explore-dataset/actual_range_of_values.csv", na = "", row.names=FALSE) 
+tab_all <- tab_all %>%
+  mutate(variable = replace(variable, variable == "baseline_HED", "Baseline HED")) %>%
+  mutate(variable = replace(variable, variable == "baseline_rutgers", "Baseline RAPI")) %>%
+  mutate(variable = replace(variable, variable == "sex", "Sex")) %>%
+  mutate(variable = replace(variable, variable == "race", "Race")) %>%
+  mutate(variable = replace(variable, variable == "age", "Age")) %>%
+  mutate(variable = replace(variable, variable == "baseline_social_desirability", "Baseline social desirability")) %>%
+  mutate(variable = replace(variable, variable == "baseline_impulsivity", "Baseline impulsivity")) %>%
+  mutate(variable = replace(variable, variable == "Time 0: lifestress", "Time 0: Life stress")) %>%
+  mutate(variable = replace(variable, variable == "Time 0: rutgers", "Time 0: RAPI")) %>%
+  mutate(variable = replace(variable, variable == "Time 0: qualitative_role_overload", "Time 0: Qualitative role overload")) %>%
+  mutate(variable = replace(variable, variable == "Time 0: quantitative_role_overload", "Time 0: Quantitative role overload")) %>%
+  mutate(variable = replace(variable, variable == "Time 0: injunctive_workplace_norms", "Time 0: Injunctive norms")) %>%
+  mutate(variable = replace(variable, variable == "Time 0: descriptive_workplace_norms", "Time 0: Descriptive norms")) %>%
+  mutate(variable = replace(variable, variable == "Time 1: lifestress", "Time 1: Life stress")) %>%
+  mutate(variable = replace(variable, variable == "Time 1: rutgers", "Time 1: RAPI")) %>%
+  mutate(variable = replace(variable, variable == "Time 1: qualitative_role_overload", "Time 1: Qualitative role overload")) %>%
+  mutate(variable = replace(variable, variable == "Time 1: quantitative_role_overload", "Time 1: Quantitative role overload")) %>%
+  mutate(variable = replace(variable, variable == "Time 1: injunctive_workplace_norms", "Time 1: Injunctive norms")) %>%
+  mutate(variable = replace(variable, variable == "Time 1: descriptive_workplace_norms", "Time 1: Descriptive norms")) 
 ```
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
@@ -191,5 +210,18 @@ tab_all %>%
         col.names = c("Variable","Mean","SD","Min","Max","No. Missing", "Percent Missing", "No. Participants", "Cronbach Alpha"),
         caption = paste("Summary statistics of variables used in analyses; Note that calculation of summary statistics displayed for the variables baseline RAPI and RAPI at time 0 and 1 were restricted to only those participants who reported (within the same survey) to have no drinking in the past month; Cronbach Alphas are denoted by `NA' when not applicable"), escape = FALSE) %>%
   kable_styling(full_width = FALSE, latex_options = c("HOLD_position"))  
+```
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+out_corr_table <- read.csv("explore-dataset/out_corr_table.csv", header=TRUE) 
+out_corr_table[upper.tri(out_corr_table)] <- NA_character_
+diag(out_corr_table[,2:(ncol(out_corr_table))]) <- rep("\u2014", ncol(out_corr_table)-1)
+big_out <- left_join(x = tab_all, y = out_corr_table, by = "variable")
+write.csv(big_out, "explore-dataset/descriptives.csv", na = "", row.names = FALSE)
+```
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+big_out_display <- big_out[!((big_out$variable=="Time 0: Descriptive norms") | (big_out$variable=="Time 1: Descriptive norms")), !(colnames(big_out) %in% c("X14", "X22"))]
+write.csv(big_out_display, "prepare-publication-tables/descriptives_for_publication.csv", na = "", row.names = FALSE)
 ```
 

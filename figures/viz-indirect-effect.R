@@ -76,11 +76,10 @@ plot(-1,
      cex.axis = 1.5,
      frame.plot = FALSE)
 lines(dat_plot0$stress, dat_plot0$est, type = "l", lwd = 5)
-lines(dat_plot0$stress, dat_plot0$lb95, type = "l", lwd = 3, lty = 5)
-lines(dat_plot0$stress, dat_plot0$ub95, type = "l", lwd = 3, lty = 5)
+lines(dat_plot0$stress, dat_plot0$lb95, type = "l", lwd = 3, lty = 3, col = "cornflowerblue")
+lines(dat_plot0$stress, dat_plot0$ub95, type = "l", lwd = 3, lty = 3, col = "cornflowerblue")
 mtext("RAPI at time 0", side = 3, line = 0, cex = 1.5)
 mtext("Psychological Distress:\nNo. of standard deviations above or below mean", side = 1, line = 7, cex = 1.5)
-abline(h = 0, col = "red", lty = 3, lwd = 3)
 
 dat_plot1 <- dat_plot[dat_plot$time==1 & dat_plot$var=="qual",]
 plot(-1, 
@@ -93,11 +92,10 @@ plot(-1,
      cex.axis = 1.5,
      frame.plot = FALSE)
 lines(dat_plot1$stress, dat_plot1$est, type = "l", lwd = 5)
-lines(dat_plot1$stress, dat_plot1$lb95, type = "l", lwd = 3, lty = 5)
-lines(dat_plot1$stress, dat_plot1$ub95, type = "l", lwd = 3, lty = 5)
+lines(dat_plot1$stress, dat_plot1$lb95, type = "l", lwd = 3, lty = 3, col = "cornflowerblue")
+lines(dat_plot1$stress, dat_plot1$ub95, type = "l", lwd = 3, lty = 3, col = "cornflowerblue")
 mtext("RAPI at time 1", side = 3, line = 0, cex = 1.5)
 mtext("Psychological Distress:\nNo. of standard deviations above or below mean", side = 1, line = 7, cex = 1.5)
-abline(h = 0, col = "red", lty = 3, lwd = 3)
 
 this_ylabel <- "Indirect Effect of Quantitative Overload on RAPI"
 dat_plot0 <- dat_plot[dat_plot$time==0 & dat_plot$var=="quant",]
@@ -112,11 +110,10 @@ plot(-1,
      frame.plot = FALSE)
 lines(dat_plot0$stress, dat_plot0$est, type = "l", lwd = 5)
 lines(dat_plot0$stress, dat_plot0$est, type = "l", lwd = 3)
-lines(dat_plot0$stress, dat_plot0$lb95, type = "l", lwd = 3, lty = 5)
-lines(dat_plot0$stress, dat_plot0$ub95, type = "l", lwd = 3, lty = 5)
+lines(dat_plot0$stress, dat_plot0$lb95, type = "l", lwd = 3, lty = 3, col = "cornflowerblue")
+lines(dat_plot0$stress, dat_plot0$ub95, type = "l", lwd = 3, lty = 3, col = "cornflowerblue")
 mtext("RAPI at time 0", side = 3, line = 0, cex = 1.5)
 mtext("Psychological Distress:\nNo. of standard deviations above or below mean", side = 1, line = 7, cex = 1.5)
-abline(h = 0, col = "red", lty = 3, lwd = 3)
 
 dat_plot1 <- dat_plot[dat_plot$time==1 & dat_plot$var=="quant",]
 plot(-1, 
@@ -129,11 +126,10 @@ plot(-1,
      cex.axis = 1.5,
      frame.plot = FALSE)
 lines(dat_plot1$stress, dat_plot1$est, type = "l", lwd = 5)
-lines(dat_plot1$stress, dat_plot1$lb95, type = "l", lwd = 3, lty = 5)
-lines(dat_plot1$stress, dat_plot1$ub95, type = "l", lwd = 3, lty = 5)
+lines(dat_plot1$stress, dat_plot1$lb95, type = "l", lwd = 3, lty = 3, col = "cornflowerblue")
+lines(dat_plot1$stress, dat_plot1$ub95, type = "l", lwd = 3, lty = 3, col = "cornflowerblue")
 mtext("RAPI at time 1", side = 3, line = 0, cex = 1.5)
 mtext("Psychological Distress:\nNo. of standard deviations above or below mean", side = 1, line = 7, cex = 1.5)
-abline(h = 0, col = "red", lty = 3, lwd = 3)
 
 ###############################################################################
 # HED
@@ -183,11 +179,10 @@ plot(-1,
      cex.axis = 1.5,
      frame.plot = FALSE)
 lines(dat_plot0$stress, dat_plot0$est, type = "l", lwd = 5)
-lines(dat_plot0$stress, dat_plot0$lb95, type = "l", lwd = 3, lty = 5)
-lines(dat_plot0$stress, dat_plot0$ub95, type = "l", lwd = 3, lty = 5)
+lines(dat_plot0$stress, dat_plot0$lb95, type = "l", lwd = 3, lty = 3, col = "cornflowerblue")
+lines(dat_plot0$stress, dat_plot0$ub95, type = "l", lwd = 3, lty = 3, col = "cornflowerblue")
 mtext("HED at time 0", side = 3, line = 0, cex = 1.5)
 mtext("Psychological Distress:\nNo. of standard deviations above or below mean", side = 1, line = 7, cex = 1.5)
-abline(h = 0, col = "red", lty = 3, lwd = 3)
 
 dat_plot1 <- dat_plot[dat_plot$time==1 & dat_plot$var=="qual",]
 plot(-1, 
@@ -200,11 +195,10 @@ plot(-1,
      cex.axis = 1.5,
      frame.plot = FALSE)
 lines(dat_plot1$stress, dat_plot1$est, type = "l", lwd = 5)
-lines(dat_plot1$stress, dat_plot1$lb95, type = "l", lwd = 3, lty = 5)
-lines(dat_plot1$stress, dat_plot1$ub95, type = "l", lwd = 3, lty = 5)
+lines(dat_plot1$stress, dat_plot1$lb95, type = "l", lwd = 3, lty = 3, col = "cornflowerblue")
+lines(dat_plot1$stress, dat_plot1$ub95, type = "l", lwd = 3, lty = 3, col = "cornflowerblue")
 mtext("HED at time 1", side = 3, line = 0, cex = 1.5)
 mtext("Psychological Distress:\nNo. of standard deviations above or below mean", side = 1, line = 7, cex = 1.5)
-abline(h = 0, col = "red", lty = 3, lwd = 3)
 
 this_ylabel <- "Indirect Effect of Quantitative Overload on HED"
 dat_plot0 <- dat_plot[dat_plot$time==0 & dat_plot$var=="quant",]
@@ -219,11 +213,10 @@ plot(-1,
      frame.plot = FALSE)
 lines(dat_plot0$stress, dat_plot0$est, type = "l", lwd = 5)
 lines(dat_plot0$stress, dat_plot0$est, type = "l", lwd = 3)
-lines(dat_plot0$stress, dat_plot0$lb95, type = "l", lwd = 3, lty = 5)
-lines(dat_plot0$stress, dat_plot0$ub95, type = "l", lwd = 3, lty = 5)
+lines(dat_plot0$stress, dat_plot0$lb95, type = "l", lwd = 3, lty = 3, col = "cornflowerblue")
+lines(dat_plot0$stress, dat_plot0$ub95, type = "l", lwd = 3, lty = 3, col = "cornflowerblue")
 mtext("HED at time 0", side = 3, line = 0, cex = 1.5)
 mtext("Psychological Distress:\nNo. of standard deviations above or below mean", side = 1, line = 7, cex = 1.5)
-abline(h = 0, col = "red", lty = 3, lwd = 3)
 
 dat_plot1 <- dat_plot[dat_plot$time==1 & dat_plot$var=="quant",]
 plot(-1, 
@@ -236,10 +229,9 @@ plot(-1,
      cex.axis = 1.5,
      frame.plot = FALSE)
 lines(dat_plot1$stress, dat_plot1$est, type = "l", lwd = 5)
-lines(dat_plot1$stress, dat_plot1$lb95, type = "l", lwd = 3, lty = 5)
-lines(dat_plot1$stress, dat_plot1$ub95, type = "l", lwd = 3, lty = 5)
+lines(dat_plot1$stress, dat_plot1$lb95, type = "l", lwd = 3, lty = 3, col = "cornflowerblue")
+lines(dat_plot1$stress, dat_plot1$ub95, type = "l", lwd = 3, lty = 3, col = "cornflowerblue")
 mtext("HED at time 1", side = 3, line = 0, cex = 1.5)
 mtext("Psychological Distress:\nNo. of standard deviations above or below mean", side = 1, line = 7, cex = 1.5)
-abline(h = 0, col = "red", lty = 3, lwd = 3)
 
 
