@@ -78,7 +78,7 @@ plot(-1,
 lines(dat_plot0$stress, dat_plot0$est, type = "l", lwd = 5)
 lines(dat_plot0$stress, dat_plot0$lb95, type = "l", lwd = 3, lty = 3, col = "cornflowerblue")
 lines(dat_plot0$stress, dat_plot0$ub95, type = "l", lwd = 3, lty = 3, col = "cornflowerblue")
-mtext("RAPI at time 0", side = 3, line = 0, cex = 1.5)
+mtext("ARP at time 0", side = 3, line = 0, cex = 1.5)
 mtext("Psychological Distress:\nNo. of standard deviations above or below mean", side = 1, line = 7, cex = 1.5)
 
 dat_plot1 <- dat_plot[dat_plot$time==1 & dat_plot$var=="qual",]
@@ -94,7 +94,7 @@ plot(-1,
 lines(dat_plot1$stress, dat_plot1$est, type = "l", lwd = 5)
 lines(dat_plot1$stress, dat_plot1$lb95, type = "l", lwd = 3, lty = 3, col = "cornflowerblue")
 lines(dat_plot1$stress, dat_plot1$ub95, type = "l", lwd = 3, lty = 3, col = "cornflowerblue")
-mtext("RAPI at time 1", side = 3, line = 0, cex = 1.5)
+mtext("ARP at time 1", side = 3, line = 0, cex = 1.5)
 mtext("Psychological Distress:\nNo. of standard deviations above or below mean", side = 1, line = 7, cex = 1.5)
 
 this_ylabel <- "Indirect Effect of Quantitative Overload on RAPI"
@@ -112,7 +112,7 @@ lines(dat_plot0$stress, dat_plot0$est, type = "l", lwd = 5)
 lines(dat_plot0$stress, dat_plot0$est, type = "l", lwd = 3)
 lines(dat_plot0$stress, dat_plot0$lb95, type = "l", lwd = 3, lty = 3, col = "cornflowerblue")
 lines(dat_plot0$stress, dat_plot0$ub95, type = "l", lwd = 3, lty = 3, col = "cornflowerblue")
-mtext("RAPI at time 0", side = 3, line = 0, cex = 1.5)
+mtext("ARP at time 0", side = 3, line = 0, cex = 1.5)
 mtext("Psychological Distress:\nNo. of standard deviations above or below mean", side = 1, line = 7, cex = 1.5)
 
 dat_plot1 <- dat_plot[dat_plot$time==1 & dat_plot$var=="quant",]
@@ -128,7 +128,7 @@ plot(-1,
 lines(dat_plot1$stress, dat_plot1$est, type = "l", lwd = 5)
 lines(dat_plot1$stress, dat_plot1$lb95, type = "l", lwd = 3, lty = 3, col = "cornflowerblue")
 lines(dat_plot1$stress, dat_plot1$ub95, type = "l", lwd = 3, lty = 3, col = "cornflowerblue")
-mtext("RAPI at time 1", side = 3, line = 0, cex = 1.5)
+mtext("ARP at time 1", side = 3, line = 0, cex = 1.5)
 mtext("Psychological Distress:\nNo. of standard deviations above or below mean", side = 1, line = 7, cex = 1.5)
 
 ###############################################################################

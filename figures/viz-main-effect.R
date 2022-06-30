@@ -90,14 +90,14 @@ plot(-1,
      xlim = c(min_xlim, max_xlim),
      ylim = c(min_ylim, max_ylim),
      xlab = "",
-     ylab = "Effect of psychological distress on RAPI", 
+     ylab = "Effect of psychological distress on ARP", 
      cex.lab = 1.5,
      cex.axis = 1.5,
      frame.plot = FALSE)
 lines(dat_plot0$stress, dat_plot0$est, type = "l", lwd = 2)
 lines(dat_plot0$stress, dat_plot0$LB95, type = "l", lwd = 2, lty = 3, col = "cornflowerblue")
 lines(dat_plot0$stress, dat_plot0$UB95, type = "l", lwd = 2, lty = 3, col = "cornflowerblue")
-mtext("RAPI at time 0", side = 3, line = 0, cex = 1.5)
+mtext("ARP at time 0", side = 3, line = 0, cex = 1.5)
 mtext("Psychological Distress:\nNo. of standard deviations\nabove or below the mean", side = 1, line = 7, cex = 1.5)
 dat_plot1 <- dat_plot[dat_plot$time==1 & dat_plot$model=="RAPI_model05",]
 plot(-1, 
@@ -105,14 +105,14 @@ plot(-1,
      xlim = c(min_xlim, max_xlim),
      ylim = c(min_ylim, max_ylim),
      xlab = "",
-     ylab = "Effect of psychological distress on RAPI", 
+     ylab = "Effect of psychological distress on ARP", 
      cex.lab = 1.5,
      cex.axis = 1.5,
      frame.plot = FALSE)
 lines(dat_plot1$stress, dat_plot1$est, type = "l", lwd = 2)
 lines(dat_plot1$stress, dat_plot1$LB95, type = "l", lwd = 2, lty = 3, col = "cornflowerblue")
 lines(dat_plot1$stress, dat_plot1$UB95, type = "l", lwd = 2, lty = 3, col = "cornflowerblue")
-mtext("RAPI at time 1", side = 3, line = 0, cex = 1.5)
+mtext("ARP at time 1", side = 3, line = 0, cex = 1.5)
 mtext("Psychological Distress:\nNo. of standard deviations\nabove or below the mean", side = 1, line = 7, cex = 1.5)
 
 ###############################################################################
