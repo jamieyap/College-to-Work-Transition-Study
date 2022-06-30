@@ -222,6 +222,8 @@ write.csv(big_out, "explore-dataset/descriptives.csv", na = "", row.names = FALS
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
 big_out_display <- big_out[!((big_out$variable=="Time 0: Descriptive norms") | (big_out$variable=="Time 1: Descriptive norms")), !(colnames(big_out) %in% c("X14", "X22"))]
-write.csv(big_out_display, "prepare-publication-tables/descriptives_for_publication.csv", na = "", row.names = FALSE)
+colnames(big_out_display)[10:ncol(big_out_display)] <- paste(1:(ncol(big_out_display)-9))
+row.names(big_out_display) <- 1:nrow(big_out_display)
+write.csv(big_out_display, "prepare-publication-tables/descriptives_for_publication.csv", na = "", row.names = TRUE)
 ```
 
