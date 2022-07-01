@@ -82,6 +82,14 @@ write.csv(outfit_rutgers_1, "prepare-publication-tables/RAPI/injunctive_model_03
 
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
+unformatted_outfit_rutgers_1 <- CondenseGEEOutput(fit_rutgers_1)
+write.csv(unformatted_outfit_rutgers_1, "figures/RAPI/injunctive_model_03.csv", row.names=TRUE)
+write.csv(as.matrix(fit_rutgers_1$var), "figures/RAPI/varcovmat_injunctive_model_03.csv", row.names=TRUE)
+```
+
+
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
 outfit_rutgers_1 %>%
   mutate(parameter = gsub("_"," ", .data[["parameter"]])) %>%
   mutate(parameter = gsub(":"," x ", .data[["parameter"]])) %>%
@@ -111,9 +119,19 @@ N_HED_1 <- length(setdiff(unique(dat_analysis$ParticipantID), fit_HED_1$dropped)
 ```
 
 
+
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
 write.csv(outfit_HED_1, "prepare-publication-tables/HED/injunctive_model_03.csv", row.names=FALSE)
 ```
+
+
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+unformatted_outfit_HED_1 <- CondenseGEEOutput(fit_HED_1)
+write.csv(unformatted_outfit_HED_1, "figures/HED/injunctive_model_03.csv", row.names=TRUE)
+write.csv(as.matrix(fit_HED_1$var), "figures/HED/varcovmat_injunctive_model_03.csv", row.names=TRUE)
+```
+
 
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
