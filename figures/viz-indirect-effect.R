@@ -29,6 +29,8 @@ CurvilinearEffect <- function(stress, time, var, dat){
 
 xran_min <- -2.5
 xran_max <- 1.5
+yran_min <- -0.02
+yran_max <- 0.08
 
 ###############################################################################
 # RAPI
@@ -66,73 +68,89 @@ dat_effect <- bind_rows(list_dat_effect)
 dat_plot <- cbind(dat_plot, dat_effect)
 effect <- dat_effect$est
 
-par(mar = c(10, 5, 7, 0.5) + 0.1, mfrow = c(2,2))  # Bottom, left, top, right
-this_ylabel <- "Indirect Effect of Qualitative Overload on RAPI"
+par(mar = c(10, 8, 7, 0.5) + 0.1, mfrow = c(2,2))  # Bottom, left, top, right
+this_ylabel <- "Indirect Effect of\nQualitative Overload on ARP"
 dat_plot0 <- dat_plot[dat_plot$time==0 & dat_plot$var=="qual",]
 plot(-1, 
      type="n",
      xlim = c(xran_min, xran_max),
-     ylim = c(min(effect)-0.05,max(effect)+0.05),
+     ylim = c(yran_min, yran_max),
      xlab = "",
-     ylab = this_ylabel, 
+     ylab = "", 
      cex.lab = 1.5,
      cex.axis = 1.5,
-     frame.plot = FALSE)
+     frame.plot = FALSE,
+     yaxt = "n")
 lines(dat_plot0$stress, dat_plot0$est, type = "l", lwd = 5)
 lines(dat_plot0$stress, dat_plot0$lb95, type = "l", lwd = 3, lty = 3, col = "cornflowerblue")
 lines(dat_plot0$stress, dat_plot0$ub95, type = "l", lwd = 3, lty = 3, col = "cornflowerblue")
 mtext("ARP at time 0", side = 3, line = 0, cex = 1.5)
 mtext("Psychological Distress:\nNo. of standard deviations above or below mean", side = 1, line = 7, cex = 1.5)
+mtext(this_ylabel, side = 2, line = 3, cex = 1.5)
+abline(h = 0, lwd = 4, col = "brown", lty = 2)
+axis(2, at = seq(yran_min, yran_max, 0.02), cex.axis = 1.5, cex.lab = 1.5)
 
 dat_plot1 <- dat_plot[dat_plot$time==1 & dat_plot$var=="qual",]
 plot(-1, 
      type="n",
      xlim = c(xran_min, xran_max),
-     ylim = c(min(effect)-0.05,max(effect)+0.05),
+     ylim = c(yran_min, yran_max),
      xlab = "",
-     ylab = this_ylabel, 
+     ylab = "", 
      cex.lab = 1.5,
      cex.axis = 1.5,
-     frame.plot = FALSE)
+     frame.plot = FALSE,
+     yaxt = "n")
 lines(dat_plot1$stress, dat_plot1$est, type = "l", lwd = 5)
 lines(dat_plot1$stress, dat_plot1$lb95, type = "l", lwd = 3, lty = 3, col = "cornflowerblue")
 lines(dat_plot1$stress, dat_plot1$ub95, type = "l", lwd = 3, lty = 3, col = "cornflowerblue")
 mtext("ARP at time 1", side = 3, line = 0, cex = 1.5)
 mtext("Psychological Distress:\nNo. of standard deviations above or below mean", side = 1, line = 7, cex = 1.5)
+mtext(this_ylabel, side = 2, line = 3, cex = 1.5)
+abline(h = 0, lwd = 4, col = "brown", lty = 2)
+axis(2, at = seq(yran_min, yran_max, 0.02), cex.axis = 1.5, cex.lab = 1.5)
 
-this_ylabel <- "Indirect Effect of Quantitative Overload on RAPI"
+this_ylabel <- "Indirect Effect of\nQuantitative Overload on ARP"
 dat_plot0 <- dat_plot[dat_plot$time==0 & dat_plot$var=="quant",]
 plot(-1, 
      type="n",
      xlim = c(xran_min, xran_max),
-     ylim = c(min(effect)-0.05,max(effect)+0.05),
+     ylim = c(yran_min, yran_max),
      xlab = "",
-     ylab = this_ylabel, 
+     ylab = "", 
      cex.lab = 1.5,
      cex.axis = 1.5,
-     frame.plot = FALSE)
+     frame.plot = FALSE,
+     yaxt = "n")
 lines(dat_plot0$stress, dat_plot0$est, type = "l", lwd = 5)
 lines(dat_plot0$stress, dat_plot0$est, type = "l", lwd = 3)
 lines(dat_plot0$stress, dat_plot0$lb95, type = "l", lwd = 3, lty = 3, col = "cornflowerblue")
 lines(dat_plot0$stress, dat_plot0$ub95, type = "l", lwd = 3, lty = 3, col = "cornflowerblue")
 mtext("ARP at time 0", side = 3, line = 0, cex = 1.5)
 mtext("Psychological Distress:\nNo. of standard deviations above or below mean", side = 1, line = 7, cex = 1.5)
+mtext(this_ylabel, side = 2, line = 3, cex = 1.5)
+abline(h = 0, lwd = 4, col = "brown", lty = 2)
+axis(2, at = seq(yran_min, yran_max, 0.02), cex.axis = 1.5, cex.lab = 1.5)
 
 dat_plot1 <- dat_plot[dat_plot$time==1 & dat_plot$var=="quant",]
 plot(-1, 
      type="n",
      xlim = c(xran_min, xran_max),
-     ylim = c(min(effect)-0.05,max(effect)+0.05),
+     ylim = c(yran_min, yran_max),
      xlab = "",
-     ylab = this_ylabel, 
+     ylab = "", 
      cex.lab = 1.5,
      cex.axis = 1.5,
-     frame.plot = FALSE)
+     frame.plot = FALSE,
+     yaxt = "n")
 lines(dat_plot1$stress, dat_plot1$est, type = "l", lwd = 5)
 lines(dat_plot1$stress, dat_plot1$lb95, type = "l", lwd = 3, lty = 3, col = "cornflowerblue")
 lines(dat_plot1$stress, dat_plot1$ub95, type = "l", lwd = 3, lty = 3, col = "cornflowerblue")
 mtext("ARP at time 1", side = 3, line = 0, cex = 1.5)
 mtext("Psychological Distress:\nNo. of standard deviations above or below mean", side = 1, line = 7, cex = 1.5)
+mtext(this_ylabel, side = 2, line = 3, cex = 1.5)
+abline(h = 0, lwd = 4, col = "brown", lty = 2)
+axis(2, at = seq(yran_min, yran_max, 0.02), cex.axis = 1.5, cex.lab = 1.5)
 
 ###############################################################################
 # HED
@@ -169,72 +187,87 @@ dat_effect <- bind_rows(list_dat_effect)
 dat_plot <- cbind(dat_plot, dat_effect)
 effect <- dat_effect$est
 
-par(mar = c(10, 5, 7, 0.5) + 0.1, mfrow = c(2,2))  # Bottom, left, top, right
-this_ylabel <- "Indirect Effect of Qualitative Overload on HED"
+par(mar = c(10, 8, 7, 0.5) + 0.1, mfrow = c(2,2))  # Bottom, left, top, right
+this_ylabel <- "Indirect Effect of\nQualitative Overload on HED"
 dat_plot0 <- dat_plot[dat_plot$time==0 & dat_plot$var=="qual",]
 plot(-1, 
      type="n",
      xlim = c(xran_min, xran_max),
-     ylim = c(min(effect)-0.05,max(effect)+0.05),
+     ylim = c(yran_min, yran_max),
      xlab = "",
-     ylab = this_ylabel, 
+     ylab = "", 
      cex.lab = 1.5,
      cex.axis = 1.5,
-     frame.plot = FALSE)
+     frame.plot = FALSE,
+     yaxt = "n")
 lines(dat_plot0$stress, dat_plot0$est, type = "l", lwd = 5)
 lines(dat_plot0$stress, dat_plot0$lb95, type = "l", lwd = 3, lty = 3, col = "cornflowerblue")
 lines(dat_plot0$stress, dat_plot0$ub95, type = "l", lwd = 3, lty = 3, col = "cornflowerblue")
 mtext("HED at time 0", side = 3, line = 0, cex = 1.5)
 mtext("Psychological Distress:\nNo. of standard deviations above or below mean", side = 1, line = 7, cex = 1.5)
+mtext(this_ylabel, side = 2, line = 3, cex = 1.5)
+abline(h = 0, lwd = 4, col = "brown", lty = 2)
+axis(2, at = seq(yran_min, yran_max, 0.02), cex.axis = 1.5, cex.lab = 1.5)
 
 dat_plot1 <- dat_plot[dat_plot$time==1 & dat_plot$var=="qual",]
 plot(-1, 
      type="n",
      xlim = c(xran_min, xran_max),
-     ylim = c(min(effect)-0.05,max(effect)+0.05),
+     ylim = c(yran_min, yran_max),
      xlab = "",
-     ylab = this_ylabel, 
+     ylab = "", 
      cex.lab = 1.5,
      cex.axis = 1.5,
-     frame.plot = FALSE)
+     frame.plot = FALSE,
+     yaxt = "n")
 lines(dat_plot1$stress, dat_plot1$est, type = "l", lwd = 5)
 lines(dat_plot1$stress, dat_plot1$lb95, type = "l", lwd = 3, lty = 3, col = "cornflowerblue")
 lines(dat_plot1$stress, dat_plot1$ub95, type = "l", lwd = 3, lty = 3, col = "cornflowerblue")
 mtext("HED at time 1", side = 3, line = 0, cex = 1.5)
 mtext("Psychological Distress:\nNo. of standard deviations above or below mean", side = 1, line = 7, cex = 1.5)
+mtext(this_ylabel, side = 2, line = 3, cex = 1.5)
+abline(h = 0, lwd = 4, col = "brown", lty = 2)
+axis(2, at = seq(yran_min, yran_max, 0.02), cex.axis = 1.5, cex.lab = 1.5)
 
-this_ylabel <- "Indirect Effect of Quantitative Overload on HED"
+this_ylabel <- "Indirect Effect of\nQuantitative Overload on HED"
 dat_plot0 <- dat_plot[dat_plot$time==0 & dat_plot$var=="quant",]
 plot(-1, 
      type="n",
      xlim = c(xran_min, xran_max),
-     ylim = c(min(effect)-0.05,max(effect)+0.05),
+     ylim = c(yran_min, yran_max),
      xlab = "",
-     ylab = this_ylabel, 
+     ylab = "", 
      cex.lab = 1.5,
      cex.axis = 1.5,
-     frame.plot = FALSE)
+     frame.plot = FALSE,
+     yaxt = "n")
 lines(dat_plot0$stress, dat_plot0$est, type = "l", lwd = 5)
 lines(dat_plot0$stress, dat_plot0$est, type = "l", lwd = 3)
 lines(dat_plot0$stress, dat_plot0$lb95, type = "l", lwd = 3, lty = 3, col = "cornflowerblue")
 lines(dat_plot0$stress, dat_plot0$ub95, type = "l", lwd = 3, lty = 3, col = "cornflowerblue")
 mtext("HED at time 0", side = 3, line = 0, cex = 1.5)
 mtext("Psychological Distress:\nNo. of standard deviations above or below mean", side = 1, line = 7, cex = 1.5)
+mtext(this_ylabel, side = 2, line = 3, cex = 1.5)
+abline(h = 0, lwd = 4, col = "brown", lty = 2)
+axis(2, at = seq(yran_min, yran_max, 0.02), cex.axis = 1.5, cex.lab = 1.5)
 
 dat_plot1 <- dat_plot[dat_plot$time==1 & dat_plot$var=="quant",]
 plot(-1, 
      type="n",
      xlim = c(xran_min, xran_max),
-     ylim = c(min(effect)-0.05,max(effect)+0.05),
+     ylim = c(yran_min, yran_max),
      xlab = "",
-     ylab = this_ylabel, 
+     ylab = "", 
      cex.lab = 1.5,
      cex.axis = 1.5,
-     frame.plot = FALSE)
+     frame.plot = FALSE,
+     yaxt = "n")
 lines(dat_plot1$stress, dat_plot1$est, type = "l", lwd = 5)
 lines(dat_plot1$stress, dat_plot1$lb95, type = "l", lwd = 3, lty = 3, col = "cornflowerblue")
 lines(dat_plot1$stress, dat_plot1$ub95, type = "l", lwd = 3, lty = 3, col = "cornflowerblue")
 mtext("HED at time 1", side = 3, line = 0, cex = 1.5)
 mtext("Psychological Distress:\nNo. of standard deviations above or below mean", side = 1, line = 7, cex = 1.5)
-
+mtext(this_ylabel, side = 2, line = 3, cex = 1.5)
+abline(h = 0, lwd = 4, col = "brown", lty = 2)
+axis(2, at = seq(yran_min, yran_max, 0.02), cex.axis = 1.5, cex.lab = 1.5)
 
