@@ -27,6 +27,9 @@ CurvilinearEffect <- function(stress, time, var, dat){
         return(list(est = est, lb95 = lb95, ub95 = ub95))
 }
 
+xran_min <- -2.5
+xran_max <- 1.5
+
 ###############################################################################
 # RAPI
 ###############################################################################
@@ -57,7 +60,7 @@ for(i in 1:length(list_models_rutgers)){
 
 bootdat_params_rutgers <- bind_rows(list_params_rutgers) 
 
-dat_plot <- expand.grid(stress = seq(-20,20,0.10), time = c(0,1), var = c("quant","qual"))
+dat_plot <- expand.grid(stress = seq(xran_min, xran_max,0.10), time = c(0,1), var = c("quant","qual"))
 list_dat_effect <- mapply(CurvilinearEffect, dat_plot$stress, dat_plot$time, dat_plot$var, MoreArgs = list(dat = bootdat_params_rutgers), SIMPLIFY = FALSE)
 dat_effect <- bind_rows(list_dat_effect)
 dat_plot <- cbind(dat_plot, dat_effect)
@@ -68,7 +71,7 @@ this_ylabel <- "Indirect Effect of Qualitative Overload on RAPI"
 dat_plot0 <- dat_plot[dat_plot$time==0 & dat_plot$var=="qual",]
 plot(-1, 
      type="n",
-     xlim = c(-10,10),
+     xlim = c(xran_min, xran_max),
      ylim = c(min(effect)-0.05,max(effect)+0.05),
      xlab = "",
      ylab = this_ylabel, 
@@ -84,7 +87,7 @@ mtext("Psychological Distress:\nNo. of standard deviations above or below mean",
 dat_plot1 <- dat_plot[dat_plot$time==1 & dat_plot$var=="qual",]
 plot(-1, 
      type="n",
-     xlim = c(-10,10),
+     xlim = c(xran_min, xran_max),
      ylim = c(min(effect)-0.05,max(effect)+0.05),
      xlab = "",
      ylab = this_ylabel, 
@@ -101,7 +104,7 @@ this_ylabel <- "Indirect Effect of Quantitative Overload on RAPI"
 dat_plot0 <- dat_plot[dat_plot$time==0 & dat_plot$var=="quant",]
 plot(-1, 
      type="n",
-     xlim = c(-10,10),
+     xlim = c(xran_min, xran_max),
      ylim = c(min(effect)-0.05,max(effect)+0.05),
      xlab = "",
      ylab = this_ylabel, 
@@ -118,7 +121,7 @@ mtext("Psychological Distress:\nNo. of standard deviations above or below mean",
 dat_plot1 <- dat_plot[dat_plot$time==1 & dat_plot$var=="quant",]
 plot(-1, 
      type="n",
-     xlim = c(-10,10),
+     xlim = c(xran_min, xran_max),
      ylim = c(min(effect)-0.05,max(effect)+0.05),
      xlab = "",
      ylab = this_ylabel, 
@@ -160,7 +163,7 @@ for(i in 1:length(list_models_HED)){
 
 bootdat_params_HED <- bind_rows(list_params_HED) 
 
-dat_plot <- expand.grid(stress = seq(-20,20,0.10), time = c(0,1), var = c("quant","qual"))
+dat_plot <- expand.grid(stress = seq(xran_min, xran_max,0.10), time = c(0,1), var = c("quant","qual"))
 list_dat_effect <- mapply(CurvilinearEffect, dat_plot$stress, dat_plot$time, dat_plot$var, MoreArgs = list(dat = bootdat_params_HED), SIMPLIFY = FALSE)
 dat_effect <- bind_rows(list_dat_effect)
 dat_plot <- cbind(dat_plot, dat_effect)
@@ -171,7 +174,7 @@ this_ylabel <- "Indirect Effect of Qualitative Overload on HED"
 dat_plot0 <- dat_plot[dat_plot$time==0 & dat_plot$var=="qual",]
 plot(-1, 
      type="n",
-     xlim = c(-10,10),
+     xlim = c(xran_min, xran_max),
      ylim = c(min(effect)-0.05,max(effect)+0.05),
      xlab = "",
      ylab = this_ylabel, 
@@ -187,7 +190,7 @@ mtext("Psychological Distress:\nNo. of standard deviations above or below mean",
 dat_plot1 <- dat_plot[dat_plot$time==1 & dat_plot$var=="qual",]
 plot(-1, 
      type="n",
-     xlim = c(-10,10),
+     xlim = c(xran_min, xran_max),
      ylim = c(min(effect)-0.05,max(effect)+0.05),
      xlab = "",
      ylab = this_ylabel, 
@@ -204,7 +207,7 @@ this_ylabel <- "Indirect Effect of Quantitative Overload on HED"
 dat_plot0 <- dat_plot[dat_plot$time==0 & dat_plot$var=="quant",]
 plot(-1, 
      type="n",
-     xlim = c(-10,10),
+     xlim = c(xran_min, xran_max),
      ylim = c(min(effect)-0.05,max(effect)+0.05),
      xlab = "",
      ylab = this_ylabel, 
@@ -221,7 +224,7 @@ mtext("Psychological Distress:\nNo. of standard deviations above or below mean",
 dat_plot1 <- dat_plot[dat_plot$time==1 & dat_plot$var=="quant",]
 plot(-1, 
      type="n",
-     xlim = c(-10,10),
+     xlim = c(xran_min, xran_max),
      ylim = c(min(effect)-0.05,max(effect)+0.05),
      xlab = "",
      ylab = this_ylabel, 
