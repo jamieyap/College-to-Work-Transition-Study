@@ -38,10 +38,10 @@ CurvilinearEffect <- function(stress,
     a_idx <- use_estimates[["params"]] == "DASS"
     b_idx <- use_estimates[["params"]] == "I(DASS * DASS)"
     
-    a_est <- use_estimates[["estimates"]][a_idx]
-    b_est <- use_estimates[["estimates"]][b_idx]
+    a_est <- use_estimates[["estimates"]][a_idx]  # coefficient of DASS
+    b_est <- use_estimates[["estimates"]][b_idx]  # coefficient of DASS*DASS
     
-    est_linear_combo <- (a_est)*stress + (b_est)*stress*stress
+    est_linear_combo <- a_est + b_est*stress
     
     L <- rep(0, length(use_estimates[["params"]]))
     L[use_estimates[["params"]] == "DASS"] <- a_est
@@ -96,6 +96,7 @@ lines(dat_plot0$stress, dat_plot0$LB95, type = "l", lwd = 5, lty = 3, col = "cor
 lines(dat_plot0$stress, dat_plot0$UB95, type = "l", lwd = 5, lty = 3, col = "cornflowerblue")
 mtext("Effect of psychological distress on ARP", side = 2, line = 5, cex = 1.5)
 mtext("Psychological Distress:\nNo. of standard deviations above or below the mean", side = 1, line = 7, cex = 1.5)
+abline(h = 0, lwd = 4, col = "brown", lty = 2)
 
 ###############################################################################
 # HED
@@ -117,5 +118,6 @@ lines(dat_plot0$stress, dat_plot0$LB95, type = "l", lwd = 5, lty = 3, col = "cor
 lines(dat_plot0$stress, dat_plot0$UB95, type = "l", lwd = 5, lty = 3, col = "cornflowerblue")
 mtext("Effect of psychological distress on HED", side = 2, line = 5, cex = 1.5)
 mtext("Psychological Distress:\nNo. of standard deviations above or below the mean", side = 1, line = 7, cex = 1.5)
+abline(h = 0, lwd = 4, col = "brown", lty = 2)
 
 
