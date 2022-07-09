@@ -63,7 +63,11 @@ CurvilinearEffect <- function(stress,
 # Prepare data for plotting
 ###############################################################################
 
-dat_input <- expand.grid(stress = seq(-1.5,2.5,0.1), model = c("RAPI_model03","HED_model03"))
+min_xlim <- -1.5
+max_xlim <- 2.0
+these_xvals <- c(-1.5, -1, -0.5, 0, 0.5, 1.0, 1.5, 2)
+
+dat_input <- expand.grid(stress = seq(min_xlim,max_xlim,0.1), model = c("RAPI_model03","HED_model03"))
 list_output <- mapply(CurvilinearEffect, dat_input$stress, dat_input$model, SIMPLIFY = FALSE)
 dat_output <- do.call(rbind, list_output)
 dat_plot <- cbind(dat_input, dat_output)
@@ -71,10 +75,6 @@ dat_plot <- cbind(dat_input, dat_output)
 min_ylim <- round(min(dat_plot$est), 1)
 max_ylim <- round(max(dat_plot$est), 1)
 these_yvals <- round(seq(from = min_ylim, to = max_ylim, by = 0.1), 1)
-
-min_xlim <- -1.5
-max_xlim <- 2.5
-these_xvals <- c(-1.5, -1, -0.5, 0, 0.5, 1.0, 1.5, 2, 2.5)
 
 ###############################################################################
 # RAPI

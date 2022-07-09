@@ -27,10 +27,12 @@ CurvilinearEffect <- function(stress, time, var, dat){
         return(list(est = est, lb95 = lb95, ub95 = ub95))
 }
 
-xran_min <- -2.5
-xran_max <- 1.5
+xran_min <- -1.5
+xran_max <- 2.0
 yran_min <- -0.02
 yran_max <- 0.08
+these_xvals <- c(-1.5, -1, -0.5, 0, 0.5, 1.0, 1.5, 2)
+these_yvals <- c(-0.02, 0, 0.02, 0.04, 0.06, 0.08)
 
 ###############################################################################
 # RAPI
@@ -80,7 +82,9 @@ plot(-1,
      cex.lab = 1.5,
      cex.axis = 1.5,
      frame.plot = FALSE,
-     yaxt = "n")
+     xaxt = "n", yaxt = "n")
+axis(1, at = these_xvals, cex.lab = 1.5, cex.axis = 1.5, lwd = 5)
+axis(2, at = these_yvals, cex.lab = 1.5, cex.axis = 1.5, lwd = 5)
 lines(dat_plot0$stress, dat_plot0$est, type = "l", lwd = 5)
 lines(dat_plot0$stress, dat_plot0$lb95, type = "l", lwd = 3, lty = 3, col = "cornflowerblue")
 lines(dat_plot0$stress, dat_plot0$ub95, type = "l", lwd = 3, lty = 3, col = "cornflowerblue")
@@ -100,7 +104,9 @@ plot(-1,
      cex.lab = 1.5,
      cex.axis = 1.5,
      frame.plot = FALSE,
-     yaxt = "n")
+     xaxt = "n", yaxt = "n")
+axis(1, at = these_xvals, cex.lab = 1.5, cex.axis = 1.5, lwd = 5)
+axis(2, at = these_yvals, cex.lab = 1.5, cex.axis = 1.5, lwd = 5)
 lines(dat_plot1$stress, dat_plot1$est, type = "l", lwd = 5)
 lines(dat_plot1$stress, dat_plot1$lb95, type = "l", lwd = 3, lty = 3, col = "cornflowerblue")
 lines(dat_plot1$stress, dat_plot1$ub95, type = "l", lwd = 3, lty = 3, col = "cornflowerblue")
@@ -121,7 +127,9 @@ plot(-1,
      cex.lab = 1.5,
      cex.axis = 1.5,
      frame.plot = FALSE,
-     yaxt = "n")
+     xaxt = "n", yaxt = "n")
+axis(1, at = these_xvals, cex.lab = 1.5, cex.axis = 1.5, lwd = 5)
+axis(2, at = these_yvals, cex.lab = 1.5, cex.axis = 1.5, lwd = 5)
 lines(dat_plot0$stress, dat_plot0$est, type = "l", lwd = 5)
 lines(dat_plot0$stress, dat_plot0$est, type = "l", lwd = 3)
 lines(dat_plot0$stress, dat_plot0$lb95, type = "l", lwd = 3, lty = 3, col = "cornflowerblue")
@@ -142,7 +150,9 @@ plot(-1,
      cex.lab = 1.5,
      cex.axis = 1.5,
      frame.plot = FALSE,
-     yaxt = "n")
+     xaxt = "n", yaxt = "n")
+axis(1, at = these_xvals, cex.lab = 1.5, cex.axis = 1.5, lwd = 5)
+axis(2, at = these_yvals, cex.lab = 1.5, cex.axis = 1.5, lwd = 5)
 lines(dat_plot1$stress, dat_plot1$est, type = "l", lwd = 5)
 lines(dat_plot1$stress, dat_plot1$lb95, type = "l", lwd = 3, lty = 3, col = "cornflowerblue")
 lines(dat_plot1$stress, dat_plot1$ub95, type = "l", lwd = 3, lty = 3, col = "cornflowerblue")
@@ -199,7 +209,9 @@ plot(-1,
      cex.lab = 1.5,
      cex.axis = 1.5,
      frame.plot = FALSE,
-     yaxt = "n")
+     xaxt = "n", yaxt = "n")
+axis(1, at = these_xvals, cex.lab = 1.5, cex.axis = 1.5, lwd = 5)
+axis(2, at = these_yvals, cex.lab = 1.5, cex.axis = 1.5, lwd = 5)
 lines(dat_plot0$stress, dat_plot0$est, type = "l", lwd = 5)
 lines(dat_plot0$stress, dat_plot0$lb95, type = "l", lwd = 3, lty = 3, col = "cornflowerblue")
 lines(dat_plot0$stress, dat_plot0$ub95, type = "l", lwd = 3, lty = 3, col = "cornflowerblue")
@@ -219,7 +231,9 @@ plot(-1,
      cex.lab = 1.5,
      cex.axis = 1.5,
      frame.plot = FALSE,
-     yaxt = "n")
+     xaxt = "n", yaxt = "n")
+axis(1, at = these_xvals, cex.lab = 1.5, cex.axis = 1.5, lwd = 5)
+axis(2, at = these_yvals, cex.lab = 1.5, cex.axis = 1.5, lwd = 5)
 lines(dat_plot1$stress, dat_plot1$est, type = "l", lwd = 5)
 lines(dat_plot1$stress, dat_plot1$lb95, type = "l", lwd = 3, lty = 3, col = "cornflowerblue")
 lines(dat_plot1$stress, dat_plot1$ub95, type = "l", lwd = 3, lty = 3, col = "cornflowerblue")
@@ -240,7 +254,9 @@ plot(-1,
      cex.lab = 1.5,
      cex.axis = 1.5,
      frame.plot = FALSE,
-     yaxt = "n")
+     xaxt = "n", yaxt = "n")
+axis(1, at = these_xvals, cex.lab = 1.5, cex.axis = 1.5, lwd = 5)
+axis(2, at = these_yvals, cex.lab = 1.5, cex.axis = 1.5, lwd = 5)
 lines(dat_plot0$stress, dat_plot0$est, type = "l", lwd = 5)
 lines(dat_plot0$stress, dat_plot0$est, type = "l", lwd = 3)
 lines(dat_plot0$stress, dat_plot0$lb95, type = "l", lwd = 3, lty = 3, col = "cornflowerblue")
@@ -261,7 +277,9 @@ plot(-1,
      cex.lab = 1.5,
      cex.axis = 1.5,
      frame.plot = FALSE,
-     yaxt = "n")
+     xaxt = "n", yaxt = "n")
+axis(1, at = these_xvals, cex.lab = 1.5, cex.axis = 1.5, lwd = 5)
+axis(2, at = these_yvals, cex.lab = 1.5, cex.axis = 1.5, lwd = 5)
 lines(dat_plot1$stress, dat_plot1$est, type = "l", lwd = 5)
 lines(dat_plot1$stress, dat_plot1$lb95, type = "l", lwd = 3, lty = 3, col = "cornflowerblue")
 lines(dat_plot1$stress, dat_plot1$ub95, type = "l", lwd = 3, lty = 3, col = "cornflowerblue")
