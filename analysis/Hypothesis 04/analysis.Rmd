@@ -255,6 +255,18 @@ bootdat_params_rutgers <- bind_rows(list_params_rutgers) %>%
          quantitative_role_overload_time_1_low_DASS = (a3+a5)*(b1+b3-b2-b4),
          quantitative_role_overload_time_1_moderate_DASS = (a3+a5)*(b1+b3),
          quantitative_role_overload_time_1_high_DASS = (a3+a5)*(b1+b3+b2+b4))
+
+# Calculate contrasts between mediated effects for Qualitative Overload
+bootdat_params_rutgers <- bootdat_params_rutgers %>%
+  mutate(difference_qualitative_role_overload_time_0_low_DASS_and_qualitative_role_overload_time_1_low_DASS = qualitative_role_overload_time_0_low_DASS - qualitative_role_overload_time_1_low_DASS,
+         difference_qualitative_role_overload_time_0_moderate_DASS_and_qualitative_role_overload_time_1_moderate_DASS = qualitative_role_overload_time_0_moderate_DASS - qualitative_role_overload_time_1_moderate_DASS,
+         difference_qualitative_role_overload_time_0_high_DASS_and_qualitative_role_overload_time_1_high_DASS = qualitative_role_overload_time_0_high_DASS - qualitative_role_overload_time_1_high_DASS)
+
+# Calculate contrasts between mediated effects for Quantitative Overload
+bootdat_params_rutgers <- bootdat_params_rutgers %>%
+  mutate(difference_quantitative_role_overload_time_0_low_DASS_and_quantitative_role_overload_time_1_low_DASS = quantitative_role_overload_time_0_low_DASS - quantitative_role_overload_time_1_low_DASS,
+         difference_quantitative_role_overload_time_0_moderate_DASS_and_quantitative_role_overload_time_1_moderate_DASS = quantitative_role_overload_time_0_moderate_DASS - quantitative_role_overload_time_1_moderate_DASS,
+         difference_quantitative_role_overload_time_0_high_DASS_and_quantitative_role_overload_time_1_high_DASS = quantitative_role_overload_time_0_high_DASS - quantitative_role_overload_time_1_high_DASS)
 ```
 
 
@@ -381,6 +393,84 @@ write.csv(summary_qualitative_role_overload, "prepare-publication-tables/RAPI/in
 write.csv(summary_quantitative_role_overload, "prepare-publication-tables/RAPI/injunctive_quantitative_role_overload_mediated_effect_model_05_and_model_07.csv")
 ```
 
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+# Qualitative Role Overload
+difference_low_DASS <- bootdat_params_rutgers %>%
+  summarise(mean_difference = mean(difference_qualitative_role_overload_time_0_low_DASS_and_qualitative_role_overload_time_1_low_DASS),
+            LB_difference = quantile(difference_qualitative_role_overload_time_0_low_DASS_and_qualitative_role_overload_time_1_low_DASS, probs = alpha/2),
+            UB_difference = quantile(difference_qualitative_role_overload_time_0_low_DASS_and_qualitative_role_overload_time_1_low_DASS, probs = 1-alpha/2))
+
+difference_moderate_DASS <- bootdat_params_rutgers %>%
+  summarise(mean_difference = mean(difference_qualitative_role_overload_time_0_moderate_DASS_and_qualitative_role_overload_time_1_moderate_DASS),
+            LB_difference = quantile(difference_qualitative_role_overload_time_0_moderate_DASS_and_qualitative_role_overload_time_1_moderate_DASS, probs = alpha/2),
+            UB_difference = quantile(difference_qualitative_role_overload_time_0_moderate_DASS_and_qualitative_role_overload_time_1_moderate_DASS, probs = 1-alpha/2))
+
+difference_high_DASS <- bootdat_params_rutgers %>%
+  summarise(mean_difference = mean(difference_qualitative_role_overload_time_0_high_DASS_and_qualitative_role_overload_time_1_high_DASS),
+            LB_difference = quantile(difference_qualitative_role_overload_time_0_high_DASS_and_qualitative_role_overload_time_1_high_DASS, probs = alpha/2),
+            UB_difference = quantile(difference_qualitative_role_overload_time_0_high_DASS_and_qualitative_role_overload_time_1_high_DASS, probs = 1-alpha/2))
+
+summary_qualitative_role_overload <- matrix(c(difference_low_DASS,
+                                              difference_moderate_DASS,
+                                              difference_high_DASS),
+                                            byrow=TRUE, ncol=3)
+
+summary_qualitative_role_overload <- apply(summary_qualitative_role_overload, 2, unlist)
+summary_qualitative_role_overload <- round(summary_qualitative_role_overload, digits=3)
+row.names(summary_qualitative_role_overload) <- c("Difference between Early Onboarding Phase and Late Onboarding Phase when Low Psychological Distress",
+                                                  "Difference between Early Onboarding Phase and Late Onboarding Phase when Moderate Psychological Distress",
+                                                  "Difference between Early Onboarding Phase and Late Onboarding Phase when High Psychological Distress")
+colnames(summary_qualitative_role_overload) <- c("Bootstrap Mean","Bootstrap 95%-CI LB","Bootstrap 95%-CI UB")
+
+# Quantitative Role Overload
+difference_low_DASS <- bootdat_params_rutgers %>%
+  summarise(mean_difference = mean(difference_quantitative_role_overload_time_0_low_DASS_and_quantitative_role_overload_time_1_low_DASS),
+            LB_difference = quantile(difference_quantitative_role_overload_time_0_low_DASS_and_quantitative_role_overload_time_1_low_DASS, probs = alpha/2),
+            UB_difference = quantile(difference_quantitative_role_overload_time_0_low_DASS_and_quantitative_role_overload_time_1_low_DASS, probs = 1-alpha/2))
+
+difference_moderate_DASS <- bootdat_params_rutgers %>%
+  summarise(mean_difference = mean(difference_quantitative_role_overload_time_0_moderate_DASS_and_quantitative_role_overload_time_1_moderate_DASS),
+            LB_difference = quantile(difference_quantitative_role_overload_time_0_moderate_DASS_and_quantitative_role_overload_time_1_moderate_DASS, probs = alpha/2),
+            UB_difference = quantile(difference_quantitative_role_overload_time_0_moderate_DASS_and_quantitative_role_overload_time_1_moderate_DASS, probs = 1-alpha/2))
+
+difference_high_DASS <- bootdat_params_rutgers %>%
+  summarise(mean_difference = mean(difference_quantitative_role_overload_time_0_high_DASS_and_quantitative_role_overload_time_1_high_DASS),
+            LB_difference = quantile(difference_quantitative_role_overload_time_0_high_DASS_and_quantitative_role_overload_time_1_high_DASS, probs = alpha/2),
+            UB_difference = quantile(difference_quantitative_role_overload_time_0_high_DASS_and_quantitative_role_overload_time_1_high_DASS, probs = 1-alpha/2))
+
+summary_quantitative_role_overload <- matrix(c(difference_low_DASS,
+                                              difference_moderate_DASS,
+                                              difference_high_DASS),
+                                            byrow=TRUE, ncol=3)
+
+summary_quantitative_role_overload <- apply(summary_quantitative_role_overload, 2, unlist)
+summary_quantitative_role_overload <- round(summary_quantitative_role_overload, digits=3)
+row.names(summary_quantitative_role_overload) <- c("Difference between Early Onboarding Phase and Late Onboarding Phase when Low Psychological Distress",
+                                                  "Difference between Early Onboarding Phase and Late Onboarding Phase when Moderate Psychological Distress",
+                                                  "Difference between Early Onboarding Phase and Late Onboarding Phase when High Psychological Distress")
+colnames(summary_quantitative_role_overload) <- c("Bootstrap Mean","Bootstrap 95%-CI LB","Bootstrap 95%-CI UB")
+```
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+summary_qualitative_role_overload %>%
+  kable(booktabs = TRUE, align = c('c','c','c'), caption = "Contrast between DASS-mediated effect of Qualitative Role Overload at Early Onboarding Phase and Late Onboarding Phase; Norms Covariate: Injunctive Norms")  %>%
+  kable_styling(full_width = FALSE, latex_options = c("HOLD_position", "scale_down"))  
+```
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+summary_quantitative_role_overload %>%
+  kable(booktabs = TRUE, align = c('c','c','c'), caption = "Contrast between DASS-mediated effect of Quantitative Role Overload at Early Onboarding Phase and Late Onboarding Phase; Norms Covariate: Injunctive Norms")  %>%
+  kable_styling(full_width = FALSE, latex_options = c("HOLD_position", "scale_down"))  
+```
+
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+write.csv(summary_qualitative_role_overload, "prepare-publication-tables/RAPI/contrast_injunctive_qualitative_role_overload_mediated_effect_model_05_and_model_07.csv")
+```
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+write.csv(summary_quantitative_role_overload, "prepare-publication-tables/RAPI/contrast_injunctive_quantitative_role_overload_mediated_effect_model_05_and_model_07.csv")
+```
 
 ## HED
 
@@ -433,6 +523,18 @@ bootdat_params_HED <- bind_rows(list_params_HED) %>%
          quantitative_role_overload_time_1_low_DASS = (a3+a5)*(b1+b3-b2-b4),
          quantitative_role_overload_time_1_moderate_DASS = (a3+a5)*(b1+b3),
          quantitative_role_overload_time_1_high_DASS = (a3+a5)*(b1+b3+b2+b4))
+
+# Calculate contrasts between mediated effects for Qualitative Overload
+bootdat_params_HED <- bootdat_params_HED %>%
+  mutate(difference_qualitative_role_overload_time_0_low_DASS_and_qualitative_role_overload_time_1_low_DASS = qualitative_role_overload_time_0_low_DASS - qualitative_role_overload_time_1_low_DASS,
+         difference_qualitative_role_overload_time_0_moderate_DASS_and_qualitative_role_overload_time_1_moderate_DASS = qualitative_role_overload_time_0_moderate_DASS - qualitative_role_overload_time_1_moderate_DASS,
+         difference_qualitative_role_overload_time_0_high_DASS_and_qualitative_role_overload_time_1_high_DASS = qualitative_role_overload_time_0_high_DASS - qualitative_role_overload_time_1_high_DASS)
+
+# Calculate contrasts between mediated effects for Quantitative Overload
+bootdat_params_HED <- bootdat_params_HED %>%
+  mutate(difference_quantitative_role_overload_time_0_low_DASS_and_quantitative_role_overload_time_1_low_DASS = quantitative_role_overload_time_0_low_DASS - quantitative_role_overload_time_1_low_DASS,
+         difference_quantitative_role_overload_time_0_moderate_DASS_and_quantitative_role_overload_time_1_moderate_DASS = quantitative_role_overload_time_0_moderate_DASS - quantitative_role_overload_time_1_moderate_DASS,
+         difference_quantitative_role_overload_time_0_high_DASS_and_quantitative_role_overload_time_1_high_DASS = quantitative_role_overload_time_0_high_DASS - quantitative_role_overload_time_1_high_DASS)
 ```
 
 
@@ -528,7 +630,7 @@ summary_quantitative_role_overload <- matrix(c(time_0_low_DASS,
                                             byrow=TRUE, ncol=3)
 
 summary_quantitative_role_overload <- apply(summary_quantitative_role_overload, 2, unlist)
-summary_quantitative_role_overload <- round(summary_quantitative_role_overload, digits=5)
+summary_quantitative_role_overload <- round(summary_quantitative_role_overload, digits=3)
 row.names(summary_quantitative_role_overload) <- c("Early Onboarding Phase and Low Psychological Distress",
                                                   "Early Onboarding Phase and Moderate Psychological Distress",
                                                   "Early Onboarding Phase and High Psychological Distress",
@@ -559,4 +661,80 @@ write.csv(summary_qualitative_role_overload, "prepare-publication-tables/HED/inj
 write.csv(summary_quantitative_role_overload, "prepare-publication-tables/HED/injunctive_quantitative_role_overload_mediated_effect_model_05_and_model_07.csv")
 ```
 
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+# Qualitative Role Overload
+difference_low_DASS <- bootdat_params_HED %>%
+  summarise(mean_difference = mean(difference_qualitative_role_overload_time_0_low_DASS_and_qualitative_role_overload_time_1_low_DASS),
+            LB_difference = quantile(difference_qualitative_role_overload_time_0_low_DASS_and_qualitative_role_overload_time_1_low_DASS, probs = alpha/2),
+            UB_difference = quantile(difference_qualitative_role_overload_time_0_low_DASS_and_qualitative_role_overload_time_1_low_DASS, probs = 1-alpha/2))
 
+difference_moderate_DASS <- bootdat_params_HED %>%
+  summarise(mean_difference = mean(difference_qualitative_role_overload_time_0_moderate_DASS_and_qualitative_role_overload_time_1_moderate_DASS),
+            LB_difference = quantile(difference_qualitative_role_overload_time_0_moderate_DASS_and_qualitative_role_overload_time_1_moderate_DASS, probs = alpha/2),
+            UB_difference = quantile(difference_qualitative_role_overload_time_0_moderate_DASS_and_qualitative_role_overload_time_1_moderate_DASS, probs = 1-alpha/2))
+
+difference_high_DASS <- bootdat_params_HED %>%
+  summarise(mean_difference = mean(difference_qualitative_role_overload_time_0_high_DASS_and_qualitative_role_overload_time_1_high_DASS),
+            LB_difference = quantile(difference_qualitative_role_overload_time_0_high_DASS_and_qualitative_role_overload_time_1_high_DASS, probs = alpha/2),
+            UB_difference = quantile(difference_qualitative_role_overload_time_0_high_DASS_and_qualitative_role_overload_time_1_high_DASS, probs = 1-alpha/2))
+
+summary_qualitative_role_overload <- matrix(c(difference_low_DASS,
+                                              difference_moderate_DASS,
+                                              difference_high_DASS),
+                                            byrow=TRUE, ncol=3)
+
+summary_qualitative_role_overload <- apply(summary_qualitative_role_overload, 2, unlist)
+summary_qualitative_role_overload <- round(summary_qualitative_role_overload, digits=3)
+row.names(summary_qualitative_role_overload) <- c("Difference between Early Onboarding Phase and Late Onboarding Phase when Low Psychological Distress",
+                                                  "Difference between Early Onboarding Phase and Late Onboarding Phase when Moderate Psychological Distress",
+                                                  "Difference between Early Onboarding Phase and Late Onboarding Phase when High Psychological Distress")
+colnames(summary_qualitative_role_overload) <- c("Bootstrap Mean","Bootstrap 95%-CI LB","Bootstrap 95%-CI UB")
+
+# Quantitative Role Overload
+difference_low_DASS <- bootdat_params_HED %>%
+  summarise(mean_difference = mean(difference_quantitative_role_overload_time_0_low_DASS_and_quantitative_role_overload_time_1_low_DASS),
+            LB_difference = quantile(difference_quantitative_role_overload_time_0_low_DASS_and_quantitative_role_overload_time_1_low_DASS, probs = alpha/2),
+            UB_difference = quantile(difference_quantitative_role_overload_time_0_low_DASS_and_quantitative_role_overload_time_1_low_DASS, probs = 1-alpha/2))
+
+difference_moderate_DASS <- bootdat_params_HED %>%
+  summarise(mean_difference = mean(difference_quantitative_role_overload_time_0_moderate_DASS_and_quantitative_role_overload_time_1_moderate_DASS),
+            LB_difference = quantile(difference_quantitative_role_overload_time_0_moderate_DASS_and_quantitative_role_overload_time_1_moderate_DASS, probs = alpha/2),
+            UB_difference = quantile(difference_quantitative_role_overload_time_0_moderate_DASS_and_quantitative_role_overload_time_1_moderate_DASS, probs = 1-alpha/2))
+
+difference_high_DASS <- bootdat_params_HED %>%
+  summarise(mean_difference = mean(difference_quantitative_role_overload_time_0_high_DASS_and_quantitative_role_overload_time_1_high_DASS),
+            LB_difference = quantile(difference_quantitative_role_overload_time_0_high_DASS_and_quantitative_role_overload_time_1_high_DASS, probs = alpha/2),
+            UB_difference = quantile(difference_quantitative_role_overload_time_0_high_DASS_and_quantitative_role_overload_time_1_high_DASS, probs = 1-alpha/2))
+
+summary_quantitative_role_overload <- matrix(c(difference_low_DASS,
+                                              difference_moderate_DASS,
+                                              difference_high_DASS),
+                                            byrow=TRUE, ncol=3)
+
+summary_quantitative_role_overload <- apply(summary_quantitative_role_overload, 2, unlist)
+summary_quantitative_role_overload <- round(summary_quantitative_role_overload, digits=3)
+row.names(summary_quantitative_role_overload) <- c("Difference between Early Onboarding Phase and Late Onboarding Phase when Low Psychological Distress",
+                                                  "Difference between Early Onboarding Phase and Late Onboarding Phase when Moderate Psychological Distress",
+                                                  "Difference between Early Onboarding Phase and Late Onboarding Phase when High Psychological Distress")
+colnames(summary_quantitative_role_overload) <- c("Bootstrap Mean","Bootstrap 95%-CI LB","Bootstrap 95%-CI UB")
+```
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+summary_qualitative_role_overload %>%
+  kable(booktabs = TRUE, align = c('c','c','c'), caption = "Contrast between DASS-mediated effect of Qualitative Role Overload at Early Onboarding Phase and Late Onboarding Phase; Norms Covariate: Injunctive Norms")  %>%
+  kable_styling(full_width = FALSE, latex_options = c("HOLD_position", "scale_down"))  
+```
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+summary_quantitative_role_overload %>%
+  kable(booktabs = TRUE, align = c('c','c','c'), caption = "Contrast between DASS-mediated effect of Quantitative Role Overload at Early Onboarding Phase and Late Onboarding Phase; Norms Covariate: Injunctive Norms")  %>%
+  kable_styling(full_width = FALSE, latex_options = c("HOLD_position", "scale_down"))  
+```
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+write.csv(summary_qualitative_role_overload, "prepare-publication-tables/HED/contrast_injunctive_qualitative_role_overload_mediated_effect_model_05_and_model_07.csv")
+```
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+write.csv(summary_quantitative_role_overload, "prepare-publication-tables/HED/contrast_injunctive_quantitative_role_overload_mediated_effect_model_05_and_model_07.csv")
+```
