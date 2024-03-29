@@ -1,3 +1,8 @@
+---
+output:
+  pdf_document: default
+  html_document: default
+---
 # About this Repository
 
 This repository contains code and documentation relating to a manuscript titled, **_'The (In)Stability of Work-based Risk Factors for Drinking Over Time: Insights from a Two-Wave Analysis of Emerging Adults Over the Course of Initial Career Entry'_**.
@@ -12,7 +17,7 @@ The code in this repository was utilized to prepare and analyze data collected f
 
 | <img height=0 width=350> File <img height=0 width=350> | <img height=0 width=800> Brief Description <img height=0 width=800> |
 |:------------------------------------------:|:--------------------------------------------------------------------------------------------------|
-| renv.lock | Records the collection of R packages and specific versions utilized. |
+| renv.lock | Records the collection of R packages and specific versions utilized. The R package `renv` was used to take a snapshot of the software version numbers. |
 
 ## 2. Constructing datasets used in analyses
 
