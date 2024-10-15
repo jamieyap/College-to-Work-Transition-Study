@@ -81,6 +81,12 @@ these_yvals <- round(seq(from = min_ylim, to = max_ylim, by = 0.1), 1)
 ###############################################################################
 par(mar = c(10, 7, 2, 0.5) + 0.1)  # Bottom, left, top, right
 dat_plot0 <- dat_plot[dat_plot$model=="RAPI_model03",]
+
+dat_plot0$exp_est <- exp(dat_plot0$est)
+dat_plot0$exp_LB95 <- exp(dat_plot0$LB95)
+dat_plot0$exp_UB95 <- exp(dat_plot0$UB95)
+
+# Plot on the log-mean scale --------------------------------------------------
 plot(-1, 
      type="n",
      xlim = c(min_xlim, max_xlim),
@@ -98,11 +104,35 @@ mtext("Effect of psychological distress on ARP", side = 2, line = 5, cex = 1.5)
 mtext("Psychological Distress:\nNo. of standard deviations above or below the mean", side = 1, line = 7, cex = 1.5)
 abline(h = 0, lwd = 4, col = "brown", lty = 2)
 
+# Plot on the mean-scale ------------------------------------------------------
+plot(-1, 
+     type="n",
+     xlim = c(min_xlim, max_xlim),
+     ylim = c(0.9,1.5),
+     xlab = "",
+     ylab = "",
+     frame.plot = FALSE,
+     xaxt = "n", yaxt = "n")
+axis(1, at = these_xvals, cex.lab = 1.5, cex.axis = 1.5, lwd = 5)
+axis(2, at = seq(0.9,1.5,0.1), cex.lab = 1.5, cex.axis = 1.5, lwd = 5)
+lines(dat_plot0$stress, dat_plot0$exp_est, type = "l", lwd = 5)
+lines(dat_plot0$stress, dat_plot0$exp_LB95, type = "l", lwd = 5, lty = 3, col = "cornflowerblue")
+lines(dat_plot0$stress, dat_plot0$exp_UB95, type = "l", lwd = 5, lty = 3, col = "cornflowerblue")
+mtext("Effect of psychological distress on ARP", side = 2, line = 5, cex = 1.5)
+mtext("Psychological Distress:\nNo. of standard deviations above or below the mean", side = 1, line = 7, cex = 1.5)
+abline(h = 1, lwd = 4, col = "brown", lty = 2)
+
 ###############################################################################
 # HED
 ###############################################################################
 par(mar = c(10, 7, 2, 0.5) + 0.1)  # Bottom, left, top, right
 dat_plot0 <- dat_plot[dat_plot$model=="HED_model03",]
+
+dat_plot0$exp_est <- exp(dat_plot0$est)
+dat_plot0$exp_LB95 <- exp(dat_plot0$LB95)
+dat_plot0$exp_UB95 <- exp(dat_plot0$UB95)
+
+# Plot on the log-mean scale --------------------------------------------------
 plot(-1, 
      type="n",
      xlim = c(min_xlim, max_xlim),
@@ -120,4 +150,22 @@ mtext("Effect of psychological distress on HED", side = 2, line = 5, cex = 1.5)
 mtext("Psychological Distress:\nNo. of standard deviations above or below the mean", side = 1, line = 7, cex = 1.5)
 abline(h = 0, lwd = 4, col = "brown", lty = 2)
 
+# Plot on the mean-scale ------------------------------------------------------
+plot(-1, 
+     type="n",
+     xlim = c(min_xlim, max_xlim),
+     ylim = c(0.9,1.5),
+     xlab = "",
+     ylab = "",
+     frame.plot = FALSE,
+     xaxt = "n", yaxt = "n")
+
+axis(1, at = these_xvals, cex.lab = 1.5, cex.axis = 1.5, lwd = 5)
+axis(2, at = seq(0.9,1.5,0.1), cex.lab = 1.5, cex.axis = 1.5, lwd = 5)
+lines(dat_plot0$stress, dat_plot0$exp_est, type = "l", lwd = 5)
+lines(dat_plot0$stress, dat_plot0$exp_LB95, type = "l", lwd = 5, lty = 3, col = "cornflowerblue")
+lines(dat_plot0$stress, dat_plot0$exp_UB95, type = "l", lwd = 5, lty = 3, col = "cornflowerblue")
+mtext("Effect of psychological distress on HED", side = 2, line = 5, cex = 1.5)
+mtext("Psychological Distress:\nNo. of standard deviations above or below the mean", side = 1, line = 7, cex = 1.5)
+abline(h = 1, lwd = 4, col = "brown", lty = 2)
 
